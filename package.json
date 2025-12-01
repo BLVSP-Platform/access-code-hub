@@ -1,12 +1,13 @@
 {
   "name": "access-code-hub",
   "private": true,
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev:client": "cd packages/client && vite",
     "dev:server": "cd packages/server && npm run dev",
-    "dev": "concurrently -n client,server -c green,blue \"npm run dev:client\" \"npm run dev:server\"",
-    "dev:bun": "bunx --bun concurrently -n client,server -c green,blue \"bun run dev:client\" \"bun run packages/server/index.ts\""
+    "dev": "concurrently -n client,server -c green,blue \"npm run dev:client\" \"npm run dev:server\""
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
