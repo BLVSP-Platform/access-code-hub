@@ -25,11 +25,11 @@ function Navbar() {
         </HStack>
       </NavigationMenuItem>
       <NavigationMenuItem>
-        <ColorModeButton color="white" _hover={{ bgColor: "purple.600" }}></ColorModeButton> {/** @todo: get rid of this after we have a placeholder profile? */}
+        <HStack gap={4}>
+          <ColorModeButton color="white"></ColorModeButton>
+          <LoginButton />
+        </HStack>
       </NavigationMenuItem>
-	  <NavigationMenuItem>
-		<LoginButton />
-	  </NavigationMenuItem>
     </NavigationMenu>
 
   );
