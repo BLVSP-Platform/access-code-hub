@@ -1,4 +1,4 @@
-import { Button, Field, Input } from "@chakra-ui/react";
+import { Button, Field, Flex, Input } from "@chakra-ui/react";
 import { PasswordInput } from "./password-input";
 import { signIn, signUp } from "@/lib/auth";
 import { MouseEventHandler } from "react";
@@ -24,7 +24,7 @@ export const LoginForm = () => {
 	}
 
 	return (
-		<form className="flex flex-col">
+		<Flex flexDir="column">
 			<Field.Root>
 				<Field.Label>Email</Field.Label>
 				<Input />
@@ -34,7 +34,7 @@ export const LoginForm = () => {
 				<PasswordInput />
 			</Field.Root>
 			<Button type="submit" mt="8" bg="primary" onClick={login}>Login</Button>
-			<Button type="submit" mt="8" bg="primary" onClick={register}>Register</Button>
-		</form>
+			<Button type="submit" mt="4" bg="primary" onClick={register}>Register</Button>
+		</Flex>
 	)
 }
