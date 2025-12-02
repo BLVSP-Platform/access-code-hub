@@ -10,7 +10,10 @@ function App() {
       <Box pt={13} px={13}>
         <Navbar />
       </Box>
-      <Box mx={28} pt={8}>
+      <Box mx={{
+		lg: 28,
+		sm: 4
+		}} pt={8}>
         <Outlet /> {/* Render nested routes here */}
       </Box>
     </Provider>
