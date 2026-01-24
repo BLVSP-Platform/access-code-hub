@@ -1,12 +1,17 @@
 import { betterAuth } from "better-auth";
-import { MongoClient } from "mongodb";
+import { MongoClient, ServerApiVersion } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import 'dotenv/config'
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/blvsp'
+if (!process.env.MONGODB_USERNAME) throw new Error("MONGODB_USERNAME not provided");
+if (!process.env.MONGODB_PASSWORD) throw new Error("MONGODB_PASSWORD not provided");
+const MONGODB_URI = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@cluster0.upfmf6g.mongodb.net/?appName=Cluster0`;
+console.log(`Logging into mongo with ${MONGODB_URI}`)
 
-if (!MONGODB_URI) throw new Error("");
+const client = new MongoClient(MONGODB_URI, {
+    serverApi: ServerApiVersion.v1,
+});
 
-const client = new MongoClient(MONGODB_URI);
 const db = client.db();
 
 export const auth = betterAuth({
