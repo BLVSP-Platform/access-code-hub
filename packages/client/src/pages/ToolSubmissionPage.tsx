@@ -1,5 +1,5 @@
 import { FormSubmissionModal } from "@/components/Form";
-import { Box, Button, Dialog, Field, Heading, HStack, Input, Portal, RadioGroup, RadioGroupValueChangeDetails, Stack, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Field, Heading, HStack, Input, RadioGroup, RadioGroupValueChangeDetails, Stack, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
 const TextInput = ({ name, label, required = true }: { name: string, label: string, required?: boolean }) => {
@@ -133,7 +133,7 @@ function ToolSubmissionPage() {
             body={dialogueBody}
             isOpen={isDialogueOpen}
             onOpenChange={details => {
-              if (details.open) { } // Do nothing. We want to control when the dialogue opens
+              if (details.open) { } // Do nothing. We want to control when the dialogue modal opens
               else setDialogueOpen(details.open) // Close dialogue when received from the modal
             }}
           >
