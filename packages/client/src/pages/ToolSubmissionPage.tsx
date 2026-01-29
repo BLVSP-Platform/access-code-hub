@@ -1,4 +1,5 @@
-import { Box, Button, Field, Heading, HStack, Input, RadioGroup, RadioGroupValueChangeDetails, Stack, Text, VStack } from "@chakra-ui/react";
+import { FormSubmissionModal } from "@/components/Form";
+import { Box, Button, Dialog, Field, Heading, HStack, Input, Portal, RadioGroup, RadioGroupValueChangeDetails, Stack, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
 const TextInput = ({ name, label, required = true }: { name: string, label: string, required?: boolean }) => {
@@ -58,7 +59,7 @@ const CreatorField = () => {
         <Text>Are you the creator of this tool?</Text>
         <Field.RequiredIndicator />
       </Field.Label>
-      <RadioGroup.Root name="isCreator" onValueChange={toggleEmailRequired}>
+      <RadioGroup.Root name="isCreator" onValueChange={toggleEmailRequired} required>
         <VStack align="start">
           <HStack align="center" justifyContent="space-between">
             <RadioGroup.Item value="true" w="1/2" >
@@ -80,6 +81,10 @@ const CreatorField = () => {
 };
 
 function ToolSubmissionPage() {
+  const [isDialogueOpen, setDialogueOpen] = useState<boolean>(false);
+  const [dialogueBody, setDialogueBody] = useState<string>("");
+  const [dialogueTitle, setDialogueTitle] = useState<string>("");
+
   const submitForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Get form data from the submit event
@@ -90,8 +95,15 @@ function ToolSubmissionPage() {
       body: formData,
     });
     // Handle the response from the server
-    if (res.ok) { /* [...] */ }
-    else { /* [...] */ }
+    setDialogueOpen(true);
+    if (res.ok) {
+      setDialogueTitle("Success");
+      setDialogueBody("Thank you for your submission. It will be reviewed by a moderator.");
+    }
+    else {
+      setDialogueTitle("Error");
+      setDialogueBody("An error occurred while processing your submission.");
+    }
   };
 
 
@@ -116,7 +128,17 @@ function ToolSubmissionPage() {
               <CreatorField />
             </VStack>
           </Box>
-          <Button type="submit" variant="outline" borderColor="primary" borderWidth="medium" size="2xl" w="2xs" alignSelf="end">Submit</Button>
+          <FormSubmissionModal
+            title={dialogueTitle}
+            body={dialogueBody}
+            isOpen={isDialogueOpen}
+            onOpenChange={details => {
+              if (details.open) { } // Do nothing. We want to control when the dialogue opens
+              else setDialogueOpen(details.open) // Close dialogue when received from the modal
+            }}
+          >
+            <Button type="submit" variant="outline" borderColor="primary" borderWidth="medium" size="2xl" w="2xs" alignSelf="end">Submit</Button>
+          </FormSubmissionModal>
         </VStack>
       </form>
     </Stack >
