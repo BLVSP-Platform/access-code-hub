@@ -1,7 +1,6 @@
 import { betterAuth } from "better-auth";
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import 'dotenv/config'
 
 if (!process.env.MONGODB_URI) {
     throw new Error("MONGODB_URI not provided");
@@ -24,5 +23,5 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
     },
-    trustedOrigins: ["http://localhost:5173"]
+    trustedOrigins: [`http://localhost:${process.env.CLIENT_PORT}`]
 });

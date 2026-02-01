@@ -3,7 +3,7 @@ import { toNodeHandler } from "better-auth/node";
 import { auth } from "./auth";
 
 const app = express();
-const port = 8000;
+const port = process.env.SERVER_PORT;
 
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 
