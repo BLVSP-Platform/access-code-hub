@@ -1,23 +1,28 @@
 import { Button, Dialog, DialogOpenChangeDetails, Portal } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
-export interface FormSubmissionModalParams {
+interface FormDialogProps {
     children: ReactNode;
-    title?: ReactNode;
-    body?: ReactNode;
+    title: ReactNode;
+    body: ReactNode;
     isOpen?: boolean;
-    onOpenChange?: ((details: DialogOpenChangeDetails) => void)
-
+    onOpenChange?: ((details: DialogOpenChangeDetails) => void);
+    /*
+        Listens for when Chakra triggers Dialog to open. Useful for controlling when the Dialog opens.
+        details.open is either true or false depending on whether the Dialog was triggered to be opened or closed 
+        if (details.open) { } // Do something when Chakra wants to open the Dialog
+        else { setDialogueOpen(details.open) } // Do something when Chakra wants to close the Dialog
+    */
 }
 
-export function FormSubmissionModal(params: FormSubmissionModalParams) {
-    const {
-        children,
-        title,
-        body,
-        isOpen,
-        onOpenChange
-    } = params;
+// Modal dialog/popup created on form submission
+export function FormDialog({
+    children,
+    title,
+    body,
+    isOpen,
+    onOpenChange
+}: FormDialogProps) {
 
     return (
         <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
@@ -51,6 +56,5 @@ export function FormSubmissionModal(params: FormSubmissionModalParams) {
                 </Dialog.Backdrop>
             </Portal>
         </Dialog.Root>
-
     )
 }

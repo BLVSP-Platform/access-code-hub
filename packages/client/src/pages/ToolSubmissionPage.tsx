@@ -1,8 +1,17 @@
-import { FormSubmissionModal } from "@/components/Form";
+import { FormDialog } from "@/components/Form";
 import { Box, Button, Field, Heading, HStack, Input, RadioGroup, RadioGroupValueChangeDetails, Stack, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
-const TextInput = ({ name, label, required = true }: { name: string, label: string, required?: boolean }) => {
+interface TextInputProps {
+  name: string,
+  label: string,
+  required?: boolean
+}
+const TextInput = ({
+  name,
+  label,
+  required = true
+}: TextInputProps) => {
   return (
     <Field.Root required={required}>
       <Field.Label>
@@ -90,19 +99,27 @@ function ToolSubmissionPage() {
     // Get form data from the submit event
     const form = event.target as HTMLFormElement;
     const formData = new FormData(form);
-    const res = await fetch("http://localhost:5173/api/tool", {
-      method: "POST",
-      body: formData,
-    });
-    // Handle the response from the server
-    setDialogueOpen(true);
-    if (res.ok) {
-      setDialogueTitle("Success");
-      setDialogueBody("Thank you for your submission. It will be reviewed by a moderator.");
-    }
-    else {
-      setDialogueTitle("Error");
-      setDialogueBody("An error occurred while processing your submission.");
+    try {
+      const res = await fetch("http://localhost:5173/api/tool", {
+        method: "POST",
+        body: formData,
+      });
+      // Handle the response from the server
+      setDialogueOpen(true);
+      if (res.ok) {
+        setDialogueTitle("Success");
+        setDialogueBody("Thank you for your submission. It will be reviewed by a moderator.");
+      }
+      else {
+
+        setDialogueTitle(`Error: ${res.statusText}`);
+        setDialogueBody("An error occurred while processing your submission.");
+      }
+    } catch (err) {
+      if (Error.isError(err)) {
+        setDialogueTitle(err.name);
+        setDialogueBody(err.message);
+      }
     }
   };
 
@@ -128,17 +145,16 @@ function ToolSubmissionPage() {
               <CreatorField />
             </VStack>
           </Box>
-          <FormSubmissionModal
+          <FormDialog
             title={dialogueTitle}
             body={dialogueBody}
             isOpen={isDialogueOpen}
             onOpenChange={details => {
-              if (details.open) { } // Do nothing. We want to control when the dialogue modal opens
-              else setDialogueOpen(details.open) // Close dialogue when received from the modal
+              if (!details.open) setDialogueOpen(false);
             }}
           >
             <Button type="submit" variant="outline" borderColor="primary" borderWidth="medium" size="2xl" w="2xs" alignSelf="end">Submit</Button>
-          </FormSubmissionModal>
+          </FormDialog>
         </VStack>
       </form>
     </Stack >
