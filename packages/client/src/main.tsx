@@ -15,6 +15,7 @@ import { LoginPage } from './pages/LoginPage.tsx';
 import { RequireAuth } from './components/AuthProvider.tsx';
 import ToolSubmissionPage from './pages/ToolSubmissionPage.tsx';
 import CustomToolSubmissionPage from './pages/CustomToolSubmissionPage.tsx';
+import MentorshipPage from './pages/MentorshipPage.tsx';
 
 const router = createBrowserRouter([
 	{
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
 					{
 						path: "submission2", // @todo: this should replace submission when backend is completed
 						element: <CustomToolSubmissionPage />
+					},
+					{
+						path: "mentorship",
+						element: <MentorshipPage />
 					},
 				],
 			},
