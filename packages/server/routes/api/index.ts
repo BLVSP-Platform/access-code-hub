@@ -10,7 +10,7 @@ const app = Router();
 //     res.send("Hello!")
 // });
 
-app.post("/api/tool",
+app.post("/tool",
     formHandler.none(),
     body("email").trim().isEmail().normalizeEmail(),
     body("link").trim().isURL().escape(),
