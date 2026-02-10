@@ -2,11 +2,13 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 import { ToolFormModel, type ToolFormParameters } from "./schema/tool";
 import mongoose from "mongoose";
 
-export const initializeMongoose = async () => await mongoose.connect("mongodb+srv://blvsp_db_user:My6$Password!@cluster0.upfmf6g.mongodb.net/?appName=Cluster0", {
+const MONGODB_URI = process.env.MONGODB_URI || "";
+
+export const initializeMongoose = async () => await mongoose.connect(MONGODB_URI, {
     bufferCommands: false,
 });
 
-export const client = new MongoClient("mongodb+srv://blvsp_db_user:My6$Password!@cluster0.upfmf6g.mongodb.net/?appName=Cluster0", {
+export const client = new MongoClient(MONGODB_URI, {
     serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
