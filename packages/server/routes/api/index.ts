@@ -1,7 +1,7 @@
 import { body } from "express-validator";
 import multer from "multer";
-import { ToolFormModel, type ToolFormParameters } from "../../schema/tool";
 import { Router } from "express";
+import { insertToolSubmission } from "../../db";
 
 const formHandler = multer();
 const app = Router();
@@ -23,7 +23,10 @@ app.post("/tool",
     body("isCreator").isBoolean(),
     async (req, res) => {
         try {
-            await ToolFormModel.create(req.body as ToolFormParameters);
+            const result = await insertToolSubmission(req.body);
+            if (!result) {
+                return res.status(502);
+            }
             return res.status(201).send("Success");
         } catch (err) {
             return res.status(500);
