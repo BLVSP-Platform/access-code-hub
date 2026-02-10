@@ -1,16 +1,14 @@
 import { betterAuth } from "better-auth";
-import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { client } from "./db"
+// const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://cluster0.upfmf6g.mongodb.net/?authSource=%24external&authMechanism=MONGODB-X509&appName=Cluster0'
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/blvsp'
+// if (!MONGODB_URI) throw new Error("");
 
-if (!MONGODB_URI) throw new Error("");
-
-const client = new MongoClient(MONGODB_URI);
-const db = client.db();
+// const credentials = "C:\\Users\\green\\Downloads\\X509-cert-9033981711947858141.pem";
 
 export const auth = betterAuth({
-    database: mongodbAdapter(db, {
+    database: mongodbAdapter(client.db(), {
         client
     }),
     emailAndPassword: {
