@@ -15,7 +15,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8000/',
+        target: 'http://localhost:8000/', // TODO: Proxy the correct port based on project root env 
         changeOrigin: true
       }
     }
