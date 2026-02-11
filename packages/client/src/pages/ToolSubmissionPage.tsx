@@ -90,9 +90,9 @@ const CreatorField = () => {
 };
 
 function ToolSubmissionPage() {
-  const [isDialogueOpen, setDialogueOpen] = useState<boolean>(false);
-  const [dialogueBody, setDialogueBody] = useState<string>("");
-  const [dialogueTitle, setDialogueTitle] = useState<string>("");
+  const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [dialogBody, setDialogBody] = useState<string>("");
+  const [dialogTitle, setDialogTitle] = useState<string>("");
 
   const submitForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -105,20 +105,19 @@ function ToolSubmissionPage() {
         body: formData,
       });
       // Handle the response from the server
-      setDialogueOpen(true);
+      setDialogOpen(true);
       if (res.ok) {
-        setDialogueTitle("Success");
-        setDialogueBody("Thank you for your submission. It will be reviewed by a moderator.");
+        setDialogTitle("Success");
+        setDialogBody("Thank you for your submission. It will be reviewed by a moderator.");
       }
       else {
-
-        setDialogueTitle(`Error: ${res.statusText}`);
-        setDialogueBody("An error occurred while processing your submission.");
+        setDialogTitle(`Error: ${res.statusText}`);
+        setDialogBody("An error occurred while processing your submission.");
       }
     } catch (err) {
       if (Error.isError(err)) {
-        setDialogueTitle(err.name);
-        setDialogueBody(err.message);
+        setDialogTitle(err.name);
+        setDialogBody(err.message);
       }
     }
   };
@@ -146,11 +145,11 @@ function ToolSubmissionPage() {
             </VStack>
           </Box>
           <FormDialog
-            title={dialogueTitle}
-            body={dialogueBody}
-            isOpen={isDialogueOpen}
+            title={dialogTitle}
+            body={dialogBody}
+            isOpen={isDialogOpen}
             onOpenChange={details => {
-              if (!details.open) setDialogueOpen(false);
+              if (!details.open) setDialogOpen(false);
             }}
           >
             <Button type="submit" variant="outline" borderColor="primary" borderWidth="medium" size="2xl" w="2xs" alignSelf="end">Submit</Button>
