@@ -1,4 +1,4 @@
-import { FormDialog } from "@/components/Form";
+import { FormDialog } from "@/components/FormDialog";
 import { Box, Button, Field, Heading, HStack, Input, RadioGroup, RadioGroupValueChangeDetails, Stack, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 

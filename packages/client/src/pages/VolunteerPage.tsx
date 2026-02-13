@@ -16,6 +16,7 @@ function VolunteerPage() {
         formState: { errors },
     } = useForm<VolunteerData>();
     
+    // @TODO: hook up to backend
     const onSubmit = handleSubmit((data) => {
         console.log(data);
         setDialogOpen(true);
@@ -49,15 +50,16 @@ function VolunteerPage() {
     )
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} noValidate>
             <Stack gap="8" align="flex-start" maxW="70%">
                 <Heading as="h1" size="4xl">
                     Volunteering
                 </Heading>
 
-                <Field.Root invalid={!!errors.shortAnswer}>
+                <Field.Root required invalid={!!errors.shortAnswer}>
                     <Field.Label>
-                        How would you like to help keep the website maintained?:<span style ={{ color: 'red' }}>*</span>
+                        How would you like to help keep the website maintained?:
+                        <Field.RequiredIndicator />
                     </Field.Label>
                     <Textarea
                         resize="none"
@@ -67,9 +69,10 @@ function VolunteerPage() {
                     <Field.ErrorText>{errors.shortAnswer?.message}</Field.ErrorText>
                 </Field.Root>
 
-                <Field.Root invalid={!!errors.email}>
+                <Field.Root required invalid={!!errors.email}> {/** @TODO: validate email here */}
                     <Field.Label>
-                        Please enter your email and a moderator will get back to you:<span style ={{ color: 'red' }}>*</span>
+                        Please enter your email and a moderator will get back to you:
+                        <Field.RequiredIndicator />
                     </Field.Label>
                     <Input
                         {...register("email", {required: "Email is required"})}
