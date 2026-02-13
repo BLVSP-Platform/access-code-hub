@@ -79,10 +79,6 @@ const router = createBrowserRouter([
 						element: <ToolSubmissionPage />
 					},
 					{
-						path: "submission2", // @todo: this should replace submission when backend is completed
-						element: <CustomToolSubmissionPage />
-					},
-					{
 						path: "volunteer",
 						element: <VolunteerPage />
 					},
