@@ -3,6 +3,7 @@ import { Box, Button, CloseButton, Dialog, Flex, Heading, HStack, Input, InputGr
 import { InfoTip } from '@/components/ui/toggle-tip';
 import { useState } from 'react';
 import { LuSearch } from 'react-icons/lu';
+import { formatDate } from '@/lib/utils';
 
 interface Posts {
   id: string;
@@ -110,7 +111,7 @@ function ThreadsPage() {
                 <Table.Cell>{posts.title}</Table.Cell>
                 <Table.Cell>{posts.topic}</Table.Cell>
                 <Table.Cell>{posts.tags}</Table.Cell>
-                <Table.Cell>{posts.date}</Table.Cell>
+                <Table.Cell>{formatDate(posts.date)}</Table.Cell>
 
               </Table.Row>
             ))}
