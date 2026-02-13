@@ -7,13 +7,17 @@ import {
 	Outlet,
 } from "react-router-dom";
 import App from './App.tsx';
-import CreatePage from './pages/CreatePage.tsx';
 import HomePage from './pages/HomePage.tsx';
 import ToolDetailPage from './pages/ToolDetailPage.tsx';
 import ToolIndexPage from './pages/ToolIndexPage.tsx';
 import { LoginPage } from './pages/LoginPage.tsx';
 import { RequireAuth } from './components/AuthProvider.tsx';
 import ToolSubmissionPage from './pages/ToolSubmissionPage.tsx';
+import VolunteerPage from './pages/VolunteerPage.tsx';
+import ThreadsPage from './pages/ThreadsPage.tsx';
+import CommunityNavPage from './pages/CommunityNavPage.tsx';
+import PostThreadPage from './pages/PostThreadPage.tsx';
+import BookmarkThreadPage from './pages/BookmarkThreadPage.tsx';
 
 const router = createBrowserRouter([
 	{
@@ -36,8 +40,25 @@ const router = createBrowserRouter([
 						element: <HomePage />,
 					},
 					{
-						path: "createpage",
-						element: <CreatePage />,
+						path: "community",
+						children: [
+							{
+								index: true,
+								element: <CommunityNavPage />
+							},
+							{
+								path: "browsethreads",
+								element: <ThreadsPage />
+							},
+							{
+								path: "postthread",
+								element: <PostThreadPage />
+							},
+							{
+								path: "bookmarkthread",
+								element: <BookmarkThreadPage /> 
+							},
+						]
 					},
 					{
 						path: "tools",
@@ -54,6 +75,10 @@ const router = createBrowserRouter([
 					{
 						path: "submission",
 						element: <ToolSubmissionPage />
+					},
+					{
+						path: "volunteer",
+						element: <VolunteerPage />
 					},
 				],
 			},
