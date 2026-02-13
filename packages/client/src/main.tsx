@@ -7,14 +7,12 @@ import {
 	Outlet,
 } from "react-router-dom";
 import App from './App.tsx';
-//import CreatePage from './pages/CreatePage.tsx';
 import HomePage from './pages/HomePage.tsx';
 import ToolDetailPage from './pages/ToolDetailPage.tsx';
 import ToolIndexPage from './pages/ToolIndexPage.tsx';
 import { LoginPage } from './pages/LoginPage.tsx';
 import { RequireAuth } from './components/AuthProvider.tsx';
 import ToolSubmissionPage from './pages/ToolSubmissionPage.tsx';
-import CustomToolSubmissionPage from './pages/CustomToolSubmissionPage.tsx';
 import VolunteerPage from './pages/VolunteerPage.tsx';
 import ThreadsPage from './pages/ThreadsPage.tsx';
 import CommunityNavPage from './pages/CommunityNavPage.tsx';
