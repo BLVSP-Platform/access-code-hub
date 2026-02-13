@@ -1,5 +1,5 @@
 import threadsData from '../data/sample_threads.json';
-import { Box, Button, CloseButton, Dialog, Heading, HStack, Input, InputGroup, Portal, Stack, Table, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, CloseButton, Dialog, Flex, Heading, HStack, Input, InputGroup, Portal, Stack, Table, Text, VStack } from "@chakra-ui/react";
 import { InfoTip } from '@/components/ui/toggle-tip';
 import { useState } from 'react';
 import { LuSearch } from 'react-icons/lu';
@@ -50,12 +50,18 @@ function ThreadsPage() {
                         onChange={(e) => setSearch(e.target.value)}
                       />
                     </InputGroup>
+
+                    {/** @TODO: implement filtering */}
                   </Box>
                 </VStack>
               </Dialog.Body>
               <Dialog.Footer>
                 <Dialog.ActionTrigger asChild>
-                  <Button onClick={handleFilterSubmit} bg="primary">Submit</Button> {/* center this? */}
+                  <Flex justify="center" w="100%">
+                    <Button onClick={handleFilterSubmit} bg="primary" w="200px">
+                      Submit
+                    </Button>
+                  </Flex>
                 </Dialog.ActionTrigger>
               </Dialog.Footer>
               <Dialog.CloseTrigger asChild>
