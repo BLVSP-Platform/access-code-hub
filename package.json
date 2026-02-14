@@ -13,6 +13,7 @@
     "concurrently": "^9.2.1"
   },
   "dependencies": {
-    "tsx": "^4.20.6"
+    "tsx": "^4.20.6",
+    "vite": "^7.3.1"
   }
 }
