@@ -3,11 +3,7 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import "dotenv/config";
 
-if (!process.env.MONGODB_URI) {
-    throw new Error("MONGODB_URI not provided");
-    process.exit(1);
-}
-
+if (!process.env.MONGODB_URI) throw new Error("MONGODB_URI not provided");
 const MONGODB_URI = process.env.MONGODB_URI;
 console.log(`Logging into mongo with ${MONGODB_URI}`);
 
@@ -17,6 +13,7 @@ const client = new MongoClient(MONGODB_URI, {
 
 const db = client.db();
 
+if (!process.env.CLIENT_URL) throw new Error("CLIENT_URL not provided")
 export const auth = betterAuth({
     database: mongodbAdapter(db, {
         client
@@ -24,5 +21,5 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
     },
-    trustedOrigins: [`http://localhost:${process.env.CLIENT_PORT}`]
+    trustedOrigins: [process.env.CLIENT_URL]
 });

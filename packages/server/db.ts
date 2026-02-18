@@ -2,7 +2,8 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 import { ToolFormModel, type ToolFormParameters } from "./schema/tool";
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/blvsp";
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) throw new Error("Error: MONGODB_URI not provided");
 
 export const initializeMongoose = async () => await mongoose.connect(MONGODB_URI, {
     bufferCommands: false,

@@ -14,7 +14,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: `http://localhost:${process.env.SERVER_PORT}/`,
+        target: import.meta.env.SERVER_URL,
         changeOrigin: true
       }
     }
