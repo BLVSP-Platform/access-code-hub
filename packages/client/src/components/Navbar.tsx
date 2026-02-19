@@ -18,9 +18,9 @@ function Navbar() {
         <HStack gap={8}>
           <NavigationMenuLink href="/" color="white">Home</NavigationMenuLink>
           <NavigationMenuLink href="tools" color="white">Tool Index</NavigationMenuLink>
-          <NavigationMenuLink href="createpage" color="white">Create Post</NavigationMenuLink>
+          <NavigationMenuLink href="community" color="white">Community</NavigationMenuLink>
           <NavigationMenuLink href="mentorship" color="white">Mentorship</NavigationMenuLink>
-          <NavigationMenuLink href="#" color="white">Volunteer</NavigationMenuLink>
+          <NavigationMenuLink href="volunteer" color="white">Volunteer</NavigationMenuLink>
           <NavigationMenuLink href="submission" color="white">Tool Submission Form</NavigationMenuLink>
         </HStack>
       </NavigationMenuItem>
