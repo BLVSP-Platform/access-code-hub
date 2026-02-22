@@ -1,0 +1,11 @@
+import type { InferSchemaType } from "mongoose";
+import mongoose from "mongoose";
+
+export const volunteerFormSchema = new mongoose.Schema({
+    description: { type: String, required: true },
+    email: { type: String, required: true },
+});
+
+export const VolunteerFormModel = mongoose.model("volunteer", volunteerFormSchema);
+
+export type VolunteerFormParameters = InferSchemaType<typeof volunteerFormSchema>;
