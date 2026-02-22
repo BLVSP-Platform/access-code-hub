@@ -6,9 +6,25 @@ import { insertToolSubmission } from "../../db";
 const formHandler = multer();
 const app = Router();
 
-// app.get("/api/example", (req, res) => {
-//     res.send("Hello!")
-// });
+app.post("/thread",
+    formHandler.none(),
+    body("title").trim().isString().escape(),
+    body("topic").trim().isString().escape(),
+    body("content").trim().isString().escape(),
+    body("tags").trim().isString().escape(),
+    async (req, res) => {
+
+    }
+);
+
+app.post("/volunteer",
+    formHandler.none(),
+    body("description").trim().isString().escape(),
+    body("email").trim().isEmail().normalizeEmail(),
+    async (req, res) => {
+
+    }
+)
 
 app.post("/tool",
     formHandler.none(),
