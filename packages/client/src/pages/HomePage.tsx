@@ -45,7 +45,7 @@ function App() {
 				sm: "24"
 			}} className="directory">
 				<HomePageItem
-          to="tools"
+          to="toolsmenu"
           title="Tool Index"
           description="Our Tool Index page is a configured list of accessible tools. Please visit here to find the most applicable tools for your use case."
         />

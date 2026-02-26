@@ -17,7 +17,7 @@ function Navbar() {
       <NavigationMenuItem flexGrow={1}>
         <HStack gap={8}>
           <NavigationMenuLink href="/" color="white">Home</NavigationMenuLink>
-          <NavigationMenuLink href="tools" color="white">Tool Index</NavigationMenuLink>
+          <NavigationMenuLink href="toolsmenu" color="white">Tool Index</NavigationMenuLink>
           <NavigationMenuLink href="community" color="white">Community</NavigationMenuLink>
           <NavigationMenuLink href="#" color="white">Mentorship</NavigationMenuLink>
           <NavigationMenuLink href="volunteer" color="white">Volunteer</NavigationMenuLink>

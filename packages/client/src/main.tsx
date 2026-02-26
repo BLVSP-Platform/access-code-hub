@@ -18,6 +18,9 @@ import ThreadsPage from './pages/ThreadsPage.tsx';
 import CommunityNavPage from './pages/CommunityNavPage.tsx';
 import PostThreadPage from './pages/PostThreadPage.tsx';
 import BookmarkThreadPage from './pages/BookmarkThreadPage.tsx';
+import ToolIndexNavPage from './pages/ToolIndexNavPage.tsx';
+import SubmitToolReviewsPage from './pages/SubmitToolReviewsPage.tsx';
+import BookmarkToolPage from './pages/BookmarkToolPage.tsx';
 
 const router = createBrowserRouter([
 	{
@@ -61,20 +64,33 @@ const router = createBrowserRouter([
 						]
 					},
 					{
-						path: "tools",
-						element: <ToolIndexPage />,
+						path: "toolsmenu",
+						children: [
+							{
+								index: true,
+								element: <ToolIndexNavPage />,
+							},
+							{
+								path: "toolsindex",
+								element: <ToolIndexPage />
+							},
+							{
+								path: "submission",
+								element: <ToolSubmissionPage />
+							},
+							{
+								path: "submitreviews",
+								element: <SubmitToolReviewsPage />
+							},
+							{
+								path: "bookmarktool",
+								element: <BookmarkToolPage />
+							}
+						]
 					},
 					{
 						path: "tool/:id",
 						element: <ToolDetailPage />,
-					},
-					{
-						path: "index",
-						element: <ToolIndexPage />,
-					},
-					{
-						path: "submission",
-						element: <ToolSubmissionPage />
 					},
 					{
 						path: "volunteer",
