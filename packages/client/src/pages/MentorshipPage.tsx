@@ -1,7 +1,7 @@
-import { Portal, Dialog, Flex, Button, Field, Stack, Heading} from "@chakra-ui/react"
+import { Input, Portal, RadioGroup, Dialog, Flex, Button, Field, Stack, Heading, TagsInput} from "@chakra-ui/react"
 import {useForm} from "react-hook-form"
 import {useState} from "react"
-import { Radio, RadioGroup } from "@/components/ui/radio";
+//import { Radio, RadioGroup } from "@/components/ui/radio";
 import { Controller } from "react-hook-form";
 import { InputTagsCombo } from "@/components/ui/input-tags-combo";
 
@@ -18,6 +18,7 @@ function MentorshipPage() {
         register,
         handleSubmit,
         control,
+        setValue,
         formState: { errors },
     } = useForm<MentorshipData>();
     
@@ -25,6 +26,11 @@ function MentorshipPage() {
         console.log(data);
         setDialogOpen(true);
     })
+
+    const items = [
+        { label: "Mentor", value: "Mentor" },
+        { label: "Mentee", value: "Mentee" },
+    ]
 
     const submitDialog = (
           <Dialog.Root placement="center"open={dialogOpen} onOpenChange={(e) => setDialogOpen(e.open)}>
@@ -54,34 +60,44 @@ function MentorshipPage() {
     )
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} noValidate>
             <Stack gap="8" align="flex-start" maxW="70%">
                 <Heading as="h1" size="4xl">
                     Mentorship
                 </Heading>
 
-                <Field.Root invalid={!!errors.mentorshipRole}>
+                {/* mentor/mentee selection ------------------*/}
+                <Field.Root required invalid={!!errors.mentorshipRole}>
                     <Field.Label>
-                        Are you interested in giving or receiving mentorship?<span style={{ color: "red" }}>*</span>
+                        Are you interested in giving or receiving mentorship?:
+                        <Field.RequiredIndicator />
                     </Field.Label>
 
-                    <Controller
-                        name="mentorshipRole"
-                        control={control}
-                        rules={{ required: "Please select Mentor or Mentee" }}
-                        render={({ field }) => (
-                        <RadioGroup value={field.value} onChange={field.onChange}>
-                            <Stack gap="3" mt="2">
-                            <Radio value="Mentor">Mentor</Radio>
-                            <Radio value="Mentee">Mentee</Radio>
-                            </Stack>
-                        </RadioGroup>
-                        )}
+                    <Input 
+                        type="text"
+                        hidden
+                        readOnly
+                        required 
+                        {...register("mentorshipRole", { required: "Please select an option." })}
                     />
 
+                    <RadioGroup.Root 
+                        onValueChange={(detail) => setValue("mentorshipRole", detail.value as "Mentor" | "Mentee", { shouldValidate: true })}
+                    >
+                        <Stack gap="3">
+                            {items.map((item) => (
+                            <RadioGroup.Item key={item.value} value={item.value}>
+                                <RadioGroup.ItemHiddenInput  />
+                                <RadioGroup.ItemIndicator />
+                                <RadioGroup.ItemText>{item.label}</RadioGroup.ItemText>
+                            </RadioGroup.Item>
+                            ))}
+                        </Stack>
+                    </RadioGroup.Root>
                 <Field.ErrorText>{errors.mentorshipRole?.message}</Field.ErrorText>
                 </Field.Root>
 
+                {/* mentor input ------------------- original*/}
                 <Field.Root invalid={!!errors.mentorQual}>
                 <Controller
                     name="mentorQual"
@@ -92,7 +108,7 @@ function MentorshipPage() {
                     render={({ field }) => (
                     <InputTagsCombo
                         label="If you would like to mentor, what qualifications do you have to share?:"
-                        placeholder="Add skills"
+                        placeholder="Type to start adding tags..."
                         value={field.value}
                         onChange={field.onChange}
                     />
@@ -101,25 +117,36 @@ function MentorshipPage() {
                 <Field.ErrorText>{errors.mentorQual?.message}</Field.ErrorText>
                 </Field.Root>
 
-                <Field.Root invalid={!!errors.menteeQual}>
+                {/* mentee input --------------changed*/}
+                <Field.Root required invalid={!!errors.menteeQual}>
+                <Field.Label>
+                    If you would like to be a mentee, what qualifications do you want from a mentor?:
+                    <Field.RequiredIndicator />
+                </Field.Label>
+
                 <Controller
                     name="menteeQual"
                     control={control}
                     rules={{
-                    validate: (v) => (v?.length ?? 0) > 0 || "Please add at least one preference or N/A for none",
+                    validate: (value) =>
+                        (value?.length ?? 0) > 0 || "Please add at least one skill or type N/A",
                     }}
                     render={({ field }) => (
-                    <InputTagsCombo
-                        label="If you would like to be a mentee, what qualifications do you want from a mentor?:"
-                        placeholder="Add skills"
-                        value={field.value}
-                        onChange={field.onChange}
-                    />
+                    <TagsInput.Root
+                        value={field.value || []}
+                        onValueChange={(details) => field.onChange(details.value)}
+                    >
+                        <TagsInput.Control>
+                        <TagsInput.Items />
+                        <TagsInput.Input placeholder="Type to start adding tags..." />
+                        </TagsInput.Control>
+                    </TagsInput.Root>
                     )}
                 />
+
                 <Field.ErrorText>{errors.menteeQual?.message}</Field.ErrorText>
                 </Field.Root>
-                                
+                                                
             </Stack>
 
             <Flex gap="4" w="100%" justify="flex-end" mt="8">
