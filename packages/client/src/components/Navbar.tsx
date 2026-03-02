@@ -6,7 +6,7 @@ import {
 
 import { ColorModeButton } from "./ui/color-mode";
 import { HStack, Image } from "@chakra-ui/react";
-import { LoginButton } from "./ui/login-button";
+import { AuthDialog } from "./ui/AuthDialog";
 
 function Navbar() {
   return (
@@ -27,7 +27,7 @@ function Navbar() {
       <NavigationMenuItem>
         <HStack gap={4}>
           <ColorModeButton color="white"></ColorModeButton>
-          <LoginButton />
+          <AuthDialog />
         </HStack>
       </NavigationMenuItem>
     </NavigationMenu>
