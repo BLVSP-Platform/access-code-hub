@@ -12,7 +12,7 @@ export const AuthDialog = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [authError, setAuthError] = useState('');
+    const [authError, setAuthError] = useState(''); // @TODO: would be nicer if we differentiated and displayed errors by field 
 
     const handleSubmit = async (e: React.SubmitEvent) => {
       e.preventDefault();
@@ -56,17 +56,38 @@ export const AuthDialog = () => {
         {isRegistering && (
           <Field.Root> 
             <Field.Label>Username</Field.Label>
-            <Input value={username} onChange={(e) => setUsername(e.target.value)} />
+            <Input 
+              value={username} 
+              disabled={loading}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                setAuthError('');
+              }}
+            />
           </Field.Root>
         )}
         
         <Field.Root mt="4">
           <Field.Label>Email</Field.Label>
-          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input 
+            value={email} 
+            disabled={loading}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              setAuthError('');
+            }}
+          />
         </Field.Root>
         <Field.Root mt="4">
           <Field.Label>Password</Field.Label>
-          <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
+          <PasswordInput 
+            value={password} 
+            disabled={loading}
+            onChange={(e) => {
+              setPassword(e.target.value)
+              setAuthError('');
+            }} 
+          />
         </Field.Root>
 
         {authError && (
