@@ -1,4 +1,4 @@
-import { Button, CloseButton, Dialog, Field, Flex, IconButton, Input, Portal } from "@chakra-ui/react";
+import { Button, CloseButton, Dialog, Field, Flex, IconButton, Input, Portal, Text } from "@chakra-ui/react";
 import { LuCircleUserRound } from "react-icons/lu";
 import { useState } from "react";
 import { PasswordInput } from "./password-input";
@@ -11,30 +11,50 @@ export const AuthDialog = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [authError, setAuthError] = useState('');
 
     const handleSubmit = async (e: React.SubmitEvent) => {
       e.preventDefault();
+      setAuthError('');
+      setLoading(true);
+      
+      try {
+        let result;
 
-      if(isRegistering){
-        await signUp.email({
-          name: username,
-          email,
-          password,
-          callbackURL: '/',
-        });
-      } else {
-        await signIn.email({
-          email,
-          password,
-          callbackURL: '/',
-        });
+        if(isRegistering){
+          result = await signUp.email({
+            name: username,
+            email,
+            password,
+            callbackURL: '/',
+          });
+        } else {
+          result = await signIn.email({
+            email,
+            password,
+            callbackURL: '/',
+          });
+        }
+
+        if(result?.error){
+          const rawMessage = result.error.message ?? "Authentication failed.";
+          const cleanedMessage = rawMessage.replace(/\[.*?\]\s*/, ''); // @todo: kinda scuffed
+          setAuthError(cleanedMessage);
+          return;
+        }
+      } catch (err) {
+        setAuthError("Something went wrong. Please try again.");
+      } finally {
+        setLoading(false);
       }
+      
     }
   
     return (
       <Flex as='form' onSubmit={handleSubmit} flexDir="column">
         {isRegistering && (
-          <Field.Root> {/* @todo: ask yoonha if this is ok */}
+          <Field.Root> 
             <Field.Label>Username</Field.Label>
             <Input value={username} onChange={(e) => setUsername(e.target.value)} />
           </Field.Root>
@@ -49,10 +69,18 @@ export const AuthDialog = () => {
           <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
         </Field.Root>
 
+        {authError && (
+          <Text color="red" mt="2">
+            {authError}
+          </Text>
+        )}
+
         <Button 
           type="submit" 
           mt="8" 
           bg="primary" 
+          loading={loading}
+          disabled={loading}
         >
           {isRegistering ? 'Register' : 'Login'}
         </Button>
