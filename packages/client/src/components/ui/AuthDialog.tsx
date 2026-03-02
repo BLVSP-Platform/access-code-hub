@@ -3,6 +3,7 @@ import { LuCircleUserRound } from "react-icons/lu";
 import { useState } from "react";
 import { PasswordInput } from "./password-input";
 import { signIn, signUp } from "@/lib/auth";
+import { useForm } from "react-hook-form";
 
 interface LoginFormProps {
   isRegistering: boolean;
@@ -11,20 +12,23 @@ interface LoginFormProps {
   setRegisterSuccess: React.Dispatch<React.SetStateAction<string>>;
 }
 
+interface AuthFormData {
+  username?: string;
+  email: string;
+  password: string;
+}
+
 const LoginForm = ({ 
   isRegistering,
   setIsRegistering,
   registerSuccess,
   setRegisterSuccess,
 }: LoginFormProps) => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState(''); // @TODO: would be nicer if we differentiated and displayed errors by field 
+  const { register, handleSubmit, reset } = useForm<AuthFormData>()
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: AuthFormData) => {
     setAuthError('');
     setLoading(true);
     
@@ -33,15 +37,15 @@ const LoginForm = ({
 
       if(isRegistering){
         result = await signUp.email({
-          name: username,
-          email,
-          password,
+          name: data.username || '',
+          email: data.email,
+          password: data.password,
           callbackURL: '/',
         });
       } else {
         result = await signIn.email({
-          email,
-          password,
+          email: data.email,
+          password: data.password,
           callbackURL: '/',
         });
       }
@@ -54,8 +58,7 @@ const LoginForm = ({
       }
 
       if(isRegistering) {
-        setUsername('');
-        setPassword('');
+        reset();
         setAuthError('');
         setIsRegistering(false);
         setRegisterSuccess('Account created successfully! Please log in.');
@@ -76,41 +79,32 @@ const LoginForm = ({
   }
 
   return (
-    <Flex as='form' onSubmit={handleSubmit} flexDir="column">
+    <Flex as='form' onSubmit={handleSubmit(onSubmit)} flexDir="column">
       {isRegistering && (
         <Field.Root> 
           <Field.Label>Username</Field.Label>
-          <Input 
-            value={username} 
+          <Input
             disabled={loading}
-            onChange={(e) => {
-              setUsername(e.target.value);
-              setAuthError('');
-            }}
+            {...register("username")}
+            onChange={() => setAuthError('')}
           />
         </Field.Root>
       )}
       
       <Field.Root mt="4">
         <Field.Label>Email</Field.Label>
-        <Input 
-          value={email} 
+        <Input
           disabled={loading}
-          onChange={(e) => {
-            setEmail(e.target.value)
-            setAuthError('');
-          }}
+          {...register("email", { required: true })}
+          onChange={() => setAuthError('')}
         />
       </Field.Root>
       <Field.Root mt="4">
         <Field.Label>Password</Field.Label>
-        <PasswordInput 
-          value={password} 
+        <PasswordInput
           disabled={loading}
-          onChange={(e) => {
-            setPassword(e.target.value)
-            setAuthError('');
-          }} 
+          {...register("password", { required: true })}
+          onChange={() => setAuthError('')}
         />
       </Field.Root>
 
