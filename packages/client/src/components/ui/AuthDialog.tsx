@@ -6,6 +6,7 @@ import { signIn, signUp } from "@/lib/auth";
 
 export const AuthDialog = () => {
   const [isRegistering, setIsRegistering] = useState(false);
+  const [registerSuccess, setRegisterSuccess] = useState('');
 
   const LoginForm = () => {
     const [username, setUsername] = useState('');
@@ -43,8 +44,23 @@ export const AuthDialog = () => {
           setAuthError(cleanedMessage);
           return;
         }
-      } catch (err) {
-        setAuthError("Something went wrong. Please try again.");
+
+        if(isRegistering) {
+          setUsername('');
+          setPassword('');
+          setAuthError('');
+          setIsRegistering(false);
+          setRegisterSuccess('Account created successfully! Please log in.');
+          return;
+        }
+      } catch (err: unknown) {
+        console.error(err);
+
+        if(err instanceof Error){
+          setAuthError(err.message);
+        } else {
+          setAuthError("Something went wrong. Please try again.");
+        }
       } finally {
         setLoading(false);
       }
@@ -90,6 +106,12 @@ export const AuthDialog = () => {
           />
         </Field.Root>
 
+        {registerSuccess && (
+          <Text color="green" mt="2">
+            {registerSuccess}
+          </Text>
+        )}
+
         {authError && (
           <Text color="red" mt="2">
             {authError}
@@ -109,7 +131,11 @@ export const AuthDialog = () => {
         <Button
           variant='ghost'
           mt="4"
-          onClick={() => setIsRegistering(!isRegistering)}
+          onClick={() => {
+            setIsRegistering(!isRegistering)
+            setAuthError('');
+            setRegisterSuccess('');
+          }}
         >
           {isRegistering 
             ? 'Already have an account?'
