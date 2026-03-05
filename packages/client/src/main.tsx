@@ -1,19 +1,19 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
+import { RequireAuth } from "./components/AuthProvider.tsx";
+import BookmarkThreadPage from "./pages/BookmarkThreadPage.tsx";
+import CommunityNavPage from "./pages/CommunityNavPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
+import { LoginPage } from "./pages/LoginPage.tsx";
+import PostThreadPage from "./pages/PostThreadPage.tsx";
+import ThreadsPage from "./pages/ThreadsPage.tsx";
 import ToolDetailPage from "./pages/ToolDetailPage.tsx";
 import ToolIndexPage from "./pages/ToolIndexPage.tsx";
-import { LoginPage } from "./pages/LoginPage.tsx";
-import { RequireAuth } from "./components/AuthProvider.tsx";
 import ToolSubmissionPage from "./pages/ToolSubmissionPage.tsx";
 import VolunteerPage from "./pages/VolunteerPage.tsx";
-import ThreadsPage from "./pages/ThreadsPage.tsx";
-import CommunityNavPage from "./pages/CommunityNavPage.tsx";
-import PostThreadPage from "./pages/PostThreadPage.tsx";
-import BookmarkThreadPage from "./pages/BookmarkThreadPage.tsx";
 
 const router = createBrowserRouter([
 	{

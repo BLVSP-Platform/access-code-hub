@@ -1,4 +1,4 @@
-import { Stack, Textarea, Heading } from "@chakra-ui/react";
+import { Heading, Stack, Textarea } from "@chakra-ui/react";
 
 function BookmarkThreadPage() {
 	return (

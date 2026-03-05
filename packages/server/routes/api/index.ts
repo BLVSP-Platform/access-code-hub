@@ -1,6 +1,6 @@
+import { Router } from "express";
 import { body } from "express-validator";
 import multer from "multer";
-import { Router } from "express";
 import { insertToolSubmission } from "../../db";
 
 const formHandler = multer();

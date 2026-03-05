@@ -1,4 +1,4 @@
-import { Box, type BoxProps, Link as ChakraLink, type LinkProps, HStack, type StackProps } from "@chakra-ui/react";
+import { Box, type BoxProps, Link as ChakraLink, HStack, type LinkProps, type StackProps } from "@chakra-ui/react";
 import { Link as ReactLink } from "react-router-dom";
 
 export const NavigationMenu = (props: StackProps) => {

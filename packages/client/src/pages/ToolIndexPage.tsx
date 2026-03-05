@@ -1,4 +1,3 @@
-import toolsData from "../data/sample_tools.json";
 import {
 	Box,
 	Button,
@@ -15,9 +14,10 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react";
-import { InfoTip } from "@/components/ui/toggle-tip";
 import { useState } from "react";
 import { LuSearch } from "react-icons/lu";
+import { InfoTip } from "@/components/ui/toggle-tip";
+import toolsData from "../data/sample_tools.json";
 
 interface Tool {
 	id: string;

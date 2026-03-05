@@ -1,4 +1,4 @@
-import { Box, Grid, Heading, Link as ChakraLink, Text } from "@chakra-ui/react";
+import { Box, Link as ChakraLink, Grid, Heading, Text } from "@chakra-ui/react";
 import { Link as ReactLink } from "react-router-dom";
 
 interface HomePageItemProps {

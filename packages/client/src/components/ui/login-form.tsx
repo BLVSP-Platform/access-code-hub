@@ -1,7 +1,7 @@
 import { Button, Field, Flex, Input } from "@chakra-ui/react";
-import { PasswordInput } from "./password-input";
-import { signIn, signUp } from "@/lib/auth";
 import type { MouseEventHandler } from "react";
+import { signIn, signUp } from "@/lib/auth";
+import { PasswordInput } from "./password-input";
 
 export const LoginForm = () => {
 	const login: MouseEventHandler = (e) => {

@@ -1,4 +1,3 @@
-import threadsData from "../data/sample_threads.json";
 import {
 	Box,
 	Button,
@@ -15,10 +14,11 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react";
-import { InfoTip } from "@/components/ui/toggle-tip";
 import { useState } from "react";
 import { LuSearch } from "react-icons/lu";
+import { InfoTip } from "@/components/ui/toggle-tip";
 import { formatDate } from "@/lib/utils";
+import threadsData from "../data/sample_threads.json";
 
 interface Posts {
 	id: string;

@@ -13,8 +13,9 @@ export default function ToolDetailPage() {
   )
 }
 */
-import { useParams, useLocation } from "react-router-dom";
+
 import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 
 export default function ToolDetailPage() {
 	const { id } = useParams();

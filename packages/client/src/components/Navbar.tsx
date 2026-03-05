@@ -1,7 +1,6 @@
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
-
-import { ColorModeButton } from "./ui/color-mode";
 import { HStack, Image } from "@chakra-ui/react";
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
+import { ColorModeButton } from "./ui/color-mode";
 import { LoginButton } from "./ui/login-button";
 
 function Navbar() {

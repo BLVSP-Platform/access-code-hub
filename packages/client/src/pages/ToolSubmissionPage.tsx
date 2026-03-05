@@ -1,4 +1,3 @@
-import { FormDialog } from "@/components/FormDialog";
 import {
 	Box,
 	Button,
@@ -13,6 +12,7 @@ import {
 	VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { FormDialog } from "@/components/FormDialog";
 
 interface TextInputProps {
 	name: string;

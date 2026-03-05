@@ -1,8 +1,6 @@
-import { Stack, Heading, AbsoluteCenter, Box, Grid, Link as ChakraLink, Text } from "@chakra-ui/react";
+import { AbsoluteCenter, Box, Link as ChakraLink, Grid, Heading, Stack, Text } from "@chakra-ui/react";
+import { LuBookmark, LuFile, LuSearch } from "react-icons/lu";
 import { Link as ReactLink } from "react-router-dom";
-import { LuSearch } from "react-icons/lu";
-import { LuFile } from "react-icons/lu";
-import { LuBookmark } from "react-icons/lu";
 
 interface CommunityPageProps {
 	to: string;

@@ -1,6 +1,6 @@
-import { Portal, Dialog, Flex, Button, Field, Input, Stack, Textarea, Heading } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
+import { Button, Dialog, Field, Flex, Heading, Input, Portal, Stack, Textarea } from "@chakra-ui/react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 interface VolunteerData {
 	shortAnswer: string;
