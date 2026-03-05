@@ -7,7 +7,7 @@ import {
 	HStack,
 	Input,
 	RadioGroup,
-	RadioGroupValueChangeDetails,
+	type RadioGroupValueChangeDetails,
 	Stack,
 	Text,
 	VStack,

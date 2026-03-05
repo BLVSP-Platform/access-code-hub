@@ -1,5 +1,5 @@
-import { Button, Dialog, DialogOpenChangeDetails, Portal } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import { Button, Dialog, type DialogOpenChangeDetails, Portal } from "@chakra-ui/react";
+import type { ReactNode } from "react";
 
 interface FormDialogProps {
 	children: ReactNode;
