@@ -101,6 +101,7 @@ export const PasswordStrengthMeter = React.forwardRef<HTMLDivElement, PasswordSt
 				<HStack width="full" {...rest}>
 					{Array.from({ length: max }).map((_, index) => (
 						<Box
+							// biome-ignore lint: list is fixed in this case; using index as key is okay
 							key={index}
 							height="1"
 							flex="1"
