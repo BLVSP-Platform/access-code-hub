@@ -4,19 +4,20 @@ import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/blvsp";
 
-export const initializeMongoose = async () => await mongoose.connect(MONGODB_URI, {
-    bufferCommands: false,
-});
+export const initializeMongoose = async () =>
+	await mongoose.connect(MONGODB_URI, {
+		bufferCommands: false,
+	});
 
 export const client = new MongoClient(MONGODB_URI, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    }
+	serverApi: {
+		version: ServerApiVersion.v1,
+		strict: true,
+		deprecationErrors: true,
+	},
 });
 
 export const insertToolSubmission = async (formParams: ToolFormParameters) => {
-    const result = await ToolFormModel.insertOne(formParams);
-    return result.id;
-}
+	const result = await ToolFormModel.insertOne(formParams);
+	return result.id;
+};

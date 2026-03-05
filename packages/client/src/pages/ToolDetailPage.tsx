@@ -13,42 +13,42 @@ export default function ToolDetailPage() {
   )
 }
 */
-import { useParams, useLocation } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useParams, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function ToolDetailPage() {
-  const { id } = useParams()
-  const location = useLocation()
-  const name = location.state?.name as string | undefined
-  const [textContent, setTextContent] = useState('Loading...')
+	const { id } = useParams();
+	const location = useLocation();
+	const name = location.state?.name as string | undefined;
+	const [textContent, setTextContent] = useState("Loading...");
 
-  useEffect(() => {
-    if (!id) return
+	useEffect(() => {
+		if (!id) return;
 
-    // Fetch from public folder
-    fetch(`/${id}.txt`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('File not found')
-        }
-        return res.text()
-      })
-      .then((text) => setTextContent(text))
-      .catch((error) => {
-        console.error(error)
-        setTextContent('Could not load tool description.')
-      })
-  }, [id])
+		// Fetch from public folder
+		fetch(`/${id}.txt`)
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error("File not found");
+				}
+				return res.text();
+			})
+			.then((text) => setTextContent(text))
+			.catch((error) => {
+				console.error(error);
+				setTextContent("Could not load tool description.");
+			});
+	}, [id]);
 
-  return (
-    <div className="p-6 whitespace-pre-wrap">
-      <h2 className="text-2xl font-bold mb-4">{name ?? 'Tool Detail Page'}</h2>
-      <p className="mb-4 font-medium text-gray-700">Tool ID: {id}</p>
-      <div className="bg-white dark:bg-gray-800 p-4 rounded shadow text-gray-900 dark:text-gray-100">
-        {textContent}
-      </div>
-    </div>
-  )
+	return (
+		<div className="p-6 whitespace-pre-wrap">
+			<h2 className="text-2xl font-bold mb-4">{name ?? "Tool Detail Page"}</h2>
+			<p className="mb-4 font-medium text-gray-700">Tool ID: {id}</p>
+			<div className="bg-white dark:bg-gray-800 p-4 rounded shadow text-gray-900 dark:text-gray-100">
+				{textContent}
+			</div>
+		</div>
+	);
 }
 
 /*
