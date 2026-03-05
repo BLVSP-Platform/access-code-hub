@@ -44,5 +44,10 @@
 				"organizeImports": "on"
 			}
 		}
-	}
+	},
+  "json": {
+    "formatter": {
+      "enabled": false
+    }
+  }
 }
