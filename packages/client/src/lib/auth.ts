@@ -1,4 +1,6 @@
 import { createAuthClient } from "better-auth/react"
+import "dotenv/config";
+
 export const { signIn, signUp, useSession } = createAuthClient({
-    baseURL: "http://localhost:5173/"
+    baseURL: import.meta.env.CLIENT_URL
 });
