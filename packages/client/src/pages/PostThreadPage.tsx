@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, Field, Flex, Heading, Input, Portal, Stack, Textarea } from "@chakra-ui/react";
+import { Button, Dialog, Field, Flex, Heading, Input, Portal, Stack, Textarea } from "@chakra-ui/react";
 
 interface PostPageProps {
 	label: string;

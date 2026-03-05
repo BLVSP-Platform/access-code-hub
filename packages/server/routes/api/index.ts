@@ -29,7 +29,7 @@ app.post(
 				return res.status(502);
 			}
 			return res.status(201).send("Success");
-		} catch (err) {
+		} catch (_err) {
 			return res.status(500);
 		}
 	},
