@@ -10,3 +10,8 @@ export const threadFormSchema = new mongoose.Schema({
 export const ThreadFormModel = mongoose.model("thread", threadFormSchema);
 
 export type ThreadFormParameters = InferSchemaType<typeof threadFormSchema>;
+
+export const insertThread = async (formParams: ThreadFormParameters) => {
+    const result = await ThreadFormModel.insertOne(formParams);
+    return result.id;
+}

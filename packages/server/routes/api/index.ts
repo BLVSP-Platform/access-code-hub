@@ -1,7 +1,9 @@
 import { body } from "express-validator";
 import multer from "multer";
 import { Router } from "express";
-import { insertToolSubmission } from "../../db";
+import { insertToolSubmission } from "../../schema/tool";
+import { insertVolunteerApplication } from "../../schema/volunteer";
+import { insertThread } from "../../schema/thread";
 
 const formHandler = multer();
 const app = Router();
@@ -13,7 +15,15 @@ app.post("/thread",
     body("content").trim().isString().escape(),
     body("tags").trim().isString().escape(),
     async (req, res) => {
-
+        try {
+            const result = await insertThread(req.body);
+            if (!result) {
+                return res.status(502);
+            }
+            return res.status(201).send("Success");
+        } catch (err) {
+            return res.status(500);
+        }
     }
 );
 
@@ -22,7 +32,15 @@ app.post("/volunteer",
     body("description").trim().isString().escape(),
     body("email").trim().isEmail().normalizeEmail(),
     async (req, res) => {
-
+        try {
+            const result = await insertVolunteerApplication(req.body);
+            if (!result) {
+                return res.status(502);
+            }
+            return res.status(201).send("Success");
+        } catch (err) {
+            return res.status(500);
+        }
     }
 )
 

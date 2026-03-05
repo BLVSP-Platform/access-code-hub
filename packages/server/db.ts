@@ -1,5 +1,4 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
-import { ToolFormModel, type ToolFormParameters } from "./schema/tool";
 import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/blvsp";
@@ -15,8 +14,3 @@ export const client = new MongoClient(MONGODB_URI, {
         deprecationErrors: true,
     }
 });
-
-export const insertToolSubmission = async (formParams: ToolFormParameters) => {
-    const result = await ToolFormModel.insertOne(formParams);
-    return result.id;
-}

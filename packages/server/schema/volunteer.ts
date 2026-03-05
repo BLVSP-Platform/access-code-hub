@@ -9,3 +9,8 @@ export const volunteerFormSchema = new mongoose.Schema({
 export const VolunteerFormModel = mongoose.model("volunteer", volunteerFormSchema);
 
 export type VolunteerFormParameters = InferSchemaType<typeof volunteerFormSchema>;
+
+export const insertVolunteerApplication = async (formParams: VolunteerFormParameters) => {
+    const result = await VolunteerFormModel.insertOne(formParams);
+    return result.id;
+}
