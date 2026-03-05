@@ -1,4 +1,5 @@
 import { FormDialog } from "@/components/FormDialog";
+import { formDataCast } from "@/lib/utils";
 import { Input, Button, Flex, Stack, Textarea, Heading, Box, Field } from "@chakra-ui/react"
 import { useState } from "react";
 import { FieldError, RegisterOptions, useForm } from "react-hook-form"
@@ -23,6 +24,8 @@ interface PostPageProps {
 
 function PostThreadPage() {
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogBody, setDialogBody] = useState<string>("");
+    const [dialogTitle, setDialogTitle] = useState<string>("");
 
     const {
         register,
@@ -31,9 +34,29 @@ function PostThreadPage() {
     } = useForm<ThreadData>();
 
     // @TODO: hook up to backend
-    const onSubmit = handleSubmit((data) => {
-        console.log(data);
-        setDialogOpen(true);
+    const onSubmit = handleSubmit(async (data) => {
+        const formData = formDataCast(data);
+        try {
+            const res = await fetch("/api/thread", {
+                method: "POST",
+                body: formData,
+            });
+            // Handle the response from the server
+            setDialogOpen(true);
+            if (res.ok) {
+                setDialogTitle("Thread Posted!");
+                setDialogBody("");
+            }
+            else {
+                setDialogTitle(`Error: ${res.statusText}`);
+                setDialogBody("An error occurred while processing your submission.");
+            }
+        } catch (err) {
+            if (Error.isError(err)) {
+                setDialogTitle(err.name);
+                setDialogBody(err.message);
+            }
+        }
     });
 
     const PostPageInput = ({ label, text, name, registerOptions, error }: PostPageProps) => {
@@ -89,8 +112,8 @@ function PostThreadPage() {
                 />
             </Stack>
             <FormDialog
-                title="Thread Posted!"
-                body=""
+                title={dialogTitle}
+                body={dialogBody}
                 isOpen={dialogOpen}
                 onOpenChange={details => {
                     if (!details.open) setDialogOpen(false)

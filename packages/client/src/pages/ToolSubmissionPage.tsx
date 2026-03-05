@@ -156,7 +156,7 @@ function ToolSubmissionPage() {
           </FormDialog>
         </VStack>
       </form>
-    </Stack >
+    </Stack>
   );
 }
 

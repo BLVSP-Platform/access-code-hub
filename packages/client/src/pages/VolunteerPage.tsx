@@ -2,6 +2,7 @@ import { Flex, Button, Field, Input, Stack, Textarea, Heading } from "@chakra-ui
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { FormDialog } from "@/components/FormDialog";
+import { formDataCast } from "@/lib/utils";
 
 interface VolunteerData {
     shortAnswer: string;
@@ -10,6 +11,8 @@ interface VolunteerData {
 
 function VolunteerPage() {
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogBody, setDialogBody] = useState<string>("");
+    const [dialogTitle, setDialogTitle] = useState<string>("");
 
     const {
         register,
@@ -18,9 +21,29 @@ function VolunteerPage() {
     } = useForm<VolunteerData>();
 
     // @TODO: hook up to backend
-    const onSubmit = handleSubmit((data) => {
-        console.log(data);
-        setDialogOpen(true);
+    const onSubmit = handleSubmit(async (data) => {
+        const formData = formDataCast(data);
+        try {
+            const res = await fetch("/api/volunteer", {
+                method: "POST",
+                body: formData,
+            });
+            // Handle the response from the server
+            setDialogOpen(true);
+            if (res.ok) {
+                setDialogTitle("Thank you for volunteering!");
+                setDialogBody("A moderator will review this and get back to you.");
+            }
+            else {
+                setDialogTitle(`Error: ${res.statusText}`);
+                setDialogBody("An error occurred while processing your submission.");
+            }
+        } catch (err) {
+            if (Error.isError(err)) {
+                setDialogTitle(err.name);
+                setDialogBody(err.message);
+            }
+        }
     });
 
     return (
@@ -55,8 +78,8 @@ function VolunteerPage() {
                 </Field.Root>
             </Stack>
             <FormDialog
-                title="Thank you for volunteering!"
-                body="A moderator will review this and get back to you."
+                title={dialogTitle}
+                body={dialogBody}
                 isOpen={dialogOpen}
                 onOpenChange={details => {
                     if (!details.open) setDialogOpen(false);
