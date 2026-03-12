@@ -19,9 +19,12 @@ function MentorshipPage() {
         handleSubmit,
         control,
         setValue,
+        watch,
         formState: { errors },
     } = useForm<MentorshipData>();
     
+    const role = watch("mentorshipRole");
+
     const onSubmit = handleSubmit((data) => {
         console.log(data);
         setDialogOpen(true);
@@ -96,8 +99,9 @@ function MentorshipPage() {
                     </RadioGroup.Root>
                 <Field.ErrorText>{errors.mentorshipRole?.message}</Field.ErrorText>
                 </Field.Root>
-
-                {/* mentor input ------------------- original*/}
+                
+                {/* mentor input */}
+                {role === "Mentor" && (
                 <Field.Root invalid={!!errors.mentorQual}>
                 <Controller
                     name="mentorQual"
@@ -116,37 +120,30 @@ function MentorshipPage() {
                 />
                 <Field.ErrorText>{errors.mentorQual?.message}</Field.ErrorText>
                 </Field.Root>
+                )}
 
-                {/* mentee input --------------changed*/}
-                <Field.Root required invalid={!!errors.menteeQual}>
-                <Field.Label>
-                    If you would like to be a mentee, what qualifications do you want from a mentor?:
-                    <Field.RequiredIndicator />
-                </Field.Label>
-
+                {/* mentee input */}
+                {role === "Mentee" && (
+                <Field.Root invalid={!!errors.menteeQual}>
                 <Controller
                     name="menteeQual"
                     control={control}
                     rules={{
-                    validate: (value) =>
-                        (value?.length ?? 0) > 0 || "Please add at least one skill or type N/A",
+                    validate: (v) => (v?.length ?? 0) > 0 || "Please add at least one preference or N/A for none",
                     }}
                     render={({ field }) => (
-                    <TagsInput.Root
-                        value={field.value || []}
-                        onValueChange={(details) => field.onChange(details.value)}
-                    >
-                        <TagsInput.Control>
-                        <TagsInput.Items />
-                        <TagsInput.Input placeholder="Type to start adding tags..." />
-                        </TagsInput.Control>
-                    </TagsInput.Root>
+                    <InputTagsCombo
+                        label="If you would like to be a mentee, what qualifications do you want from a mentor?:"
+                        placeholder="Type to start adding tags..."
+                        value={field.value}
+                        onChange={field.onChange}
+                    />
                     )}
                 />
-
                 <Field.ErrorText>{errors.menteeQual?.message}</Field.ErrorText>
                 </Field.Root>
-                                                
+                )}               
+                
             </Stack>
 
             <Flex gap="4" w="100%" justify="flex-end" mt="8">
