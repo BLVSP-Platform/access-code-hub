@@ -135,4 +135,4 @@ function PostThreadPage() {
     )
 }
 
-export default PostThreadPage
+export default PostThreadPage;

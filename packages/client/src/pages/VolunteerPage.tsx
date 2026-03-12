@@ -100,4 +100,4 @@ function VolunteerPage() {
     )
 }
 
-export default VolunteerPage
+export default VolunteerPage;

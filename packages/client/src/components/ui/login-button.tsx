@@ -3,7 +3,6 @@ import { LuCircleUserRound } from "react-icons/lu";
 import { LoginForm } from "./login-form";
 
 export const LoginButton = () => {
-
 	return (
 		<Dialog.Root>
 			<Dialog.Trigger asChild>
@@ -30,5 +29,5 @@ export const LoginButton = () => {
 				</Dialog.Positioner>
 			</Portal>
 		</Dialog.Root>
-	)
-}
+	);
+};
