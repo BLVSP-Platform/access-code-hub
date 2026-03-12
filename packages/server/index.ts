@@ -1,5 +1,5 @@
-import express from "express";
 import { toNodeHandler } from "better-auth/node";
+import express from "express";
 import { auth } from "./auth";
 import apiRouter from "./routes/api"
 import "dotenv/config";
@@ -14,5 +14,5 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", apiRouter);
 
 app.listen(port, () => {
-    console.log(`Better Auth app listening on port ${port}`);
+	console.log(`Better Auth app listening on port ${port}`);
 });

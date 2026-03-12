@@ -1,16 +1,25 @@
 {
-  "name": "access-code-hub",
-  "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
-  "scripts": {
-    "dev:client": "cd packages/client && vite",
-    "dev:server": "cd packages/server && npm run dev",
-    "dev": "concurrently -n client,server -c green,blue \"npm run dev:client\" \"npm run dev:server\""
-  },
-  "devDependencies": {
-    "concurrently": "^9.2.1"
-  },
-  "dependencies": {}
+	"name": "access-code-hub",
+	"private": true,
+	"workspaces": [
+		"packages/*"
+	],
+	"scripts": {
+		"dev:client": "cd packages/client && vite",
+		"dev:server": "cd packages/server && npm run dev",
+		"dev": "concurrently -n client,server -c green,blue \"npm run dev:client\" \"npm run dev:server\"",
+		"prepare": "husky"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.6",
+		"concurrently": "^9.2.1",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.3.2"
+	},
+	"lint-staged": {
+		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+			"biome format --write --no-errors-on-unmatched",
+			"biome check --no-errors-on-unmatched"
+		]
+	}
 }

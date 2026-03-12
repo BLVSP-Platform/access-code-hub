@@ -1,23 +1,23 @@
 [
-  {
-    "id": "1",
-    "title": "Guidance for JetBrains IDEs",
-    "topic": "Programming IDEs",
-    "tags": "Python, Java, Programming",
-    "date": "2024-11-18T20:33:00Z"
-  },
-  {
-    "id": "2",
-    "title": "NVDA Keyboard Shortcuts",
-    "topic": "NVDA",
-    "tags": "Python, Shortcuts",
-    "date": "2024-11-18T20:33:00Z"
-  },
-  {
-    "id": "3",
-    "title": "Eclipse Accessibility Features",
-    "topic": "Eclipse",
-    "tags": "Java, Tips",
-    "date": "2024-11-18T20:33:00Z"
-  }
+	{
+		"id": "1",
+		"title": "Guidance for JetBrains IDEs",
+		"topic": "Programming IDEs",
+		"tags": "Python, Java, Programming",
+		"date": "2024-11-18T20:33:00Z"
+	},
+	{
+		"id": "2",
+		"title": "NVDA Keyboard Shortcuts",
+		"topic": "NVDA",
+		"tags": "Python, Shortcuts",
+		"date": "2024-11-18T20:33:00Z"
+	},
+	{
+		"id": "3",
+		"title": "Eclipse Accessibility Features",
+		"topic": "Eclipse",
+		"tags": "Java, Tips",
+		"date": "2024-11-18T20:33:00Z"
+	}
 ]
