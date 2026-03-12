@@ -1,7 +1,7 @@
 import { toNodeHandler } from "better-auth/node";
 import express from "express";
 import { auth } from "./auth";
-import apiRouter from "./routes/api"
+import apiRouter from "./routes/api";
 import "dotenv/config";
 
 const app = express();

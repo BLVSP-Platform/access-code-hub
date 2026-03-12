@@ -7,7 +7,7 @@ if (!process.env.MONGODB_URI) throw new Error("MONGODB_URI not provided");
 const MONGODB_URI = process.env.MONGODB_URI;
 console.log(`Logging into mongo with ${MONGODB_URI}`);
 
-if (!process.env.CLIENT_URL) throw new Error("CLIENT_URL not provided")
+if (!process.env.CLIENT_URL) throw new Error("CLIENT_URL not provided");
 export const auth = betterAuth({
     database: mongodbAdapter(client.db(), {
         client
