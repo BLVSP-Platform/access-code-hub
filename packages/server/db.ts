@@ -1,6 +1,7 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import mongoose from "mongoose";
 import { ToolFormModel, type ToolFormParameters } from "./schema/tool";
+import "dotenv/config";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) throw new Error("Error: MONGODB_URI not provided");
