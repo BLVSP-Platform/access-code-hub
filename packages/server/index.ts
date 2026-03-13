@@ -3,6 +3,10 @@ import express from "express";
 import { auth } from "./auth";
 import apiRouter from "./routes/api";
 import "dotenv/config";
+import { initializeMongoose } from "./db";
+
+await initializeMongoose();
+console.log("Mongo connected");
 
 const app = express();
 const port = process.env.SERVER_PORT;
