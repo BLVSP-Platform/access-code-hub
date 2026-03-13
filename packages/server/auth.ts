@@ -4,6 +4,8 @@ import { client } from "./db";
 import "dotenv/config";
 
 if (!process.env.CLIENT_URL) throw new Error("CLIENT_URL not provided");
+if (!process.env.SERVER_URL) throw new Error("SERVER_URL not provided");
+
 export const auth = betterAuth({
 	database: mongodbAdapter(client.db(), {
 		client,

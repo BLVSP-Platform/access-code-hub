@@ -6,7 +6,6 @@ import "dotenv/config";
 import { initializeDatabase } from "./db";
 
 await initializeDatabase();
-console.log("Mongo connected");
 
 const app = express();
 const port = process.env.SERVER_PORT;
