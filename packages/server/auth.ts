@@ -1,10 +1,10 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { client } from "./db";
+import "dotenv/config";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/blvsp";
-
-if (!MONGODB_URI) throw new Error("");
+if (!process.env.CLIENT_URL) throw new Error("CLIENT_URL not provided");
+if (!process.env.SERVER_URL) throw new Error("SERVER_URL not provided");
 
 export const auth = betterAuth({
 	database: mongodbAdapter(client.db(), {
@@ -13,5 +13,6 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
 	},
-	trustedOrigins: ["http://localhost:5173"],
+	trustedOrigins: [process.env.CLIENT_URL],
+	baseURL: process.env.SERVER_URL,
 });

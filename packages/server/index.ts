@@ -1,13 +1,14 @@
 import { toNodeHandler } from "better-auth/node";
 import express from "express";
 import { auth } from "./auth";
-import { initializeMongoose } from "./db";
 import apiRouter from "./routes/api";
+import "dotenv/config";
+import { initializeDatabase } from "./db";
 
-await initializeMongoose();
+await initializeDatabase();
 
 const app = express();
-const port = 8000; // TODO: Use port defined in project root env
+const port = process.env.SERVER_PORT;
 
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 
