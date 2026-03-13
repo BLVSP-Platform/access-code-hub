@@ -5,24 +5,25 @@ import { defineConfig, loadEnv } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-	const env = loadEnv(mode, process.cwd(), "VITE_");
-	return {
-		define: {
-			__APP_ENV__: JSON.stringify(env.APP_ENV),
-		},
-		plugins: [react(), tailwindcss()],
-		resolve: {
-			alias: {
-				"@": path.resolve(__dirname, "./src"),
-			},
-		},
-		server: {
-			proxy: {
-				"/api": {
-					target: env.VITE_SERVER_URL,
-					changeOrigin: true,
-				},
-			},
-		},
-	};
+  const env = loadEnv(mode, process.cwd(), "VITE_");
+  return {
+    define: {
+      __APP_ENV__: JSON.stringify(env.APP_ENV),
+    },
+    plugins: [react(), tailwindcss()],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+    },
+    server: {
+      proxy: {
+        "/api": {
+          target: env.VITE_SERVER_URL,
+          changeOrigin: true,
+        },
+      },
+    },
+  };
+
 });
