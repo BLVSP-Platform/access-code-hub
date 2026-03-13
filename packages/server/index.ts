@@ -3,9 +3,9 @@ import express from "express";
 import { auth } from "./auth";
 import apiRouter from "./routes/api";
 import "dotenv/config";
-import { initializeMongoose } from "./db";
+import { initializeDatabase } from "./db";
 
-await initializeMongoose();
+await initializeDatabase();
 console.log("Mongo connected");
 
 const app = express();

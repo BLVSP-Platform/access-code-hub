@@ -6,11 +6,6 @@ import "dotenv/config";
 const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) throw new Error("Error: MONGODB_URI not provided");
 
-export const initializeMongoose = async () =>
-	await mongoose.connect(MONGODB_URI, {
-		bufferCommands: false,
-	});
-
 export const client = new MongoClient(MONGODB_URI, {
 	serverApi: {
 		version: ServerApiVersion.v1,
@@ -19,7 +14,17 @@ export const client = new MongoClient(MONGODB_URI, {
 	},
 });
 
+export const initializeDatabase = async () => {
+	await client.connect();
+	console.log("MongoClient connected");
+
+	await mongoose.connect(MONGODB_URI, {
+		bufferCommands: false,
+	});
+	console.log("Mongoose connected");
+};
+
 export const insertToolSubmission = async (formParams: ToolFormParameters) => {
-	const result = await ToolFormModel.insertOne(formParams);
-	return result.id;
+	const result = await ToolFormModel.create(formParams);
+	return result._id;
 };
