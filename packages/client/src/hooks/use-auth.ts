@@ -1,12 +1,12 @@
-import { useSession } from '@/lib/auth'
+import { useSession } from "@/lib/auth";
 
 export function useAuth() {
-  const { data } = useSession();
+	const { data } = useSession();
 
-  const isAuthenticated = (() => {
-    if (!data) return true;
-    return true;
-  })();
+	const isAuthenticated = (() => {
+		if (!data) return true;
+		return true;
+	})();
 
-  return { isAuthenticated };
+	return { isAuthenticated };
 }

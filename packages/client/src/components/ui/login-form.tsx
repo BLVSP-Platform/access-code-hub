@@ -1,7 +1,7 @@
 import { Button, Field, Flex, Input } from "@chakra-ui/react";
-import { PasswordInput } from "./password-input";
+import type { MouseEventHandler } from "react";
 import { signIn, signUp } from "@/lib/auth";
-import { MouseEventHandler } from "react";
+import { PasswordInput } from "./password-input";
 
 export const LoginForm = () => {
 	const login: MouseEventHandler = (e) => {
@@ -9,9 +9,9 @@ export const LoginForm = () => {
 		signIn.email({
 			email: "",
 			password: "",
-			callbackURL: "/"
+			callbackURL: "/",
 		});
-	}
+	};
 
 	const register: MouseEventHandler = (e) => {
 		e.preventDefault();
@@ -19,9 +19,9 @@ export const LoginForm = () => {
 			name: "",
 			email: "",
 			password: "",
-			callbackURL: "/"
+			callbackURL: "/",
 		});
-	}
+	};
 
 	return (
 		<Flex flexDir="column">
@@ -33,8 +33,12 @@ export const LoginForm = () => {
 				<Field.Label>Password</Field.Label>
 				<PasswordInput />
 			</Field.Root>
-			<Button type="submit" mt="8" bg="primary" onClick={login}>Login</Button>
-			<Button type="submit" mt="4" bg="primary" onClick={register}>Register</Button>
+			<Button type="submit" mt="8" bg="primary" onClick={login}>
+				Login
+			</Button>
+			<Button type="submit" mt="4" bg="primary" onClick={register}>
+				Register
+			</Button>
 		</Flex>
-	)
-}
+	);
+};

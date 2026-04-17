@@ -1,24 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import {
-	createBrowserRouter,
-	RouterProvider,
-	Outlet,
-} from "react-router-dom";
-import App from './App.tsx';
-import HomePage from './pages/HomePage.tsx';
-import ToolDetailPage from './pages/ToolDetailPage.tsx';
-import ToolIndexPage from './pages/ToolIndexPage.tsx';
-import { LoginPage } from './pages/LoginPage.tsx';
-import { RequireAuth } from './components/AuthProvider.tsx';
-import ToolSubmissionPage from './pages/ToolSubmissionPage.tsx';
-import VolunteerPage from './pages/VolunteerPage.tsx';
-import ThreadsPage from './pages/ThreadsPage.tsx';
-import CommunityNavPage from './pages/CommunityNavPage.tsx';
-import PostThreadPage from './pages/PostThreadPage.tsx';
-import BookmarkThreadPage from './pages/BookmarkThreadPage.tsx';
-import MentorshipPage from './pages/MentorshipPage.tsx';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import App from "./App.tsx";
+import { RequireAuth } from "./components/AuthProvider.tsx";
+import BookmarkThreadPage from "./pages/BookmarkThreadPage.tsx";
+import CommunityNavPage from "./pages/CommunityNavPage.tsx";
+import HomePage from "./pages/HomePage.tsx";
+import { LoginPage } from "./pages/LoginPage.tsx";
+import MentorshipPage from "./pages/MentorshipPage.tsx";
+import PostThreadPage from "./pages/PostThreadPage.tsx";
+import ThreadsPage from "./pages/ThreadsPage.tsx";
+import ToolDetailPage from "./pages/ToolDetailPage.tsx";
+import ToolIndexPage from "./pages/ToolIndexPage.tsx";
+import ToolSubmissionPage from "./pages/ToolSubmissionPage.tsx";
+import VolunteerPage from "./pages/VolunteerPage.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -45,21 +41,21 @@ const router = createBrowserRouter([
 						children: [
 							{
 								index: true,
-								element: <CommunityNavPage />
+								element: <CommunityNavPage />,
 							},
 							{
 								path: "browsethreads",
-								element: <ThreadsPage />
+								element: <ThreadsPage />,
 							},
 							{
 								path: "postthread",
-								element: <PostThreadPage />
+								element: <PostThreadPage />,
 							},
 							{
 								path: "bookmarkthread",
-								element: <BookmarkThreadPage /> 
+								element: <BookmarkThreadPage />,
 							},
-						]
+						],
 					},
 					{
 						path: "tools",
@@ -75,15 +71,15 @@ const router = createBrowserRouter([
 					},
 					{
 						path: "submission",
-						element: <ToolSubmissionPage />
+						element: <ToolSubmissionPage />,
 					},
 					{
 						path: "volunteer",
-						element: <VolunteerPage />
+						element: <VolunteerPage />,
 					},
 					{
 						path: "mentorship",
-						element: <MentorshipPage />
+						element: <MentorshipPage />,
 					},
 				],
 			},
@@ -91,8 +87,8 @@ const router = createBrowserRouter([
 	},
 ]);
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root") as HTMLElement).render(
 	<StrictMode>
 		<RouterProvider router={router} />
-	</StrictMode>
-)
+	</StrictMode>,
+);
