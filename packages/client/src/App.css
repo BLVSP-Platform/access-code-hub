@@ -1,7 +1,10 @@
 .Title {
-  font-size: xx-large;
+	font-size: xx-large;
 }
 
-html, body, * { /* @todo: move this to the theme? */
-  font-weight: 400;
+html,
+body,
+* {
+	/* @todo: move this to the theme? */
+	font-weight: 400;
 }
