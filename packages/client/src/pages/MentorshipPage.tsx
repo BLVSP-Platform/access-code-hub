@@ -5,8 +5,55 @@ import { InputTagsCombo } from "@/components/ui/input-tags-combo";
 
 interface MentorshipData {
 	mentorshipRole: "Mentor" | "Mentee";
-	mentorQual: string[];
-	menteeQual: string[];
+	tags: string[];
+}
+
+// tags input 
+type Role = "Mentor" | "Mentee";
+
+type RoleConfig = {
+  label: string;
+  errorMessage: string;
+  initialItems?: string[];
+};
+
+const roleFieldConfig: Record<Role, RoleConfig> = {
+  Mentor: {
+    label: "If you would like to mentor, what qualifications do you have to share?",
+    errorMessage: "Please list your qualifications",
+    initialItems: ["JavaScript", "React", "TypeScript", "Next.js", "Chakra UI", "Ark UI", "Zag.js"],
+  },
+  Mentee: {
+    label: "If you would like to be a mentee, what qualifications do you want from a mentor?",
+    errorMessage: "Please add at least one preference or N/A for none",
+  },
+};
+
+function TagsInput({ role, control, errors }: { role: Role; control: any; errors: any; }) {
+  const config = roleFieldConfig[role];
+
+  return (
+    <Field.Root invalid={!!errors.tags}>
+      <Controller
+        name="tags"
+        control={control}
+        rules={{
+          validate: (v) =>
+            (v?.length ?? 0) > 0 || config.errorMessage,
+        }}
+        render={({ field }) => (
+          <InputTagsCombo
+            label={config.label}
+            placeholder="Type to start adding tags..."
+            value={field.value}
+            onChange={field.onChange}
+            initialItems={config.initialItems}
+          />
+        )}
+      />
+      <Field.ErrorText>{errors.tags?.message}</Field.ErrorText>
+    </Field.Root>
+  );
 }
 
 function MentorshipPage() {
@@ -17,9 +64,11 @@ function MentorshipPage() {
 		handleSubmit,
 		control,
 		setValue,
+		resetField,
+		clearErrors,
 		watch,
 		formState: { errors },
-	} = useForm<MentorshipData>();
+	} = useForm<MentorshipData>({defaultValues: { tags: [], }});
 
 	const role = watch("mentorshipRole");
 
@@ -68,7 +117,7 @@ function MentorshipPage() {
 					Mentorship
 				</Heading>
 
-				{/* mentor/mentee selection ------------------*/}
+				{/* mentor/mentee selection */}
 				<Field.Root required invalid={!!errors.mentorshipRole}>
 					<Field.Label>
 						Are you interested in giving or receiving mentorship?:
@@ -84,9 +133,12 @@ function MentorshipPage() {
 					/>
 
 					<RadioGroup.Root
-						onValueChange={(detail) =>
-							setValue("mentorshipRole", detail.value as "Mentor" | "Mentee", { shouldValidate: true })
-						}
+						onValueChange={(detail) => {
+							const newRole = detail.value as Role;
+							setValue("mentorshipRole", newRole, { shouldValidate: true });
+              				resetField("tags");
+							clearErrors("tags");
+						}}
 					>
 						<Stack gap="3">
 							{items.map((item) => (
@@ -101,52 +153,11 @@ function MentorshipPage() {
 					<Field.ErrorText>{errors.mentorshipRole?.message}</Field.ErrorText>
 				</Field.Root>
 
-				{/* mentor input */}
-				{role === "Mentor" && (
-					<Field.Root invalid={!!errors.mentorQual}>
-						<Controller
-							name="mentorQual"
-							control={control}
-							rules={{
-								validate: (v) => (v?.length ?? 0) > 0 || "Please list your qualifications",
-							}}
-							render={({ field }) => (
-								<InputTagsCombo
-									label="If you would like to mentor, what qualifications do you have to share?:"
-									placeholder="Type to start adding tags..."
-									value={field.value}
-									onChange={field.onChange}
-								/>
-							)}
-						/>
-						<Field.ErrorText>{errors.mentorQual?.message}</Field.ErrorText>
-					</Field.Root>
-				)}
-
-				{/* mentee input */}
-				{role === "Mentee" && (
-					<Field.Root invalid={!!errors.menteeQual}>
-						<Controller
-							name="menteeQual"
-							control={control}
-							rules={{
-								validate: (v) =>
-									(v?.length ?? 0) > 0 || "Please add at least one preference or N/A for none",
-							}}
-							render={({ field }) => (
-								<InputTagsCombo
-									label="If you would like to be a mentee, what qualifications do you want from a mentor?:"
-									placeholder="Type to start adding tags..."
-									value={field.value}
-									onChange={field.onChange}
-								/>
-							)}
-						/>
-						<Field.ErrorText>{errors.menteeQual?.message}</Field.ErrorText>
-					</Field.Root>
-				)}
+				{/* tags input */}
+				{role && <TagsInput role={role} control={control} errors={errors} />}
 			</Stack>
 
+			{/* submit button */}
 			<Flex gap="4" w="100%" justify="flex-end" mt="8">
 				<Button
 					borderColor="primary"

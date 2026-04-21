@@ -7,6 +7,7 @@ type InputTagsComboProps = {
 	label?: string;
 	placeholder?: string;
 	value: string[];
+	initialItems?: string[];
 	onChange: (next: string[]) => void;
 };
 
@@ -14,12 +15,13 @@ export const InputTagsCombo = ({
 	label = "Tags",
 	placeholder = "Add tag...",
 	value,
+	initialItems,
 	onChange,
 }: InputTagsComboProps) => {
 	const { contains } = useFilter({ sensitivity: "base" });
 
 	const { collection, filter } = useListCollection({
-		initialItems: ["React", "Chakra", "TypeScript", "Next.js", "Ark UI", "Zag.js", "N/A"],
+		initialItems: initialItems || [],
 		filter: contains,
 	});
 
