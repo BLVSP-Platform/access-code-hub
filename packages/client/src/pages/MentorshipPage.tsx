@@ -1,6 +1,7 @@
 import { Button, Dialog, Field, Flex, Heading, Input, Portal, RadioGroup, Stack } from "@chakra-ui/react";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+// biome-ignore lint/style/useImportType: <explanation>
+import { Control, Controller, FieldErrors, useForm } from "react-hook-form";
 import { InputTagsCombo } from "@/components/ui/input-tags-combo";
 
 interface MentorshipData {
@@ -26,10 +27,11 @@ const roleFieldConfig: Record<Role, RoleConfig> = {
   Mentee: {
     label: "If you would like to be a mentee, what qualifications do you want from a mentor?",
     errorMessage: "Please add at least one preference or N/A for none",
+	initialItems: ["JavaScript", "React", "TypeScript", "Next.js", "Chakra UI", "Ark UI", "Zag.js"],
   },
 };
 
-function TagsInput({ role, control, errors }: { role: Role; control: any; errors: any; }) {
+function TagsInput({ role, control, errors }: { role: Role; control: Control<MentorshipData>; errors: FieldErrors<MentorshipData>; }) {
   const config = roleFieldConfig[role];
 
   return (
