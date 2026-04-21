@@ -1,6 +1,6 @@
 import { Button, Dialog, Field, Flex, Heading, Input, Portal, RadioGroup, Stack } from "@chakra-ui/react";
 import { useState } from "react";
-// biome-ignore lint/style/useImportType: <explanation>
+// biome-ignore lint/style/useImportType: using type imports causes issues with react-hook-form's Controller component;
 import { Control, Controller, FieldErrors, useForm } from "react-hook-form";
 import { InputTagsCombo } from "@/components/ui/input-tags-combo";
 
