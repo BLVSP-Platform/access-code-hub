@@ -1,61 +1,11 @@
 import { Button, Dialog, Field, Flex, Heading, Input, Portal, RadioGroup, Stack } from "@chakra-ui/react";
 import { useState } from "react";
-// biome-ignore lint/style/useImportType: using type imports causes issues with react-hook-form's Controller component;
-import { Control, Controller, FieldErrors, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { InputTagsCombo } from "@/components/ui/input-tags-combo";
 
 interface MentorshipData {
 	mentorshipRole: "Mentor" | "Mentee";
 	tags: string[];
-}
-
-// tags input 
-type Role = "Mentor" | "Mentee";
-
-type RoleConfig = {
-  label: string;
-  errorMessage: string;
-  initialItems?: string[];
-};
-
-const roleFieldConfig: Record<Role, RoleConfig> = {
-  Mentor: {
-    label: "If you would like to mentor, what qualifications do you have to share?",
-    errorMessage: "Please list your qualifications",
-    initialItems: ["JavaScript", "React", "TypeScript", "Next.js", "Chakra UI", "Ark UI", "Zag.js"],
-  },
-  Mentee: {
-    label: "If you would like to be a mentee, what qualifications do you want from a mentor?",
-    errorMessage: "Please add at least one preference or N/A for none",
-	initialItems: ["JavaScript", "React", "TypeScript", "Next.js", "Chakra UI", "Ark UI", "Zag.js"],
-  },
-};
-
-function TagsInput({ role, control, errors }: { role: Role; control: Control<MentorshipData>; errors: FieldErrors<MentorshipData>; }) {
-  const config = roleFieldConfig[role];
-
-  return (
-    <Field.Root invalid={!!errors.tags}>
-      <Controller
-        name="tags"
-        control={control}
-        rules={{
-          validate: (v) =>
-            (v?.length ?? 0) > 0 || config.errorMessage,
-        }}
-        render={({ field }) => (
-          <InputTagsCombo
-            label={config.label}
-            placeholder="Type to start adding tags..."
-            value={field.value}
-            onChange={field.onChange}
-            initialItems={config.initialItems}
-          />
-        )}
-      />
-      <Field.ErrorText>{errors.tags?.message}</Field.ErrorText>
-    </Field.Root>
-  );
 }
 
 function MentorshipPage() {
@@ -83,6 +33,55 @@ function MentorshipPage() {
 		{ label: "Mentor", value: "Mentor" },
 		{ label: "Mentee", value: "Mentee" },
 	];
+
+	// tags input 
+type Role = "Mentor" | "Mentee";
+
+type RoleConfig = {
+  label: string;
+  errorMessage: string;
+  initialItems?: string[];
+};
+
+const roleFieldConfig: Record<Role, RoleConfig> = {
+  Mentor: {
+    label: "If you would like to mentor, what qualifications do you have to share?",
+    errorMessage: "Please list your qualifications",
+    initialItems: ["JavaScript", "React", "TypeScript", "Next.js", "Chakra UI", "Ark UI", "Zag.js"],
+  },
+  Mentee: {
+    label: "If you would like to be a mentee, what qualifications do you want from a mentor?",
+    errorMessage: "Please add at least one preference or N/A for none",
+	initialItems: ["JavaScript", "React", "TypeScript", "Next.js", "Chakra UI", "Ark UI", "Zag.js"],
+  },
+};
+
+const TagsInput = () => {
+	const config = roleFieldConfig[role];
+	
+    return (
+      <Field.Root invalid={!!errors.tags}>
+        <Controller
+          name="tags"
+          control={control}
+          rules={{
+            validate: (v) =>
+              (v?.length ?? 0) > 0 || config.errorMessage,
+          }}
+          render={({ field }) => (
+            <InputTagsCombo
+              label={config.label}
+              placeholder="Type to start adding tags..."
+              value={field.value}
+              onChange={field.onChange}
+              initialItems={config.initialItems}
+            />
+          )}
+        />
+        <Field.ErrorText>{errors.tags?.message}</Field.ErrorText>
+      </Field.Root>
+    );
+};
 
 	const submitDialog = (
 		<Dialog.Root placement="center" open={dialogOpen} onOpenChange={(e) => setDialogOpen(e.open)}>
@@ -156,7 +155,7 @@ function MentorshipPage() {
 				</Field.Root>
 
 				{/* tags input */}
-				{role && <TagsInput role={role} control={control} errors={errors} />}
+				{role && <TagsInput />}
 			</Stack>
 
 			{/* submit button */}
