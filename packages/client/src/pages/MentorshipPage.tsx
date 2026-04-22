@@ -35,53 +35,53 @@ function MentorshipPage() {
 	];
 
 	// tags input 
-type Role = "Mentor" | "Mentee";
+	type Role = "Mentor" | "Mentee";
 
-type RoleConfig = {
-  label: string;
-  errorMessage: string;
-  initialItems?: string[];
-};
+	type RoleConfig = {
+	label: string;
+	errorMessage: string;
+	initialItems?: string[];
+	};
 
-const roleFieldConfig: Record<Role, RoleConfig> = {
-  Mentor: {
-    label: "If you would like to mentor, what qualifications do you have to share?",
-    errorMessage: "Please list your qualifications",
-    initialItems: ["JavaScript", "React", "TypeScript", "Next.js", "Chakra UI", "Ark UI", "Zag.js"],
-  },
-  Mentee: {
-    label: "If you would like to be a mentee, what qualifications do you want from a mentor?",
-    errorMessage: "Please add at least one preference or N/A for none",
-	initialItems: ["JavaScript", "React", "TypeScript", "Next.js", "Chakra UI", "Ark UI", "Zag.js"],
-  },
-};
+	const roleFieldConfig: Record<Role, RoleConfig> = {
+	Mentor: {
+		label: "If you would like to mentor, what qualifications do you have to share?",
+		errorMessage: "Please list your qualifications",
+		initialItems: ["JavaScript", "React", "TypeScript", "Next.js", "Chakra UI", "Ark UI", "Zag.js"],
+	},
+	Mentee: {
+		label: "If you would like to be a mentee, what qualifications do you want from a mentor?",
+		errorMessage: "Please add at least one preference or N/A for none",
+		initialItems: ["JavaScript", "React", "TypeScript", "Next.js", "Chakra UI", "Ark UI", "Zag.js"],
+	},
+	};
 
-const TagsInput = () => {
-	const config = roleFieldConfig[role];
-	
-    return (
-      <Field.Root invalid={!!errors.tags}>
-        <Controller
-          name="tags"
-          control={control}
-          rules={{
-            validate: (v) =>
-              (v?.length ?? 0) > 0 || config.errorMessage,
-          }}
-          render={({ field }) => (
-            <InputTagsCombo
-              label={config.label}
-              placeholder="Type to start adding tags..."
-              value={field.value}
-              onChange={field.onChange}
-              initialItems={config.initialItems}
-            />
-          )}
-        />
-        <Field.ErrorText>{errors.tags?.message}</Field.ErrorText>
-      </Field.Root>
-    );
-};
+	const TagsInput = () => {
+		const config = roleFieldConfig[role];
+		
+		return (
+		<Field.Root invalid={!!errors.tags}>
+			<Controller
+			name="tags"
+			control={control}
+			rules={{
+				validate: (v) =>
+				(v?.length ?? 0) > 0 || config.errorMessage,
+			}}
+			render={({ field }) => (
+				<InputTagsCombo
+				label={config.label}
+				placeholder="Type to start adding tags..."
+				value={field.value}
+				onChange={field.onChange}
+				initialItems={config.initialItems}
+				/>
+			)}
+			/>
+			<Field.ErrorText>{errors.tags?.message}</Field.ErrorText>
+		</Field.Root>
+		);
+	};
 
 	const submitDialog = (
 		<Dialog.Root placement="center" open={dialogOpen} onOpenChange={(e) => setDialogOpen(e.open)}>
