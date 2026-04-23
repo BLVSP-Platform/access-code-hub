@@ -60,26 +60,26 @@ function MentorshipPage() {
 		const config = roleFieldConfig[role];
 		
 		return (
-		<Field.Root invalid={!!errors.tags}>
-			<Controller
-			name="tags"
-			control={control}
-			rules={{
-				validate: (v) =>
-				(v?.length ?? 0) > 0 || config.errorMessage,
-			}}
-			render={({ field }) => (
-				<InputTagsCombo
-				label={config.label}
-				placeholder="Type to start adding tags..."
-				value={field.value}
-				onChange={field.onChange}
-				initialItems={config.initialItems}
+			<Field.Root invalid={!!errors.tags}>
+				<Controller
+				name="tags"
+				control={control}
+				rules={{
+					validate: (v) =>
+					(v?.length ?? 0) > 0 || config.errorMessage,
+				}}
+				render={({ field }) => (
+					<InputTagsCombo
+					label={config.label}
+					placeholder="Type to start adding tags..."
+					value={field.value}
+					onChange={field.onChange}
+					initialItems={config.initialItems}
+					/>
+				)}
 				/>
-			)}
-			/>
-			<Field.ErrorText>{errors.tags?.message}</Field.ErrorText>
-		</Field.Root>
+				<Field.ErrorText>{errors.tags?.message}</Field.ErrorText>
+			</Field.Root>
 		);
 	};
 
