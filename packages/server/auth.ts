@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { rateLimiter } from "better-auth-rate-limiter";
 import { client } from "./db";
 import "dotenv/config";
 
@@ -13,6 +14,17 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
 	},
+	rateLimit: {
+		enabled: false, // Change to true in prod
+	},
 	trustedOrigins: [process.env.CLIENT_URL],
 	baseURL: process.env.SERVER_URL,
+	plugins: [
+		rateLimiter({
+			window: 60,
+			max: 100,
+			storage: "memory",
+			detection: "ip",
+		}),
+	],
 });
