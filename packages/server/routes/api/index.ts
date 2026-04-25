@@ -2,9 +2,12 @@ import { Router } from "express";
 import { body } from "express-validator";
 import multer from "multer";
 import { insertToolSubmission } from "../../db";
+import { rateLimitMiddleware } from "../../middleware/rateLimiter";
 
 const formHandler = multer();
 const app = Router();
+
+app.use("*", rateLimitMiddleware);
 
 // app.get("/api/example", (req, res) => {
 //     res.send("Hello!")
