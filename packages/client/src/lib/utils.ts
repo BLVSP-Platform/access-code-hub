@@ -36,7 +36,7 @@ export function formatDate(dateString: string) {
 	return `${month} ${day}${suffix} ${year} @ ${hours}`;
 }
 
-export function formDataCast(obj: Object): FormData {
+export function formDataCast(obj: Record<string, string>): FormData {
 	const formData = new FormData();
 	for (const [k, v] of Object.entries(obj)) {
 		formData.set(k, v);

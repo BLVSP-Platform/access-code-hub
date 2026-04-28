@@ -19,4 +19,4 @@ export type ToolFormParameters = InferSchemaType<typeof toolFormSchema>;
 export const insertToolSubmission = async (formParams: ToolFormParameters) => {
 	const result = await ToolFormModel.insertOne(formParams);
 	return result.id;
-}
+};
