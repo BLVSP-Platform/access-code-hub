@@ -4,10 +4,11 @@ import { toNodeHandler } from "better-auth/node";
 import express from "express";
 
 import { auth } from "./auth";
-import { initializeMongoose } from "./db";
 import apiRouter from "./routes/api";
+import "dotenv/config";
+import { initializeDatabase } from "./db";
 
-await initializeMongoose();
+await initializeDatabase();
 
 const app = express();
 const port = process.env.SERVER_PORT;
