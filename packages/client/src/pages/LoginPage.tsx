@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { LoginForm } from "@/components/ui/login-form";
+import { AuthDialog } from "@/components/ui/AuthDialog";
 import { useAuth } from "@/hooks/use-auth";
 
 export const LoginPage = () => {
@@ -7,5 +7,5 @@ export const LoginPage = () => {
 
 	if (isAuthenticated) return <Navigate to="/" replace />;
 
-	return <LoginForm />;
+	return <AuthDialog />;
 };
