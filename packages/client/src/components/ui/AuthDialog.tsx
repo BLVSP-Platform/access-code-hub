@@ -21,9 +21,10 @@ interface AuthFormData {
 type SignInResult = Awaited<ReturnType<typeof signIn.email>>;
 type SignUpResult = Awaited<ReturnType<typeof signUp.email>>;
 
+// @todo: more robust error displays
 const LoginForm = ({ isRegistering, setIsRegistering, registerSuccess, setRegisterSuccess }: LoginFormProps) => {
 	const [loading, setLoading] = useState(false);
-	const [authError, setAuthError] = useState(""); // @TODO: would be nicer if we differentiated and displayed errors by field
+	const [authError, setAuthError] = useState("");
 	const { register, handleSubmit, reset } = useForm<AuthFormData>();
 
 	const onSubmit = async (data: AuthFormData) => {
@@ -50,7 +51,7 @@ const LoginForm = ({ isRegistering, setIsRegistering, registerSuccess, setRegist
 
 			if (result?.error) {
 				const rawMessage = result.error.message ?? "Authentication failed.";
-				const cleanedMessage = rawMessage.replace(/\[.*?\]\s*/, ""); // @todo: kinda scuffed
+				const cleanedMessage = rawMessage.replace(/\[.*?\]\s*/, "");
 				setAuthError(cleanedMessage);
 				return;
 			}
