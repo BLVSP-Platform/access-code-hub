@@ -23,7 +23,7 @@ export const auth = betterAuth({
 		rateLimiter({
 			window: 60,
 			max: 100,
-			storage: "memory",
+			storage: "database",
 			detection: "ip",
 		}),
 	],
