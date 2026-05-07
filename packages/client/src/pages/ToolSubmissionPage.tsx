@@ -107,8 +107,8 @@ function ToolSubmissionPage() {
 				setDialogTitle(`Error: ${res.statusText}`);
 				setDialogBody("An error occurred while processing your submission.");
 			}
-		} catch (err) {
-			if (Error.isError(err)) {
+		} catch (err: unknown) {
+			if (err instanceof Error) {
 				setDialogTitle(err.name);
 				setDialogBody(err.message);
 			}
