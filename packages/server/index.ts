@@ -3,12 +3,20 @@ import express from "express";
 import { auth } from "./auth";
 import apiRouter from "./routes/api";
 import "dotenv/config";
+import cors from "cors";
 import { initializeDatabase } from "./db";
 
 await initializeDatabase();
 
 const app = express();
 const port = Number(process.env.PORT);
+
+app.use(
+	cors({
+		origin: ["http://localhost:5173", "https://ach-frontend-production.up.railway.app"],
+		credentials: true,
+	}),
+);
 
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 
