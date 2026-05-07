@@ -13,7 +13,7 @@ const port = Number(process.env.PORT);
 
 const corsOptions = {
 	origin: ["http://localhost:5173", "https://ach-frontend-production.up.railway.app"],
-	redentials: true,
+	credentials: true,
 };
 
 app.use(cors(corsOptions));
