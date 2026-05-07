@@ -8,7 +8,7 @@ import { initializeDatabase } from "./db";
 await initializeDatabase();
 
 const app = express();
-const port = process.env.SERVER_PORT;
+const port = process.env.PORT;
 
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 
@@ -17,5 +17,5 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", apiRouter);
 
 app.listen(port, () => {
-	console.log(`Better Auth app listening on port ${port}`);
+	console.log(`ACH Server listening on port ${port}`);
 });
