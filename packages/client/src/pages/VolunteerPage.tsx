@@ -20,7 +20,6 @@ function VolunteerPage() {
 		formState: { errors },
 	} = useForm<VolunteerData>();
 
-	// @TODO: hook up to backend
 	const onSubmit = handleSubmit(async (data) => {
 		const formData = formDataCast(data);
 		try {
@@ -28,7 +27,6 @@ function VolunteerPage() {
 				method: "POST",
 				body: formData,
 			});
-			// Handle the response from the server
 			setDialogOpen(true);
 			if (res.ok) {
 				setDialogTitle("Thank you for volunteering!");
@@ -38,7 +36,7 @@ function VolunteerPage() {
 				setDialogBody("An error occurred while processing your submission.");
 			}
 		} catch (err) {
-			if (Error.isError(err)) {
+			if (err instanceof Error) {
 				setDialogTitle(err.name);
 				setDialogBody(err.message);
 			}
