@@ -8,6 +8,7 @@ import BookmarkThreadPage from "./pages/BookmarkThreadPage.tsx";
 import CommunityNavPage from "./pages/CommunityNavPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import { LoginPage } from "./pages/LoginPage.tsx";
+import MentorshipPage from "./pages/MentorshipPage.tsx";
 import PostThreadPage from "./pages/PostThreadPage.tsx";
 import ThreadsPage from "./pages/ThreadsPage.tsx";
 import ToolDetailPage from "./pages/ToolDetailPage.tsx";
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
 					{
 						path: "volunteer",
 						element: <VolunteerPage />,
+					},
+					{
+						path: "mentorship",
+						element: <MentorshipPage />,
 					},
 					{
 						path: "profile",

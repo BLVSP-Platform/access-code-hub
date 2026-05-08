@@ -20,7 +20,7 @@ function Navbar() {
 					<NavigationMenuLink href="community" color="white">
 						Community
 					</NavigationMenuLink>
-					<NavigationMenuLink href="#" color="white">
+					<NavigationMenuLink href="mentorship" color="white">
 						Mentorship
 					</NavigationMenuLink>
 					<NavigationMenuLink href="volunteer" color="white">
