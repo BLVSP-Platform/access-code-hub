@@ -32,7 +32,6 @@ function PostThreadPage() {
 		formState: { errors },
 	} = useForm<ThreadData>();
 
-	// @TODO: hook up to backend
 	const onSubmit = handleSubmit(async (data) => {
 		const formData = formDataCast(data);
 		try {
@@ -50,7 +49,7 @@ function PostThreadPage() {
 				setDialogBody("An error occurred while processing your submission.");
 			}
 		} catch (err) {
-			if (Error.isError(err)) {
+			if (err instanceof Error) {
 				setDialogTitle(err.name);
 				setDialogBody(err.message);
 			}
