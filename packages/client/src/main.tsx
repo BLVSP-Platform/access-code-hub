@@ -14,6 +14,7 @@ import ToolDetailPage from "./pages/ToolDetailPage.tsx";
 import ToolIndexPage from "./pages/ToolIndexPage.tsx";
 import ToolSubmissionPage from "./pages/ToolSubmissionPage.tsx";
 import VolunteerPage from "./pages/VolunteerPage.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
 					{
 						path: "volunteer",
 						element: <VolunteerPage />,
+					},
+					{
+						path: "profile",
+						element: <ProfilePage />,
 					},
 				],
 			},
