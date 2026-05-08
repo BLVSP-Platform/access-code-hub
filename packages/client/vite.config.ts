@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => {
 					changeOrigin: true,
 				},
 			},
+			allowedHosts: ["ach-frontend-production.up.railway.app"],
 		},
 	};
 });
