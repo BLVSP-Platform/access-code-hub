@@ -1,14 +1,50 @@
 import { Router } from "express";
 import { body } from "express-validator";
 import multer from "multer";
-import { insertToolSubmission } from "../../db";
+import { insertThread } from "../../schema/thread";
+import { insertToolSubmission } from "../../schema/tool";
+import { insertVolunteerApplication } from "../../schema/volunteer";
 
 const formHandler = multer();
 const app = Router();
 
-// app.get("/api/example", (req, res) => {
-//     res.send("Hello!")
-// });
+app.post(
+	"/thread",
+	formHandler.none(),
+	body("title").trim().isString().escape(),
+	body("topic").trim().isString().escape(),
+	body("content").trim().isString().escape(),
+	body("tags").trim().isString().escape(),
+	async (req, res) => {
+		try {
+			const result = await insertThread(req.body);
+			if (!result) {
+				return res.status(502);
+			}
+			return res.status(201).send("Success");
+		} catch (err) {
+			return res.status(500).send(err);
+		}
+	},
+);
+
+app.post(
+	"/volunteer",
+	formHandler.none(),
+	body("shortAnswer").trim().isString().escape(),
+	body("email").trim().isEmail().normalizeEmail(),
+	async (req, res) => {
+		try {
+			const result = await insertVolunteerApplication(req.body);
+			if (!result) {
+				return res.status(502);
+			}
+			return res.status(201).send("Success");
+		} catch (err) {
+			return res.status(500).send(err);
+		}
+	},
+);
 
 app.post(
 	"/tool",
@@ -29,8 +65,8 @@ app.post(
 				return res.status(502);
 			}
 			return res.status(201).send("Success");
-		} catch (_err) {
-			return res.status(500);
+		} catch (err) {
+			return res.status(500).send(err);
 		}
 	},
 );

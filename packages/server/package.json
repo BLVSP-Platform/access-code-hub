@@ -24,6 +24,7 @@
     "tsx": "^4.20.6"
   },
   "scripts": {
-    "dev": "npx tsx index.ts"
+    "dev": "npx tsx index.ts",
+    "start": "tsx index.ts"
   }
 }

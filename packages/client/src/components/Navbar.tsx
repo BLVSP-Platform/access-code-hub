@@ -1,7 +1,7 @@
 import { HStack, Image } from "@chakra-ui/react";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
+import { AuthDialog } from "./ui/AuthDialog";
 import { ColorModeButton } from "./ui/color-mode";
-import { LoginButton } from "./ui/login-button";
 
 function Navbar() {
 	return (
@@ -20,7 +20,7 @@ function Navbar() {
 					<NavigationMenuLink href="community" color="white">
 						Community
 					</NavigationMenuLink>
-					<NavigationMenuLink href="#" color="white">
+					<NavigationMenuLink href="mentorship" color="white">
 						Mentorship
 					</NavigationMenuLink>
 					<NavigationMenuLink href="volunteer" color="white">
@@ -34,7 +34,7 @@ function Navbar() {
 			<NavigationMenuItem>
 				<HStack gap={4}>
 					<ColorModeButton color="white"></ColorModeButton>
-					<LoginButton />
+					<AuthDialog />
 				</HStack>
 			</NavigationMenuItem>
 		</NavigationMenu>
