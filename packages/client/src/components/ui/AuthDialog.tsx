@@ -1,7 +1,6 @@
-import { Button, CloseButton, Dialog, Field, Flex, IconButton, Input, Portal, Text } from "@chakra-ui/react";
+import { Button, CloseButton, Dialog, Field, Flex, Input, Portal, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { LuCircleUserRound } from "react-icons/lu";
 import { signIn, signUp } from "@/lib/auth";
 import { PasswordInput } from "./password-input";
 
