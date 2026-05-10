@@ -1,13 +1,13 @@
 import { Heading, Stack } from "@chakra-ui/react";
 
-function BookmarkThreadPage() {
+function BookmarkedToolsPage() {
 	return (
 		<Stack>
 			<Heading as="h1" size="4xl">
-				My Bookmarked Threads
+				My Bookmarked Tools
 			</Heading>
 		</Stack>
 	);
 }
 
-export default BookmarkThreadPage;
+export default BookmarkedToolsPage;

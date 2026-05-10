@@ -25,7 +25,7 @@ const ToolIndexPageItem = ({ to, title, icon }: ToolIndexPageProps) => {
 	);
 };
 
-function ToolIndexNavPage() {
+function ToolIndexMainMenuPage() {
 	return (
 		<Stack>
 			<Heading as="h1" size="4xl">
@@ -46,4 +46,4 @@ function ToolIndexNavPage() {
 	);
 }
 
-export default ToolIndexNavPage;
+export default ToolIndexMainMenuPage;
