@@ -108,6 +108,10 @@ function ToolIndexPage() {
 		</Dialog.Root>
 	);
 
+	if (loading) {
+		return <Text>Loading....</Text>;
+	}
+
 	return (
 		<Stack gap={4}>
 			<HStack mb={8}>
@@ -138,7 +142,7 @@ function ToolIndexPage() {
 					{filteredTools.map((tool) => (
 						<Table.Row key={tool.id} bg="tertiary">
 							<Table.Cell>
-								<Link href={`/tool/${tool.slug}`}>{tool.name}</Link>
+								<Link href={`/tools/${tool.slug}`}>{tool.name}</Link>
 							</Table.Cell>
 							<Table.Cell>{tool.compatibility}</Table.Cell>
 							<Table.Cell>{tool.description}</Table.Cell>

@@ -28,6 +28,10 @@ export default function ToolDetailPage() {
 		fetchTool();
 	}, [slug]);
 
+	if (loading) {
+		return <Text>Loading...</Text>;
+	}
+
 	return (
 		<Stack>
 			<Heading as="h1" size="4xl">
@@ -40,27 +44,27 @@ export default function ToolDetailPage() {
 			<VStack mt={4} gap={4} align="start">
 				<HStack align="start">
 					<Text fontWeight="bold">Description:</Text>
-					<Text>{tool?.description}</Text>
+					<Text>{tool?.description ?? "N/A"}</Text>
 				</HStack>
 
 				<HStack align="start">
 					<Text fontWeight="bold">Compatibility Information:</Text>
-					<Text>{tool?.compatibility}</Text> {/* @todo: compatibility vs compatibility info*/}
+					<Text>{tool?.compatibility ?? "N/A"}</Text> {/* @todo: compatibility vs compatibility info*/}
 				</HStack>
 
 				<HStack align="start">
 					<Text fontWeight="bold">Tutorial Video(s):</Text>
-					<Text>{tool?.video}</Text>
+					<Text>{tool?.video ?? "N/A"}</Text>
 				</HStack>
 
 				<HStack align="start">
 					<Text fontWeight="bold">Guidelines:</Text>
-					<Text>{tool?.guidelines}</Text>
+					<Text>{tool?.guidelines ?? "N/A"}</Text>
 				</HStack>
 
 				<HStack align="start">
 					<Text fontWeight="bold">Limitations:</Text>
-					<Text>{tool?.limitations}</Text>
+					<Text>{tool?.limitations ?? "N/A"}</Text>
 				</HStack>
 
 				<HStack align="start">
@@ -70,7 +74,7 @@ export default function ToolDetailPage() {
 
 				<HStack align="start">
 					<Text fontWeight="bold">Link:</Text>
-					<Link href={tool?.link}>{tool?.link}</Link>
+					<Link href={tool?.link ?? "N/A"}>{tool?.link}</Link>
 				</HStack>
 			</VStack>
 		</Stack>
