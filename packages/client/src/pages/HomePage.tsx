@@ -61,25 +61,25 @@ function App() {
 				className="directory"
 			>
 				<HomePageItem
-					to="tools"
+					to="tools/index"
 					title="Tool Index"
 					description="Our Tool Index page is a configured list of accessible tools. Please visit here to find the most applicable tools for your use case."
 				/>
 
 				<HomePageItem
-					to="#"
+					to="tools/submit"
 					title="Submit A Tool"
 					description="To submit a tool to the website please use our Tool Submission Form. This will create a new index in the Tool Index page, so that other developers can take advantage of this utility."
 				/>
 
 				<HomePageItem
-					to="#"
+					to="community"
 					title="Connect Now"
 					description="To learn more about the BLVSP community please visit our Community section. Here you can find other software professionals to discuss useful tools."
 				/>
 
 				<HomePageItem
-					to="#"
+					to="volunteer"
 					title="Get Involved"
 					description="To get more engaged in the community please consider volunteering. Here you can help improve our Tool Index website through content moderation or community outreach."
 				/>

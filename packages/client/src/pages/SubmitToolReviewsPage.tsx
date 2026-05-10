@@ -1,13 +1,13 @@
 import { Heading, Stack } from "@chakra-ui/react";
 
-function BookmarkThreadPage() {
+function SubmitToolReviewsPage() {
 	return (
 		<Stack>
 			<Heading as="h1" size="4xl">
-				My Bookmarked Threads
+				Submit Tool Reviews
 			</Heading>
 		</Stack>
 	);
 }
 
-export default BookmarkThreadPage;
+export default SubmitToolReviewsPage;
