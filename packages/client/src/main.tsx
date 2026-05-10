@@ -25,8 +25,25 @@ const router = createBrowserRouter([
 		element: <App></App>,
 		children: [
 			{
+				index: true,
+				element: <HomePage />,
+			},
+			{
 				path: "login",
 				element: <LoginPage />,
+			},
+			{
+				path: "tools",
+				children: [
+					{
+						index: true,
+						element: <ToolIndexMainMenuPage />,
+					},
+					{
+						path: "index",
+						element: <ToolIndexPage />,
+					},
+				],
 			},
 			{
 				element: (
@@ -35,10 +52,6 @@ const router = createBrowserRouter([
 					</RequireAuth>
 				),
 				children: [
-					{
-						index: true,
-						element: <HomePage />,
-					},
 					{
 						path: "community",
 						children: [
@@ -63,14 +76,6 @@ const router = createBrowserRouter([
 					{
 						path: "tools",
 						children: [
-							{
-								index: true,
-								element: <ToolIndexMainMenuPage />,
-							},
-							{
-								path: "index",
-								element: <ToolIndexPage />,
-							},
 							{
 								path: "submit",
 								element: <ToolSubmissionPage />,
