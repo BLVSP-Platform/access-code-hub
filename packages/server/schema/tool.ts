@@ -1,4 +1,5 @@
 import mongoose, { type InferSchemaType } from "mongoose";
+import slugify from "slugify";
 
 export const toolFormSchema = new mongoose.Schema(
 	{
@@ -12,11 +13,25 @@ export const toolFormSchema = new mongoose.Schema(
 		limits: String,
 		comments: String,
 		isCreator: Boolean,
+
+		slug: { type: String, required: true, unique: true },
 	},
 	{
 		timestamps: true,
 	},
 );
+
+toolFormSchema.pre("validate", function (next) {
+	if (this.name && !this.slug) {
+		this.slug = slugify(this.name, {
+			lower: true,
+			strict: true,
+			trim: true,
+		});
+	}
+
+	next();
+});
 
 export const ToolFormModel = mongoose.model("tool", toolFormSchema);
 
@@ -25,4 +40,8 @@ export type ToolFormParameters = InferSchemaType<typeof toolFormSchema>;
 export const insertToolSubmission = async (formParams: ToolFormParameters) => {
 	const result = await ToolFormModel.create(formParams);
 	return result._id;
+};
+
+export const getToolBySlug = async (slug: string) => {
+	return ToolFormModel.findOne({ slug });
 };
