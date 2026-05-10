@@ -1,12 +1,11 @@
 import { useSession } from "@/lib/auth";
 
 export function useAuth() {
-	const { data } = useSession();
+	const { data, isPending } = useSession();
 
-	const isAuthenticated = (() => {
-		if (!data) return true;
-		return true;
-	})();
-
-	return { isAuthenticated };
+	return {
+		user: data,
+		isLoading: isPending,
+		isAuthenticated: !isPending && !!data,
+	};
 }
