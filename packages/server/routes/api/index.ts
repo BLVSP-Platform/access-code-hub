@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { body } from "express-validator";
 import multer from "multer";
+import { auth } from "../../auth";
 import { insertMentorshipRequest } from "../../schema/mentorship";
 import { insertThread } from "../../schema/thread";
 import { insertToolSubmission } from "../../schema/tool";
@@ -31,12 +32,27 @@ app.post(
 
 app.post(
 	"/mentorship",
-	body("mentorshipType").trim().isString().escape(),
+	body("mentorshipRole").trim().isString().escape(),
 	body("tags").isArray({ min: 1 }),
+	body("tags.*").trim().isString().escape(),
 
 	async (req, res) => {
 		try {
-			const result = await insertMentorshipRequest(req.body);
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+
+			if (!session) {
+				return res.status(401).send("Unauthorized");
+			}
+
+			const result = await insertMentorshipRequest({
+				userId: session.user.id,
+				email: session.user.email,
+				mentorshipRole: req.body.mentorshipRole,
+				tags: req.body.tags,
+			});
+
 			if (!result) {
 				return res.status(502);
 			}

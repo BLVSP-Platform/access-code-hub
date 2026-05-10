@@ -1,6 +1,8 @@
 import mongoose, { type InferSchemaType } from "mongoose";
 
 export const mentorshipFormSchema = new mongoose.Schema({
+	userId: { type: String, required: true },
+	email: { type: String, required: true },
 	mentorshipRole: { type: String, required: true },
 	tags: [{ type: String, required: true }],
 });
