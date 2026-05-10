@@ -20,7 +20,7 @@ import { LuSearch } from "react-icons/lu";
 import { InfoTip } from "@/components/ui/toggle-tip";
 
 // @todo: use backend type?
-interface Tool {
+export interface Tool {
 	id: string;
 	slug: string;
 	name: string;

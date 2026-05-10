@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import multer from "multer";
 import { insertThread } from "../../schema/thread";
-import { insertToolSubmission, ToolFormModel } from "../../schema/tool";
+import { getToolBySlug, insertToolSubmission, ToolFormModel } from "../../schema/tool";
 import { insertVolunteerApplication } from "../../schema/volunteer";
 
 const formHandler = multer();
@@ -79,6 +79,23 @@ app.get("/tools", async (req, res) => {
 		return res.status(200).json(tools);
 	} catch (err) {
 		return res.status(500).send(err);
+	}
+});
+
+app.get("/tools/:slug", async (req, res) => {
+	try {
+		const { slug } = req.params;
+
+		const tool = await getToolBySlug(slug);
+
+		if (!tool) {
+			return res.status(404).json({ message: "Tool not found" });
+		}
+
+		res.status(200).json(tool);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: "Server error" });
 	}
 });
 
