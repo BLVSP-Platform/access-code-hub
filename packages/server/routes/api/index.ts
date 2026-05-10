@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body, param } from "express-validator";
+import { body } from "express-validator";
 import multer from "multer";
 import { insertThread } from "../../schema/thread";
 import { getToolBySlug, insertToolSubmission, ToolFormModel } from "../../schema/tool";
@@ -72,7 +72,7 @@ app.post(
 	},
 );
 
-app.get("/tools", async (req, res) => {
+app.get("/tools", async (_req, res) => {
 	try {
 		const tools = await ToolFormModel.find().sort({ createdAt: -1 });
 
@@ -82,7 +82,7 @@ app.get("/tools", async (req, res) => {
 	}
 });
 
-app.get("/tools/last-updated", async (req, res) => {
+app.get("/tools/last-updated", async (_req, res) => {
 	try {
 		const latest = await ToolFormModel.findOne().sort({ updatedAt: -1 }).select("updatedAt");
 		return res.status(200).json({ lastUpdated: latest?.updatedAt ?? null });

@@ -13,7 +13,6 @@ export const toolFormSchema = new mongoose.Schema(
 		limits: String,
 		comments: String,
 		isCreator: Boolean,
-
 		slug: { type: String, required: true, unique: true },
 	},
 	{
