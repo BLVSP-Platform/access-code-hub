@@ -14,7 +14,7 @@ function Navbar() {
 					<NavigationMenuLink href="/" color="white">
 						Home
 					</NavigationMenuLink>
-					<NavigationMenuLink href="toolsmenu" color="white">
+					<NavigationMenuLink href="tools" color="white">
 						Tool Index
 					</NavigationMenuLink>
 					<NavigationMenuLink href="community" color="white">

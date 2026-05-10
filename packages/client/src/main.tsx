@@ -61,26 +61,26 @@ const router = createBrowserRouter([
 						],
 					},
 					{
-						path: "toolsmenu",
+						path: "tools",
 						children: [
 							{
 								index: true,
 								element: <ToolIndexMainMenuPage />,
 							},
 							{
-								path: "toolsindex",
+								path: "index",
 								element: <ToolIndexPage />,
 							},
 							{
-								path: "submission",
+								path: "submit",
 								element: <ToolSubmissionPage />,
 							},
 							{
-								path: "submitreviews",
+								path: "review",
 								element: <SubmitToolReviewsPage />,
 							},
 							{
-								path: "bookmarktool",
+								path: "bookmarked",
 								element: <BookmarkedToolsPage />,
 							},
 						],

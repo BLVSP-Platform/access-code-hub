@@ -35,10 +35,10 @@ function ToolIndexMainMenuPage() {
 			<Stack>
 				<AbsoluteCenter>
 					<Grid templateColumns="1fr" gap={6}>
-						<ToolIndexPageItem to="toolsindex" title="Browse Tools" icon={<LuSearch />} />
-						<ToolIndexPageItem to="submission" title="Submit a New Tool" icon={<LuFile />} />
-						<ToolIndexPageItem to="submitreviews" title="Submit Reviews for Tools" icon={<LuThumbsUp />} />
-						<ToolIndexPageItem to="bookmarktool" title="My Bookmarked Tools" icon={<LuBookmark />} />
+						<ToolIndexPageItem to="index" title="Browse Tools" icon={<LuSearch />} />
+						<ToolIndexPageItem to="submit" title="Submit a New Tool" icon={<LuFile />} />
+						<ToolIndexPageItem to="review" title="Submit Reviews for Tools" icon={<LuThumbsUp />} />
+						<ToolIndexPageItem to="bookmarked" title="My Bookmarked Tools" icon={<LuBookmark />} />
 					</Grid>
 				</AbsoluteCenter>
 			</Stack>
