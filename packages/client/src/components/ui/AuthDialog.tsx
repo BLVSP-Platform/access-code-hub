@@ -133,17 +133,17 @@ const LoginForm = ({ isRegistering, setIsRegistering, registerSuccess, setRegist
 	);
 };
 
-export const AuthDialog = () => {
+interface AuthDialogProps {
+	children: React.ReactNode;
+}
+
+export const AuthDialog = ({ children }: AuthDialogProps) => {
 	const [isRegistering, setIsRegistering] = useState(false);
 	const [registerSuccess, setRegisterSuccess] = useState("");
 
 	return (
 		<Dialog.Root>
-			<Dialog.Trigger asChild>
-				<IconButton bg="primary" _dark={{ bg: "primary", color: "white" }}>
-					<LuCircleUserRound></LuCircleUserRound>
-				</IconButton>
-			</Dialog.Trigger>
+			<Dialog.Trigger asChild>{children}</Dialog.Trigger>
 			<Portal>
 				<Dialog.Backdrop />
 				<Dialog.Positioner>

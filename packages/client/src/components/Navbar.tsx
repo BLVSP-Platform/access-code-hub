@@ -1,4 +1,5 @@
-import { HStack, Image } from "@chakra-ui/react";
+import { HStack, IconButton, Image } from "@chakra-ui/react";
+import { LuCircleUserRound } from "react-icons/lu";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
 import { AuthDialog } from "./ui/AuthDialog";
 import { ColorModeButton } from "./ui/color-mode";
@@ -34,7 +35,11 @@ function Navbar() {
 			<NavigationMenuItem>
 				<HStack gap={4}>
 					<ColorModeButton color="white"></ColorModeButton>
-					<AuthDialog />
+					<AuthDialog>
+						<IconButton bg="primary" _dark={{ bg: "primary", color: "white" }}>
+							<LuCircleUserRound />
+						</IconButton>
+					</AuthDialog>
 				</HStack>
 			</NavigationMenuItem>
 		</NavigationMenu>
