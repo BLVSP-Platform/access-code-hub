@@ -1,4 +1,4 @@
-import { Heading, IconButton, Link, Stack, Text, VStack } from "@chakra-ui/react";
+import { Heading, HStack, IconButton, Link, Stack, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { LuBookmark } from "react-icons/lu";
 import { useParams } from "react-router-dom";
@@ -35,14 +35,18 @@ export default function ToolDetailPage() {
 
 	return (
 		<Stack>
-			<Heading as="h1" size="4xl">
+			<HStack align="center" gap={1}>
 				<IconButton variant="ghost">
-					<LuBookmark />
+					{" "}
+					{/** @todo: bookmark a tool */}
+					<LuBookmark style={{ width: "32px", height: "32px" }} />
 				</IconButton>
-				{tool?.name}
-			</Heading>
+				<Heading as="h1" size="4xl">
+					{tool?.name}
+				</Heading>
+			</HStack>
 
-			<VStack mt={4} gap={4} align="start">
+			<VStack mt={4} gap={6} align="start">
 				<Text>
 					<Text as="span" fontWeight="bold">
 						Description:{" "}
