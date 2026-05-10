@@ -50,6 +50,7 @@ app.post(
 	"/tool",
 	formHandler.none(),
 	body("email").trim().isEmail().normalizeEmail(),
+	body("name").isString().trim().escape(),
 	body("link").trim().isURL().escape(),
 	body("description").isString().trim().escape(),
 	body("compatability").optional().trim().escape(),

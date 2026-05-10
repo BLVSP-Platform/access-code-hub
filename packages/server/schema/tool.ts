@@ -2,6 +2,7 @@ import mongoose, { type InferSchemaType } from "mongoose";
 
 export const toolFormSchema = new mongoose.Schema({
 	email: { type: String, required: true },
+	name: { type: String, required: true },
 	link: { type: String, required: true },
 	description: { type: String, required: true },
 	compatability: String,
