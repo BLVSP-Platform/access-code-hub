@@ -53,7 +53,7 @@ app.post(
 	body("name").isString().trim().escape(),
 	body("link").trim().isURL().escape(),
 	body("description").isString().trim().escape(),
-	body("compatability").optional().trim().escape(),
+	body("compatibility").optional().trim().escape(),
 	body("videos").optional().trim().escape(),
 	body("guidelines").optional().trim().escape(),
 	body("limits").optional().trim().escape(),

@@ -14,10 +14,9 @@ import {
 	Text,
 	VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import { InfoTip } from "@/components/ui/toggle-tip";
-import toolsData from "../data/sample_tools.json";
 
 interface Tool {
 	id: string;
@@ -31,10 +30,30 @@ interface Tool {
 
 function ToolIndexPage() {
 	const [search, setSearch] = useState("");
-	const [filteredTools, setFilteredTools] = useState<Tool[]>(toolsData);
+	const [tools, setTools] = useState<Tool[]>([]);
+	const [filteredTools, setFilteredTools] = useState<Tool[]>([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchTools = async () => {
+			try {
+				const res = await fetch("/api/tools");
+				const data = await res.json();
+
+				setTools(data);
+				setFilteredTools(data);
+			} catch (err) {
+				console.error("Failed to fetch tools:", err);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchTools();
+	}, []);
 
 	const handleFilterSubmit = () => {
-		const results = toolsData.filter((tool) => tool.name.toLowerCase().includes(search.toLowerCase()));
+		const results = tools.filter((tool) => tool.name.toLowerCase().includes(search.toLowerCase()));
 		setFilteredTools(results);
 	};
 

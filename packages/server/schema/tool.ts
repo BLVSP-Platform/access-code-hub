@@ -6,7 +6,7 @@ export const toolFormSchema = new mongoose.Schema(
 		name: { type: String, required: true },
 		link: { type: String, required: true },
 		description: { type: String, required: true },
-		compatability: String,
+		compatibility: String,
 		videos: String,
 		guidelines: String,
 		limits: String,
