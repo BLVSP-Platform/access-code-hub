@@ -40,6 +40,7 @@ function ToolIndexPage() {
 	const [tools, setTools] = useState<Tool[]>([]);
 	const [filteredTools, setFilteredTools] = useState<Tool[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [lastUpdated, setLastUpdated] = useState<string>("");
 
 	useEffect(() => {
 		const fetchTools = async () => {
@@ -57,6 +58,23 @@ function ToolIndexPage() {
 		};
 
 		fetchTools();
+	}, []);
+
+	useEffect(() => {
+		fetch("/api/tools/last-updated")
+			.then((res) => res.json())
+			.then((data) =>
+				setLastUpdated(
+					new Date(data.lastUpdated).toLocaleString("en-US", {
+						month: "long",
+						day: "numeric",
+						year: "numeric",
+						hour: "numeric",
+						minute: "2-digit",
+						hour12: true,
+					}),
+				),
+			);
 	}, []);
 
 	const handleFilterSubmit = () => {
@@ -117,7 +135,7 @@ function ToolIndexPage() {
 			<HStack mb={8}>
 				<Heading size="4xl">Tool Index</Heading>
 				<Text fontSize="xs" mt={4}>
-					Last Updated: October 26, 2025 03:26am {/* @todo: shouldn't hardcode this */}
+					Last Updated: {lastUpdated}
 				</Text>
 			</HStack>
 
@@ -125,7 +143,7 @@ function ToolIndexPage() {
 				{searchDialog}
 
 				<Box mb={4}>
-					<InfoTip content="hellooo" /> {/* placeholder */}
+					<InfoTip content="Filter results by tool name" />
 				</Box>
 			</HStack>
 

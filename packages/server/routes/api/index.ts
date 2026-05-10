@@ -82,6 +82,15 @@ app.get("/tools", async (req, res) => {
 	}
 });
 
+app.get("/tools/last-updated", async (req, res) => {
+	try {
+		const latest = await ToolFormModel.findOne().sort({ updatedAt: -1 }).select("updatedAt");
+		return res.status(200).json({ lastUpdated: latest?.updatedAt ?? null });
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
 app.get("/tools/:slug", async (req, res) => {
 	try {
 		const { slug } = req.params;
