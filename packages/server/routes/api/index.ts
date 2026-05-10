@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body } from "express-validator";
 import multer from "multer";
 import { insertThread } from "../../schema/thread";
-import { insertToolSubmission } from "../../schema/tool";
+import { insertToolSubmission, ToolFormModel } from "../../schema/tool";
 import { insertVolunteerApplication } from "../../schema/volunteer";
 
 const formHandler = multer();
@@ -71,5 +71,15 @@ app.post(
 		}
 	},
 );
+
+app.get("/tools", async (req, res) => {
+	try {
+		const tools = await ToolFormModel.find().sort({ createdAt: -1 });
+
+		return res.status(200).json(tools);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
 
 export default app;
