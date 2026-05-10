@@ -1,13 +1,13 @@
-import { Stack, Textarea, Heading } from "@chakra-ui/react"
+import { Heading, Stack } from "@chakra-ui/react";
 
-function SubmitToolReviewsPage() {
-    return (
-        <Stack>
-            <Heading as="h1" size="4xl">
-                My Bookmarked Tools
-            </Heading>
-        </Stack>
-    )
+function BookmarkToolPage() {
+	return (
+		<Stack>
+			<Heading as="h1" size="4xl">
+				My Bookmarked Tools
+			</Heading>
+		</Stack>
+	);
 }
 
-export default SubmitToolReviewsPage
+export default BookmarkToolPage;
