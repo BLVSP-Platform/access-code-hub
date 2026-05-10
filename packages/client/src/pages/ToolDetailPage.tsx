@@ -2,6 +2,7 @@ import { Heading, HStack, IconButton, Link, Stack, Text, VStack } from "@chakra-
 import { useEffect, useState } from "react";
 import { LuBookmark } from "react-icons/lu";
 import { useParams } from "react-router-dom";
+import { decodeEntities } from "@/lib/utils";
 import type { Tool } from "./ToolIndexPage";
 
 export default function ToolDetailPage() {
@@ -59,7 +60,7 @@ export default function ToolDetailPage() {
 
 				<HStack align="start">
 					<Text fontWeight="bold">Guidelines:</Text>
-					<Text>{tool?.guidelines ?? "N/A"}</Text>
+					<Text whiteSpace="pre-wrap">{decodeEntities(tool?.guidelines ?? "N/A")}</Text>
 				</HStack>
 
 				<HStack align="start">
@@ -74,7 +75,8 @@ export default function ToolDetailPage() {
 
 				<HStack align="start">
 					<Text fontWeight="bold">Link:</Text>
-					<Link href={tool?.link ?? "N/A"}>{tool?.link}</Link>
+					<Link href={tool?.link ?? "N/A"}>{decodeEntities(tool?.link ?? "N/A")}</Link>{" "}
+					{/** @todo: escape links in submission? */}
 				</HStack>
 			</VStack>
 		</Stack>
