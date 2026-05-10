@@ -7,6 +7,7 @@ import {
 	HStack,
 	Input,
 	InputGroup,
+	Link,
 	Portal,
 	RatingGroup,
 	Stack,
@@ -18,8 +19,10 @@ import { useEffect, useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import { InfoTip } from "@/components/ui/toggle-tip";
 
+// @todo: use backend type?
 interface Tool {
 	id: string;
+	slug: string;
 	name: string;
 	compatibility: string;
 	description: string;
@@ -130,7 +133,9 @@ function ToolIndexPage() {
 				<Table.Body>
 					{filteredTools.map((tool) => (
 						<Table.Row key={tool.id} bg="tertiary">
-							<Table.Cell>{tool.name}</Table.Cell>
+							<Table.Cell>
+								<Link href={`/tool/${tool.slug}`}>{tool.name}</Link>
+							</Table.Cell>
 							<Table.Cell>{tool.compatibility}</Table.Cell>
 							<Table.Cell>{tool.description}</Table.Cell>
 							<Table.Cell>
