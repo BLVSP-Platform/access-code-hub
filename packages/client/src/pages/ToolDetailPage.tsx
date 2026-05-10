@@ -1,5 +1,6 @@
-import { Text } from "@chakra-ui/react";
+import { Heading, HStack, IconButton, Link, Stack, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { LuBookmark } from "react-icons/lu";
 import { useParams } from "react-router-dom";
 import type { Tool } from "./ToolIndexPage";
 
@@ -27,5 +28,51 @@ export default function ToolDetailPage() {
 		fetchTool();
 	}, [slug]);
 
-	return <Text>{tool?.name}</Text>;
+	return (
+		<Stack>
+			<Heading as="h1" size="4xl">
+				<IconButton variant="ghost">
+					<LuBookmark />
+				</IconButton>
+				{tool?.name}
+			</Heading>
+
+			<VStack mt={4} gap={4} align="start">
+				<HStack align="start">
+					<Text fontWeight="bold">Description:</Text>
+					<Text>{tool?.description}</Text>
+				</HStack>
+
+				<HStack align="start">
+					<Text fontWeight="bold">Compatibility Information:</Text>
+					<Text>{tool?.compatibility}</Text> {/* @todo: compatibility vs compatibility info*/}
+				</HStack>
+
+				<HStack align="start">
+					<Text fontWeight="bold">Tutorial Video(s):</Text>
+					<Text>{tool?.video}</Text>
+				</HStack>
+
+				<HStack align="start">
+					<Text fontWeight="bold">Guidelines:</Text>
+					<Text>{tool?.guidelines}</Text>
+				</HStack>
+
+				<HStack align="start">
+					<Text fontWeight="bold">Limitations:</Text>
+					<Text>{tool?.limitations}</Text>
+				</HStack>
+
+				<HStack align="start">
+					<Text fontWeight="bold">User Reviews:</Text>
+					<Text>Reviews will go here!</Text> {/** @todo: reviews! */}
+				</HStack>
+
+				<HStack align="start">
+					<Text fontWeight="bold">Link:</Text>
+					<Link href={tool?.link}>{tool?.link}</Link>
+				</HStack>
+			</VStack>
+		</Stack>
+	);
 }

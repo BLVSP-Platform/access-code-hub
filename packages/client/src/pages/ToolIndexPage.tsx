@@ -27,6 +27,10 @@ export interface Tool {
 	compatibility: string;
 	description: string;
 	rating: number;
+	video: string;
+	guidelines: string;
+	limitations: string;
+	link: string;
 }
 
 // @todo: NEEDS ACCESSIBILITY
