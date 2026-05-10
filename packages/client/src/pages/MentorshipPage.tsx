@@ -1,8 +1,9 @@
-import { Button, Field, Flex, Heading, Input, RadioGroup, Stack } from "@chakra-ui/react";
+import { Button, Field, Flex, Heading, Input, RadioGroup, Stack, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FormDialog } from "@/components/FormDialog";
 import { InputTagsCombo } from "@/components/ui/input-tags-combo";
+import { useAuth } from "@/hooks/use-auth";
 
 interface MentorshipData {
 	mentorshipRole: "Mentor" | "Mentee";
@@ -13,6 +14,7 @@ function MentorshipPage() {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [dialogBody, setDialogBody] = useState<string>("");
 	const [dialogTitle, setDialogTitle] = useState<string>("");
+	const { isAuthenticated } = useAuth();
 
 	const {
 		register,
@@ -111,42 +113,48 @@ function MentorshipPage() {
 					Mentorship
 				</Heading>
 
-				<Field.Root required invalid={!!errors.mentorshipRole}>
-					<Field.Label>
-						Are you interested in giving or receiving mentorship?:
-						<Field.RequiredIndicator />
-					</Field.Label>
+				{isAuthenticated ? (
+					<>
+						<Field.Root required invalid={!!errors.mentorshipRole}>
+							<Field.Label>
+								Are you interested in giving or receiving mentorship?:
+								<Field.RequiredIndicator />
+							</Field.Label>
 
-					<Input
-						type="text"
-						hidden
-						readOnly
-						required
-						{...register("mentorshipRole", { required: "Please select an option." })}
-					/>
+							<Input
+								type="text"
+								hidden
+								readOnly
+								required
+								{...register("mentorshipRole", { required: "Please select an option." })}
+							/>
 
-					<RadioGroup.Root
-						onValueChange={(detail) => {
-							const newRole = detail.value as Role;
-							setValue("mentorshipRole", newRole, { shouldValidate: true });
-							resetField("tags");
-							clearErrors("tags");
-						}}
-					>
-						<Stack gap="3">
-							{items.map((item) => (
-								<RadioGroup.Item key={item.value} value={item.value}>
-									<RadioGroup.ItemHiddenInput />
-									<RadioGroup.ItemIndicator />
-									<RadioGroup.ItemText>{item.label}</RadioGroup.ItemText>
-								</RadioGroup.Item>
-							))}
-						</Stack>
-					</RadioGroup.Root>
-					<Field.ErrorText>{errors.mentorshipRole?.message}</Field.ErrorText>
-				</Field.Root>
+							<RadioGroup.Root
+								onValueChange={(detail) => {
+									const newRole = detail.value as Role;
+									setValue("mentorshipRole", newRole, { shouldValidate: true });
+									resetField("tags");
+									clearErrors("tags");
+								}}
+							>
+								<Stack gap="3">
+									{items.map((item) => (
+										<RadioGroup.Item key={item.value} value={item.value}>
+											<RadioGroup.ItemHiddenInput />
+											<RadioGroup.ItemIndicator />
+											<RadioGroup.ItemText>{item.label}</RadioGroup.ItemText>
+										</RadioGroup.Item>
+									))}
+								</Stack>
+							</RadioGroup.Root>
+							<Field.ErrorText>{errors.mentorshipRole?.message}</Field.ErrorText>
+						</Field.Root>
 
-				{role && <TagsInput />}
+						{role && <TagsInput />}
+					</>
+				) : (
+					<Text>You must be logged in to see this page!</Text>
+				)}
 			</Stack>
 
 			<FormDialog
