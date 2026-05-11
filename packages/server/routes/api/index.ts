@@ -8,6 +8,10 @@ import { insertVolunteerApplication } from "../../schema/volunteer";
 const formHandler = multer();
 const app = Router();
 
+app.get("/health", (_req, res) => {
+	res.status(200).send("OK");
+});
+
 app.post(
 	"/thread",
 	formHandler.none(),
