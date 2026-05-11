@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => {
 			},
 		},
 		preview: {
-			allowedHosts: [env.VITE_CLIENT_URL],
+			allowedHosts: [env.VITE_CLIENT_URL?.replace(/^https?:\/\//, "")],
 		},
 		server: {
 			proxy: {
@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
 					changeOrigin: true,
 				},
 			},
-			allowedHosts: [env.VITE_CLIENT_URL],
+			allowedHosts: [env.VITE_CLIENT_URL?.replace(/^https?:\/\//, "")],
 		},
 	};
 });
