@@ -15,4 +15,16 @@ export const auth = betterAuth({
 	},
 	trustedOrigins: [process.env.CLIENT_URL, "https://ach-frontend-production.up.railway.app"],
 	baseURL: process.env.SERVER_URL,
+	advanced: {
+		crossSubdomainCookies: {
+			enabled: true,
+			domain: ".railway.app",
+		},
+		defaultCookieAttributes: {
+			secure: true,
+			httpOnly: true,
+			sameSite: "none",
+			partitioned: true,
+		},
+	},
 });
