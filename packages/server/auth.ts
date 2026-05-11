@@ -13,13 +13,9 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
 	},
-	trustedOrigins: [process.env.CLIENT_URL, "https://ach-frontend-production.up.railway.app"],
+	trustedOrigins: [process.env.CLIENT_URL],
 	baseURL: process.env.SERVER_URL,
 	advanced: {
-		crossSubdomainCookies: {
-			enabled: true,
-			domain: ".railway.app",
-		},
 		defaultCookieAttributes: {
 			secure: true,
 			httpOnly: true,
