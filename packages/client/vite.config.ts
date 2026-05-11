@@ -16,6 +16,9 @@ export default defineConfig(({ mode }) => {
 				"@": path.resolve(__dirname, "./src"),
 			},
 		},
+		preview: {
+			allowedHosts: [env.VITE_CLIENT_URL],
+		},
 		server: {
 			proxy: {
 				"/api": {
