@@ -13,6 +13,14 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
 	},
-	trustedOrigins: [process.env.CLIENT_URL, "https://ach-frontend-production.up.railway.app"],
+	trustedOrigins: [process.env.CLIENT_URL],
 	baseURL: process.env.SERVER_URL,
+	advanced: {
+		defaultCookieAttributes: {
+			secure: true,
+			httpOnly: true,
+			sameSite: "none",
+			partitioned: true,
+		},
+	},
 });
