@@ -37,12 +37,17 @@ function Navbar() {
 			</NavigationMenuItem>
 			<NavigationMenuItem>
 				<HStack gap={4}>
-					<ColorModeButton color="white"></ColorModeButton>
+					<ColorModeButton
+						color="white"
+						_hover={{ color: "var(--chakra-colors-contrast)" }}
+					></ColorModeButton>
 					<AuthDialog>
 						<IconButton
 							aria-label={isAuthenticated ? "Account menu" : "Sign in"}
-							bg="primary"
-							_dark={{ bg: "primary", color: "white" }}
+							variant="ghost"
+							color="white"
+							_hover={{ color: "var(--chakra-colors-contrast)" }}
+							_open={{ color: "var(--chakra-colors-contrast)" }}
 						>
 							<LuCircleUserRound />
 						</IconButton>
