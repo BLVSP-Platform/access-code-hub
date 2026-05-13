@@ -1,10 +1,13 @@
 import { HStack, IconButton, Image } from "@chakra-ui/react";
 import { LuCircleUserRound } from "react-icons/lu";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
+import { useAuth } from "@/hooks/use-auth";
 import { AuthDialog } from "./ui/AuthDialog";
 import { ColorModeButton } from "./ui/color-mode";
 
 function Navbar() {
+	const { isAuthenticated } = useAuth();
+
 	return (
 		<NavigationMenu bg="primary" px={6} py={4} gap={8} align="center" justify="space-between">
 			<NavigationMenuItem>
@@ -36,7 +39,11 @@ function Navbar() {
 				<HStack gap={4}>
 					<ColorModeButton color="white"></ColorModeButton>
 					<AuthDialog>
-						<IconButton bg="primary" _dark={{ bg: "primary", color: "white" }}>
+						<IconButton
+							aria-label={isAuthenticated ? "Account menu" : "Sign in"}
+							bg="primary"
+							_dark={{ bg: "primary", color: "white" }}
+						>
 							<LuCircleUserRound />
 						</IconButton>
 					</AuthDialog>
