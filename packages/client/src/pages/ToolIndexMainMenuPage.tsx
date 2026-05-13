@@ -15,9 +15,7 @@ const ToolIndexPageItem = ({ to, title, icon }: ToolIndexPageProps) => {
 				<ChakraLink asChild>
 					<ReactLink to={to}>
 						{icon}
-						<Text color="black" textAlign="center">
-							{title}
-						</Text>
+						<Text textAlign="center">{title}</Text>
 					</ReactLink>
 				</ChakraLink>
 			</Heading>

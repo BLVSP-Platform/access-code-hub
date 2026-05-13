@@ -99,7 +99,17 @@ function ToolIndexPage() {
 				</Box>
 			</HStack>
 
-			<Table.Root size="lg" variant="outline" showColumnBorder>
+			<Table.Root
+				size="lg"
+				variant="outline"
+				showColumnBorder
+				css={{
+					"--chakra-colors-border": "#5B5B5B",
+					_dark: {
+						"--chakra-colors-border": "#5e5e5e",
+					},
+				}}
+			>
 				<Table.Header>
 					<Table.Row bg="secondary">
 						<Table.ColumnHeader>Name</Table.ColumnHeader>
@@ -115,7 +125,18 @@ function ToolIndexPage() {
 							<Table.Cell>{tool.compatibility}</Table.Cell>
 							<Table.Cell>{tool.description}</Table.Cell>
 							<Table.Cell>
-								<RatingGroup.Root readOnly count={5} value={tool.rating} size="sm">
+								<RatingGroup.Root
+									readOnly
+									count={5}
+									value={tool.rating}
+									size="sm"
+									css={{
+										"--chakra-colors-bg-emphasized": "#b1b1b1",
+										_dark: {
+											"--chakra-colors-bg-emphasized": "#605d70",
+										},
+									}}
+								>
 									<RatingGroup.HiddenInput />
 									<RatingGroup.Control />
 								</RatingGroup.Root>
