@@ -40,7 +40,16 @@ app.post(
 	body("email").trim().isEmail().normalizeEmail(),
 	async (req, res) => {
 		try {
-			const result = await insertVolunteerApplication(req.body);
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+
+			if (!session) {
+				return res.status(401).send("Unauthorized");
+			}
+
+			const result = await insertVolunteerApplication({ userId: session.user.id, ...req.body });
+
 			if (!result) {
 				return res.status(502);
 			}
