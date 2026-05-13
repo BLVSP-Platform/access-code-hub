@@ -125,7 +125,18 @@ function ToolIndexPage() {
 							<Table.Cell>{tool.compatibility}</Table.Cell>
 							<Table.Cell>{tool.description}</Table.Cell>
 							<Table.Cell>
-								<RatingGroup.Root readOnly count={5} value={tool.rating} size="sm">
+								<RatingGroup.Root
+									readOnly
+									count={5}
+									value={tool.rating}
+									size="sm"
+									css={{
+										"--chakra-colors-bg-emphasized": "#b1b1b1",
+										_dark: {
+											"--chakra-colors-bg-emphasized": "#605d70",
+										},
+									}}
+								>
 									<RatingGroup.HiddenInput />
 									<RatingGroup.Control />
 								</RatingGroup.Root>
