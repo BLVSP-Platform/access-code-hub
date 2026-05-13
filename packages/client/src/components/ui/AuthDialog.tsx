@@ -168,9 +168,6 @@ export const AuthDialog = ({ children }: AuthDialogProps) => {
 					<Dialog.Content>
 						<Dialog.Header>
 							<Dialog.Title>{isRegistering ? "Register" : "Login"}</Dialog.Title>
-							<Dialog.CloseTrigger asChild>
-								<CloseButton aria-label="Close dialog" />
-							</Dialog.CloseTrigger>
 						</Dialog.Header>
 						<Dialog.Body>
 							<LoginForm
@@ -180,6 +177,9 @@ export const AuthDialog = ({ children }: AuthDialogProps) => {
 								setRegisterSuccess={setRegisterSuccess}
 							/>
 						</Dialog.Body>
+						<Dialog.CloseTrigger asChild>
+							<CloseButton aria-label="Close login dialog" />
+						</Dialog.CloseTrigger>
 					</Dialog.Content>
 				</Dialog.Positioner>
 			</Portal>
