@@ -99,7 +99,17 @@ function ToolIndexPage() {
 				</Box>
 			</HStack>
 
-			<Table.Root size="lg" variant="outline" showColumnBorder>
+			<Table.Root
+				size="lg"
+				variant="outline"
+				showColumnBorder
+				css={{
+					"--chakra-colors-border": "#5B5B5B",
+					_dark: {
+						"--chakra-colors-border": "#5e5e5e",
+					},
+				}}
+			>
 				<Table.Header>
 					<Table.Row bg="secondary">
 						<Table.ColumnHeader>Name</Table.ColumnHeader>
