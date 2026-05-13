@@ -44,8 +44,6 @@ function Navbar() {
 							bg="primary"
 							_dark={{ bg: "primary", color: "white" }}
 						>
-							{" "}
-							{/** @todo: use session to differentiate aria label */}
 							<LuCircleUserRound />
 						</IconButton>
 					</AuthDialog>
