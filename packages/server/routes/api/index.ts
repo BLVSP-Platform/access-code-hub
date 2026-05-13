@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { body } from "express-validator";
 import multer from "multer";
+import { auth } from "../../auth";
 import { insertThread } from "../../schema/thread";
 import { insertToolSubmission } from "../../schema/tool";
 import { insertVolunteerApplication } from "../../schema/volunteer";
@@ -64,7 +65,16 @@ app.post(
 	body("isCreator").isBoolean(),
 	async (req, res) => {
 		try {
-			const result = await insertToolSubmission(req.body);
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+
+			if (!session) {
+				return res.status(401).send("Unauthorized");
+			}
+
+			const result = await insertToolSubmission({ userId: session.user.id, ...req.body });
+
 			if (!result) {
 				return res.status(502);
 			}
