@@ -3,9 +3,11 @@ import { AuthDialog } from "@/components/ui/AuthDialog";
 import { useAuth } from "@/hooks/use-auth";
 
 export const LoginPage = () => {
-	const { isAuthenticated } = useAuth();
+	const { isAuthenticated, isPending } = useAuth();
 
-	if (isAuthenticated) return <Navigate to="/" replace />;
+	if (isPending) return null;
+
+	if (isAuthenticated) return <Navigate to="/profile" replace />;
 
 	return <AuthDialog />;
 };

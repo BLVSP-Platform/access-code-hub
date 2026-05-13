@@ -10,6 +10,22 @@ export const auth = betterAuth({
 	database: mongodbAdapter(client.db(), {
 		client,
 	}),
+	user: {
+		additionalFields: {
+			about: {
+				type: "string",
+				required: false,
+				defaultValue: "",
+				input: false,
+			},
+			toolsList: {
+				type: "string",
+				required: false,
+				defaultValue: "",
+				input: false,
+			},
+		},
+	},
 	emailAndPassword: {
 		enabled: true,
 	},
