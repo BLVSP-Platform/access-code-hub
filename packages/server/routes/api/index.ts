@@ -1,12 +1,17 @@
 import { Router } from "express";
 import { body } from "express-validator";
 import multer from "multer";
+import { auth } from "../../auth";
 import { insertThread } from "../../schema/thread";
 import { getToolBySlug, insertToolSubmission, ToolFormModel } from "../../schema/tool";
 import { insertVolunteerApplication } from "../../schema/volunteer";
 
 const formHandler = multer();
 const app = Router();
+
+app.get("/health", (_req, res) => {
+	res.status(200).send("OK");
+});
 
 app.post(
 	"/thread",
@@ -17,7 +22,15 @@ app.post(
 	body("tags").trim().isString().escape(),
 	async (req, res) => {
 		try {
-			const result = await insertThread(req.body);
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+
+			if (!session) {
+				return res.status(401).send("Unauthorized");
+			}
+
+			const result = await insertThread({ ...req.body, userId: session.user.id });
 			if (!result) {
 				return res.status(502);
 			}
@@ -35,7 +48,16 @@ app.post(
 	body("email").trim().isEmail().normalizeEmail(),
 	async (req, res) => {
 		try {
-			const result = await insertVolunteerApplication(req.body);
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+
+			if (!session) {
+				return res.status(401).send("Unauthorized");
+			}
+
+			const result = await insertVolunteerApplication({ ...req.body, userId: session.user.id });
+
 			if (!result) {
 				return res.status(502);
 			}
@@ -61,7 +83,16 @@ app.post(
 	body("isCreator").isBoolean(),
 	async (req, res) => {
 		try {
-			const result = await insertToolSubmission(req.body);
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+
+			if (!session) {
+				return res.status(401).send("Unauthorized");
+			}
+
+			const result = await insertToolSubmission({ ...req.body, userId: session.user.id });
+
 			if (!result) {
 				return res.status(502);
 			}

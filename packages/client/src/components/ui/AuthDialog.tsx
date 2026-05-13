@@ -75,12 +75,19 @@ const LoginForm = ({ isRegistering, setIsRegistering, registerSuccess, setRegist
 		}
 	};
 
+	const formLabel = isRegistering ? "Register a new account" : "Log in to your account";
+
 	return (
-		<Flex as="form" onSubmit={handleSubmit(onSubmit)} flexDir="column">
+		<Flex as="form" onSubmit={handleSubmit(onSubmit)} flexDir="column" aria-label={formLabel} aria-busy={loading}>
 			{isRegistering && (
 				<Field.Root>
 					<Field.Label>Username</Field.Label>
-					<Input disabled={loading} {...register("username")} onChange={() => setAuthError("")} />
+					<Input
+						disabled={loading}
+						autoComplete="username"
+						{...register("username")}
+						onChange={() => setAuthError("")}
+					/>
 				</Field.Root>
 			)}
 
@@ -88,36 +95,48 @@ const LoginForm = ({ isRegistering, setIsRegistering, registerSuccess, setRegist
 				<Field.Label>Email</Field.Label>
 				<Input
 					disabled={loading}
+					autoComplete="email"
+					type="email"
 					{...register("email", { required: true })}
 					onChange={() => setAuthError("")}
 				/>
 			</Field.Root>
+
 			<Field.Root mt="4">
 				<Field.Label>Password</Field.Label>
 				<PasswordInput
 					disabled={loading}
+					autoComplete={isRegistering ? "new-password" : "current-password"}
 					{...register("password", { required: true })}
 					onChange={() => setAuthError("")}
 				/>
 			</Field.Root>
 
 			{registerSuccess && (
-				<Text color="green" mt="2">
+				<Text color="green" mt="2" role="status" aria-live="polite">
 					{registerSuccess}
 				</Text>
 			)}
 
 			{authError && (
-				<Text color="red" mt="2">
+				<Text color="red" mt="2" role="alert" aria-live="assertive">
 					{authError}
 				</Text>
 			)}
 
-			<Button type="submit" mt="8" bg="primary" loading={loading} disabled={loading}>
+			<Button
+				type="submit"
+				mt="8"
+				bg="primary"
+				loading={loading}
+				disabled={loading}
+				aria-label={loading ? (isRegistering ? "Registering…" : "Logging in…") : undefined}
+			>
 				{isRegistering ? "Register" : "Login"}
 			</Button>
 
 			<Button
+				type="button"
 				variant="ghost"
 				mt="4"
 				onClick={() => {
@@ -158,11 +177,9 @@ export const AuthDialog = ({ children }: AuthDialogProps) => {
 								setRegisterSuccess={setRegisterSuccess}
 							/>
 						</Dialog.Body>
-						<Dialog.Footer>
-							<Dialog.CloseTrigger asChild>
-								<CloseButton />
-							</Dialog.CloseTrigger>
-						</Dialog.Footer>
+						<Dialog.CloseTrigger asChild>
+							<CloseButton aria-label="Close login dialog" />
+						</Dialog.CloseTrigger>
 					</Dialog.Content>
 				</Dialog.Positioner>
 			</Portal>

@@ -6,13 +6,15 @@ import "dotenv/config";
 import cors from "cors";
 import { initializeDatabase } from "./db";
 
+if (!process.env.CLIENT_URL) throw new Error("CLIENT_URL not provided");
+
 await initializeDatabase();
 
 const app = express();
 const port = Number(process.env.PORT);
 
 const corsOptions = {
-	origin: ["http://localhost:5173", "https://ach-frontend-production.up.railway.app"],
+	origin: [process.env.CLIENT_URL],
 	credentials: true,
 };
 

@@ -3,6 +3,7 @@ import slugify from "slugify";
 
 export const toolFormSchema = new mongoose.Schema(
 	{
+		userId: { type: String, required: true },
 		email: { type: String, required: true },
 		name: { type: String, required: true },
 		link: { type: String, required: true },

@@ -16,6 +16,9 @@ export default defineConfig(({ mode }) => {
 				"@": path.resolve(__dirname, "./src"),
 			},
 		},
+		preview: {
+			allowedHosts: [env.VITE_CLIENT_URL?.replace(/^https?:\/\//, "")],
+		},
 		server: {
 			proxy: {
 				"/api": {
@@ -23,7 +26,7 @@ export default defineConfig(({ mode }) => {
 					changeOrigin: true,
 				},
 			},
-			allowedHosts: ["ach-frontend-production.up.railway.app"],
+			allowedHosts: [env.VITE_CLIENT_URL?.replace(/^https?:\/\//, "")],
 		},
 	};
 });
