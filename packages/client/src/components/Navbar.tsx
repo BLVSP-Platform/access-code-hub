@@ -11,7 +11,7 @@ function Navbar() {
 	return (
 		<NavigationMenu bg="primary" px={6} py={4} gap={8} align="center" justify="space-between">
 			<NavigationMenuItem>
-				<Image w="60px" h="50px" src="logo.png"></Image>
+				<Image w="60px" h="50px" src="/logo.png"></Image>
 			</NavigationMenuItem>
 			<NavigationMenuItem flexGrow={1}>
 				<HStack gap={8}>
