@@ -1,27 +1,6 @@
-import { AbsoluteCenter, Box, Link as ChakraLink, Grid, Heading, Stack, Text } from "@chakra-ui/react";
+import { AbsoluteCenter, Grid, Heading, Stack } from "@chakra-ui/react";
 import { LuBookmark, LuFile, LuSearch, LuThumbsUp } from "react-icons/lu";
-import { Link as ReactLink } from "react-router-dom";
-
-interface ToolIndexPageProps {
-	to: string;
-	title: string;
-	icon: React.ReactNode;
-}
-
-const ToolIndexPageItem = ({ to, title, icon }: ToolIndexPageProps) => {
-	return (
-		<Box bg="primary/33" borderWidth="1px" borderColor="secondary" w="700px" h="50px">
-			<Heading as="h2" rounded="sm" py={2} textAlign="center" mb={2}>
-				<ChakraLink asChild>
-					<ReactLink to={to}>
-						{icon}
-						<Text textAlign="center">{title}</Text>
-					</ReactLink>
-				</ChakraLink>
-			</Heading>
-		</Box>
-	);
-};
+import { PageNavItem } from "@/components/ui/PageNavItem";
 
 function ToolIndexMainMenuPage() {
 	return (
@@ -33,10 +12,10 @@ function ToolIndexMainMenuPage() {
 			<Stack>
 				<AbsoluteCenter>
 					<Grid templateColumns="1fr" gap={6}>
-						<ToolIndexPageItem to="index" title="Browse Tools" icon={<LuSearch />} />
-						<ToolIndexPageItem to="submit" title="Submit a New Tool" icon={<LuFile />} />
-						<ToolIndexPageItem to="review" title="Submit Reviews for Tools" icon={<LuThumbsUp />} />
-						<ToolIndexPageItem to="bookmarked" title="My Bookmarked Tools" icon={<LuBookmark />} />
+						<PageNavItem to="index" title="Browse Tools" icon={<LuSearch />} />
+						<PageNavItem to="submit" title="Submit a New Tool" icon={<LuFile />} />
+						<PageNavItem to="review" title="Submit Reviews for Tools" icon={<LuThumbsUp />} />
+						<PageNavItem to="bookmarked" title="My Bookmarked Tools" icon={<LuBookmark />} />
 					</Grid>
 				</AbsoluteCenter>
 			</Stack>
