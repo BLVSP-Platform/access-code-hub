@@ -3,7 +3,7 @@ import { body } from "express-validator";
 import multer from "multer";
 import { auth } from "../../auth";
 import { insertThread } from "../../schema/thread";
-import { insertToolSubmission } from "../../schema/tool";
+import { getToolBySlug, insertToolSubmission, ToolFormModel } from "../../schema/tool";
 import { insertVolunteerApplication } from "../../schema/volunteer";
 
 const formHandler = multer();
@@ -72,9 +72,10 @@ app.post(
 	"/tool",
 	formHandler.none(),
 	body("email").trim().isEmail().normalizeEmail(),
+	body("name").isString().trim().escape(),
 	body("link").trim().isURL().escape(),
 	body("description").isString().trim().escape(),
-	body("compatability").optional().trim().escape(),
+	body("compatibility").optional().trim().escape(),
 	body("videos").optional().trim().escape(),
 	body("guidelines").optional().trim().escape(),
 	body("limits").optional().trim().escape(),
@@ -101,5 +102,41 @@ app.post(
 		}
 	},
 );
+
+app.get("/tools", async (_req, res) => {
+	try {
+		const tools = await ToolFormModel.find().sort({ createdAt: -1 });
+
+		return res.status(200).json(tools);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+app.get("/tools/last-updated", async (_req, res) => {
+	try {
+		const latest = await ToolFormModel.findOne().sort({ updatedAt: -1 }).select("updatedAt");
+		return res.status(200).json({ lastUpdated: latest?.updatedAt ?? null });
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+app.get("/tools/:slug", async (req, res) => {
+	try {
+		const { slug } = req.params;
+
+		const tool = await getToolBySlug(slug);
+
+		if (!tool) {
+			return res.status(404).json({ message: "Tool not found" });
+		}
+
+		res.status(200).json(tool);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: "Server error" });
+	}
+});
 
 export default app;

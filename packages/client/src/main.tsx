@@ -91,7 +91,7 @@ const router = createBrowserRouter([
 						],
 					},
 					{
-						path: "tool/:id",
+						path: "tools/:slug",
 						element: <ToolDetailPage />,
 					},
 					{
