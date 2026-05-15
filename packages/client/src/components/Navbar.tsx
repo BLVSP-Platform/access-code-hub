@@ -1,13 +1,17 @@
-import { HStack, Image } from "@chakra-ui/react";
+import { HStack, IconButton, Image } from "@chakra-ui/react";
+import { LuCircleUserRound } from "react-icons/lu";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
+import { useAuth } from "@/hooks/use-auth";
 import { AuthDialog } from "./ui/AuthDialog";
 import { ColorModeButton } from "./ui/color-mode";
 
 function Navbar() {
+	const { isAuthenticated } = useAuth();
+
 	return (
 		<NavigationMenu bg="primary" px={6} py={4} gap={8} align="center" justify="space-between">
 			<NavigationMenuItem>
-				<Image w="60px" h="50px" src="logo.png"></Image>
+				<Image w="60px" h="50px" src="/logo.png"></Image>
 			</NavigationMenuItem>
 			<NavigationMenuItem flexGrow={1}>
 				<HStack gap={8}>
@@ -33,8 +37,21 @@ function Navbar() {
 			</NavigationMenuItem>
 			<NavigationMenuItem>
 				<HStack gap={4}>
-					<ColorModeButton color="white"></ColorModeButton>
-					<AuthDialog />
+					<ColorModeButton
+						color="white"
+						_hover={{ color: "var(--chakra-colors-contrast)" }}
+					></ColorModeButton>
+					<AuthDialog>
+						<IconButton
+							aria-label={isAuthenticated ? "Account menu" : "Sign in"}
+							variant="ghost"
+							color="white"
+							_hover={{ color: "var(--chakra-colors-contrast)" }}
+							_open={{ color: "var(--chakra-colors-contrast)" }}
+						>
+							<LuCircleUserRound />
+						</IconButton>
+					</AuthDialog>
 				</HStack>
 			</NavigationMenuItem>
 		</NavigationMenu>

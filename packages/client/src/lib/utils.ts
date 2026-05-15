@@ -47,3 +47,8 @@ export function formDataCast<T extends object>(obj: T): FormData {
 
 	return formData;
 }
+
+export function decodeEntities(str: string): string {
+	const doc = new DOMParser().parseFromString(str, "text/html");
+	return doc.documentElement.textContent ?? str;
+}

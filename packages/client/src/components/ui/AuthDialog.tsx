@@ -1,10 +1,8 @@
-import { Button, CloseButton, Dialog, Field, Flex, IconButton, Input, Portal, Text } from "@chakra-ui/react";
+import { Button, CloseButton, Dialog, Field, Flex, Input, Portal, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { LuCircleUserRound } from "react-icons/lu";
-import { signIn, signUp } from "@/lib/auth";
 import { useAuth } from "@/hooks/use-auth";
+import { signIn, signUp } from "@/lib/auth";
 import { PasswordInput } from "./password-input";
 
 interface LoginFormProps {
@@ -78,12 +76,19 @@ const LoginForm = ({ isRegistering, setIsRegistering, registerSuccess, setRegist
 		}
 	};
 
+	const formLabel = isRegistering ? "Register a new account" : "Log in to your account";
+
 	return (
-		<Flex as="form" onSubmit={handleSubmit(onSubmit)} flexDir="column">
+		<Flex as="form" onSubmit={handleSubmit(onSubmit)} flexDir="column" aria-label={formLabel} aria-busy={loading}>
 			{isRegistering && (
 				<Field.Root>
 					<Field.Label>Username</Field.Label>
-					<Input disabled={loading} {...register("username")} onChange={() => setAuthError("")} />
+					<Input
+						disabled={loading}
+						autoComplete="username"
+						{...register("username")}
+						onChange={() => setAuthError("")}
+					/>
 				</Field.Root>
 			)}
 
@@ -91,36 +96,48 @@ const LoginForm = ({ isRegistering, setIsRegistering, registerSuccess, setRegist
 				<Field.Label>Email</Field.Label>
 				<Input
 					disabled={loading}
+					autoComplete="email"
+					type="email"
 					{...register("email", { required: true })}
 					onChange={() => setAuthError("")}
 				/>
 			</Field.Root>
+
 			<Field.Root mt="4">
 				<Field.Label>Password</Field.Label>
 				<PasswordInput
 					disabled={loading}
+					autoComplete={isRegistering ? "new-password" : "current-password"}
 					{...register("password", { required: true })}
 					onChange={() => setAuthError("")}
 				/>
 			</Field.Root>
 
 			{registerSuccess && (
-				<Text color="green" mt="2">
+				<Text color="green" mt="2" role="status" aria-live="polite">
 					{registerSuccess}
 				</Text>
 			)}
 
 			{authError && (
-				<Text color="red" mt="2">
+				<Text color="red" mt="2" role="alert" aria-live="assertive">
 					{authError}
 				</Text>
 			)}
 
-			<Button type="submit" mt="8" bg="primary" loading={loading} disabled={loading}>
+			<Button
+				type="submit"
+				mt="8"
+				bg="primary"
+				loading={loading}
+				disabled={loading}
+				aria-label={loading ? (isRegistering ? "Registering…" : "Logging in…") : undefined}
+			>
 				{isRegistering ? "Register" : "Login"}
 			</Button>
 
 			<Button
+				type="button"
 				variant="ghost"
 				mt="4"
 				onClick={() => {
@@ -135,7 +152,11 @@ const LoginForm = ({ isRegistering, setIsRegistering, registerSuccess, setRegist
 	);
 };
 
-export const AuthDialog = () => {
+interface AuthDialogProps {
+	children: React.ReactNode;
+}
+
+export const AuthDialog = ({ children }: AuthDialogProps) => {
 	const [isRegistering, setIsRegistering] = useState(false);
 	const [registerSuccess, setRegisterSuccess] = useState("");
 	const { isAuthenticated } = useAuth();
@@ -143,11 +164,7 @@ export const AuthDialog = () => {
 
 	if (isAuthenticated) {
 		return (
-			<IconButton
-				bg="primary"
-				_dark={{ bg: "primary", color: "white" }}
-				onClick={() => navigate("/profile")}
-			>
+			<IconButton bg="primary" _dark={{ bg: "primary", color: "white" }} onClick={() => navigate("/profile")}>
 				<LuCircleUserRound></LuCircleUserRound>
 			</IconButton>
 		);
@@ -155,11 +172,7 @@ export const AuthDialog = () => {
 
 	return (
 		<Dialog.Root>
-			<Dialog.Trigger asChild>
-				<IconButton bg="primary" _dark={{ bg: "primary", color: "white" }}>
-					<LuCircleUserRound></LuCircleUserRound>
-				</IconButton>
-			</Dialog.Trigger>
+			<Dialog.Trigger asChild>{children}</Dialog.Trigger>
 			<Portal>
 				<Dialog.Backdrop />
 				<Dialog.Positioner>
@@ -175,11 +188,9 @@ export const AuthDialog = () => {
 								setRegisterSuccess={setRegisterSuccess}
 							/>
 						</Dialog.Body>
-						<Dialog.Footer>
-							<Dialog.CloseTrigger asChild>
-								<CloseButton />
-							</Dialog.CloseTrigger>
-						</Dialog.Footer>
+						<Dialog.CloseTrigger asChild>
+							<CloseButton aria-label="Close login dialog" />
+						</Dialog.CloseTrigger>
 					</Dialog.Content>
 				</Dialog.Positioner>
 			</Portal>

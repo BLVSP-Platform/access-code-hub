@@ -4,18 +4,21 @@ import "./index.css";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
 import { RequireAuth } from "./components/AuthProvider.tsx";
-import BookmarkThreadPage from "./pages/BookmarkThreadPage.tsx";
+import BookmarkedThreadsPage from "./pages/BookmarkedThreadsPage.tsx";
+import BookmarkedToolsPage from "./pages/BookmarkedToolsPage.tsx";
 import CommunityNavPage from "./pages/CommunityNavPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import { LoginPage } from "./pages/LoginPage.tsx";
 import MentorshipPage from "./pages/MentorshipPage.tsx";
 import PostThreadPage from "./pages/PostThreadPage.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx";
+import SubmitToolReviewsPage from "./pages/SubmitToolReviewsPage.tsx";
 import ThreadsPage from "./pages/ThreadsPage.tsx";
 import ToolDetailPage from "./pages/ToolDetailPage.tsx";
+import ToolIndexMainMenuPage from "./pages/ToolIndexMainMenuPage.tsx";
 import ToolIndexPage from "./pages/ToolIndexPage.tsx";
 import ToolSubmissionPage from "./pages/ToolSubmissionPage.tsx";
 import VolunteerPage from "./pages/VolunteerPage.tsx";
-import ProfilePage from "./pages/ProfilePage.tsx";
 
 const router = createBrowserRouter([
 	{
@@ -23,8 +26,25 @@ const router = createBrowserRouter([
 		element: <App></App>,
 		children: [
 			{
+				index: true,
+				element: <HomePage />,
+			},
+			{
 				path: "login",
 				element: <LoginPage />,
+			},
+			{
+				path: "tools",
+				children: [
+					{
+						index: true,
+						element: <ToolIndexMainMenuPage />,
+					},
+					{
+						path: "index",
+						element: <ToolIndexPage />,
+					},
+				],
 			},
 			{
 				element: (
@@ -33,10 +53,6 @@ const router = createBrowserRouter([
 					</RequireAuth>
 				),
 				children: [
-					{
-						index: true,
-						element: <HomePage />,
-					},
 					{
 						path: "community",
 						children: [
@@ -54,16 +70,29 @@ const router = createBrowserRouter([
 							},
 							{
 								path: "bookmarkthread",
-								element: <BookmarkThreadPage />,
+								element: <BookmarkedThreadsPage />,
 							},
 						],
 					},
 					{
 						path: "tools",
-						element: <ToolIndexPage />,
+						children: [
+							{
+								path: "submit",
+								element: <ToolSubmissionPage />,
+							},
+							{
+								path: "review",
+								element: <SubmitToolReviewsPage />,
+							},
+							{
+								path: "bookmarked",
+								element: <BookmarkedToolsPage />,
+							},
+						],
 					},
 					{
-						path: "tool/:id",
+						path: "tools/:slug",
 						element: <ToolDetailPage />,
 					},
 					{

@@ -1,18 +1,17 @@
-import { Navigate } from "react-router-dom";
 import { Center, Spinner } from "@chakra-ui/react";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 
 export function RequireAuth({ children }: { children?: React.ReactNode }) {
-	const { isAuthenticated, isPending } = useAuth();
+	const { isAuthenticated, isLoading } = useAuth();
 
-	if (isPending) {
-		return (
-			<Center minH="40vh">
-				<Spinner size="lg" />
-			</Center>
-		);
+	if (isLoading) {
+		return <div>Loading...</div>;
 	}
 
-	if (!isAuthenticated) return <Navigate to="/login" replace />;
+	if (!isAuthenticated) {
+		return <Navigate to="/login" replace />;
+	}
+
 	return <>{children}</>;
 }

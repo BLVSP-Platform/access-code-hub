@@ -1,12 +1,18 @@
 import { Router } from "express";
 import { body } from "express-validator";
 import multer from "multer";
+import { auth } from "../../auth";
+import { insertMentorshipRequest } from "../../schema/mentorship";
 import { insertThread } from "../../schema/thread";
-import { insertToolSubmission } from "../../schema/tool";
+import { getToolBySlug, insertToolSubmission, ToolFormModel } from "../../schema/tool";
 import { insertVolunteerApplication } from "../../schema/volunteer";
 
 const formHandler = multer();
 const app = Router();
+
+app.get("/health", (_req, res) => {
+	res.status(200).send("OK");
+});
 
 app.post(
 	"/thread",
@@ -17,7 +23,48 @@ app.post(
 	body("tags").trim().isString().escape(),
 	async (req, res) => {
 		try {
-			const result = await insertThread(req.body);
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+
+			if (!session) {
+				return res.status(401).send("Unauthorized");
+			}
+
+			const result = await insertThread({ ...req.body, userId: session.user.id });
+			if (!result) {
+				return res.status(502);
+			}
+			return res.status(201).send("Success");
+		} catch (err) {
+			return res.status(500).send(err);
+		}
+	},
+);
+
+app.post(
+	"/mentorship",
+	body("mentorshipRole").trim().isString().escape(),
+	body("tags").isArray({ min: 1 }),
+	body("tags.*").trim().isString().escape(),
+
+	async (req, res) => {
+		try {
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+
+			if (!session) {
+				return res.status(401).send("Unauthorized");
+			}
+
+			const result = await insertMentorshipRequest({
+				userId: session.user.id,
+				email: session.user.email,
+				mentorshipRole: req.body.mentorshipRole,
+				tags: req.body.tags,
+			});
+
 			if (!result) {
 				return res.status(502);
 			}
@@ -35,7 +82,16 @@ app.post(
 	body("email").trim().isEmail().normalizeEmail(),
 	async (req, res) => {
 		try {
-			const result = await insertVolunteerApplication(req.body);
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+
+			if (!session) {
+				return res.status(401).send("Unauthorized");
+			}
+
+			const result = await insertVolunteerApplication({ ...req.body, userId: session.user.id });
+
 			if (!result) {
 				return res.status(502);
 			}
@@ -50,9 +106,10 @@ app.post(
 	"/tool",
 	formHandler.none(),
 	body("email").trim().isEmail().normalizeEmail(),
+	body("name").isString().trim().escape(),
 	body("link").trim().isURL().escape(),
 	body("description").isString().trim().escape(),
-	body("compatability").optional().trim().escape(),
+	body("compatibility").optional().trim().escape(),
 	body("videos").optional().trim().escape(),
 	body("guidelines").optional().trim().escape(),
 	body("limits").optional().trim().escape(),
@@ -60,7 +117,16 @@ app.post(
 	body("isCreator").isBoolean(),
 	async (req, res) => {
 		try {
-			const result = await insertToolSubmission(req.body);
+			const session = await auth.api.getSession({
+				headers: req.headers,
+			});
+
+			if (!session) {
+				return res.status(401).send("Unauthorized");
+			}
+
+			const result = await insertToolSubmission({ ...req.body, userId: session.user.id });
+
 			if (!result) {
 				return res.status(502);
 			}
@@ -70,5 +136,41 @@ app.post(
 		}
 	},
 );
+
+app.get("/tools", async (_req, res) => {
+	try {
+		const tools = await ToolFormModel.find().sort({ createdAt: -1 });
+
+		return res.status(200).json(tools);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+app.get("/tools/last-updated", async (_req, res) => {
+	try {
+		const latest = await ToolFormModel.findOne().sort({ updatedAt: -1 }).select("updatedAt");
+		return res.status(200).json({ lastUpdated: latest?.updatedAt ?? null });
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+app.get("/tools/:slug", async (req, res) => {
+	try {
+		const { slug } = req.params;
+
+		const tool = await getToolBySlug(slug);
+
+		if (!tool) {
+			return res.status(404).json({ message: "Tool not found" });
+		}
+
+		res.status(200).json(tool);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: "Server error" });
+	}
+});
 
 export default app;

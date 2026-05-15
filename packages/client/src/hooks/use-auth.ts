@@ -4,9 +4,8 @@ export function useAuth() {
 	const { data, isPending } = useSession();
 
 	return {
-		isAuthenticated: Boolean(data?.user),
-		isPending,
-		user: data?.user,
-		session: data?.session,
+		user: data,
+		isLoading: isPending,
+		isAuthenticated: !isPending && !!data,
 	};
 }
