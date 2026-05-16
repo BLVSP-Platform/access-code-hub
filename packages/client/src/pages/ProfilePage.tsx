@@ -192,17 +192,6 @@ function ProfilePage() {
 						) : null}
 
 						<HStack w="full" gap="3">
-							<CustomButton
-								onClick={() => {
-									syncFromUser();
-									setSaveError("");
-									setIsEditing(false);
-								}}
-								disabled={saving}
-							>
-								Cancel
-							</CustomButton>
-
 							<CustomButton onClick={handleSave} loading={saving}>
 								Save
 							</CustomButton>

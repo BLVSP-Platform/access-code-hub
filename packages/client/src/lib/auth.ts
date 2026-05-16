@@ -19,6 +19,11 @@ export const { signIn, signUp, useSession, updateUser } = createAuthClient({
 					required: false,
 					defaultValue: "",
 				},
+				pfp: {
+					type: "string",
+					required: false,
+					defaultValue: "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Image-Background.png",
+				},
 			},
 		}),
 	],

@@ -22,6 +22,11 @@ export const auth = betterAuth({
 				required: false,
 				defaultValue: "",
 			},
+			pfp: {
+				type: "string",
+				required: false,
+				defaultValue: "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Image-Background.png",
+			},
 		},
 	},
 	emailAndPassword: {
