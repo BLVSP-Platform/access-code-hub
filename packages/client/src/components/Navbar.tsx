@@ -53,8 +53,13 @@ function Navbar() {
 				<HStack gap={4}>
 					<ColorModeButton color="white" _hover={{ color: "var(--chakra-colors-contrast)" }} />
 					{isAuthenticated ? (
-						<IconButton variant="ghost" p="0" minW="auto" h="auto" onClick={() => navigate("/profile")}>
-							{profileButton}
+						<IconButton
+							variant="ghost"
+							color="white"
+							_hover={{ color: "var(--chakra-colors-contrast)" }}
+							onClick={() => navigate("/profile")}
+						>
+							<LuCircleUserRound />
 						</IconButton>
 					) : (
 						<AuthDialog>{profileButton}</AuthDialog>
