@@ -2,6 +2,8 @@ import { Box, Button, Center, For, Heading, HStack, Input, Spinner, Stack, Tag, 
 import { useCallback, useEffect, useState } from "react";
 import { updateUser, useSession } from "@/lib/auth";
 
+// TODO : add pfps
+
 function parseToolsList(raw: string | null | undefined): string[] {
 	if (!raw?.trim()) return [];
 
@@ -42,7 +44,7 @@ function CustomTag({ tags }: { tags: string[] }) {
 		<HStack wrap="wrap" gap="2">
 			<For each={tags}>
 				{(tag, index) => (
-					<Tag.Root size="lg" key={`${tag}-${index}`}>
+					<Tag.Root size="xl" key={`${tag}-${index}`}>
 						<Tag.Label>{tag}</Tag.Label>
 					</Tag.Root>
 				)}
@@ -61,10 +63,10 @@ type FormFieldProps = {
 function FormField({ label, placeholder, value, onChange }: FormFieldProps) {
 	return (
 		<Box w="full">
-			<Box as="label" fontSize="sm" fontWeight="medium" mb="2" display="block">
+			<Box as="label" fontSize="2xl" fontWeight="medium" mb="2" display="block">
 				{label}
 			</Box>
-			<Input placeholder={placeholder} value={value} onChange={onChange} borderColor="gray.300" />
+			<Input placeholder={placeholder} value={value} onChange={onChange} borderColor="gray.300" size="xl" />
 		</Box>
 	);
 }
@@ -157,7 +159,7 @@ function ProfilePage() {
 					<Stack
 						align="center"
 						gap="6"
-						maxW="md"
+						maxW="xl"
 						w="full"
 						p="8"
 						borderWidth="1px"
@@ -211,29 +213,27 @@ function ProfilePage() {
 			</Heading>
 
 			<Center>
-				<Stack w="full" maxW="md" gap="6" p="8" borderWidth="1px" borderRadius="2xl" boxShadow="sm">
+				<Stack w="full" maxW="xl" gap="6" p="10" borderWidth="1px" borderRadius="2xl" boxShadow="sm">
 					<Box>
-						<Text fontSize="sm" color="gray.500">
-							Name
-						</Text>
-						<Heading size="xl">{user.name || "—"}</Heading>
+						<Heading as="h2" size="2xl" fontWeight="medium" mb="2">
+							Name:
+						</Heading>
+						<Text fontSize="xl">{user.name || "—"}</Text>
 					</Box>
 
 					<Box>
-						<Text fontSize="sm" color="gray.500">
-							About
-						</Text>
-						<Text fontSize="lg">{user.about?.trim() ? user.about : "—"}</Text>
+						<Heading as="h2" size="2xl" fontWeight="medium" mb="2">
+							About:
+						</Heading>
+						<Text fontSize="xl">{user.about?.trim() ? user.about : "—"}</Text>
 					</Box>
 
 					<Box>
-						<Text fontSize="sm" color="gray.500" mb="2">
-							Tools
-						</Text>
-
+						<Heading as="h2" size="2xl" fontWeight="medium" mb="2">
+							Tools:
+						</Heading>
 						{viewToolsTags.length ? <CustomTag tags={viewToolsTags} /> : <Text>—</Text>}
 					</Box>
-
 					<CustomButton onClick={() => setIsEditing(true)}>Edit profile</CustomButton>
 				</Stack>
 			</Center>
