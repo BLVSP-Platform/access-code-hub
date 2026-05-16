@@ -6,4 +6,20 @@ export const { signIn, signUp, useSession, updateUser } = createAuthClient({
 	fetchOptions: {
 		credentials: "include",
 	},
+	plugins: [
+		inferAdditionalFields({
+			user: {
+				about: {
+					type: "string",
+					required: false,
+					defaultValue: "",
+				},
+				toolsList: {
+					type: "string",
+					required: false,
+					defaultValue: "",
+				},
+			},
+		}),
+	],
 });

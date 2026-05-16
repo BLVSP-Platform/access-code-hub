@@ -1,8 +1,8 @@
 import { Button, CloseButton, Dialog, Field, Flex, Input, Portal, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "@/hooks/use-auth";
-import { signIn, signUp } from "@/lib/auth";
+import { useNavigate } from "react-router-dom";
+import { signIn, signUp, useSession } from "@/lib/auth";
 import { PasswordInput } from "./password-input";
 
 interface LoginFormProps {
@@ -159,14 +159,16 @@ interface AuthDialogProps {
 export const AuthDialog = ({ children }: AuthDialogProps) => {
 	const [isRegistering, setIsRegistering] = useState(false);
 	const [registerSuccess, setRegisterSuccess] = useState("");
-	const { isAuthenticated } = useAuth();
+
+	const { data } = useSession();
+	const user = data?.user;
 	const navigate = useNavigate();
 
-	if (isAuthenticated) {
+	if (user) {
 		return (
-			<IconButton bg="primary" _dark={{ bg: "primary", color: "white" }} onClick={() => navigate("/profile")}>
-				<LuCircleUserRound></LuCircleUserRound>
-			</IconButton>
+			<Button variant="ghost" p="0" minW="auto" h="auto" onClick={() => navigate("/profile")}>
+				{children}
+			</Button>
 		);
 	}
 

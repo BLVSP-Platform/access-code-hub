@@ -16,13 +16,11 @@ export const auth = betterAuth({
 				type: "string",
 				required: false,
 				defaultValue: "",
-				input: false,
 			},
 			toolsList: {
 				type: "string",
 				required: false,
 				defaultValue: "",
-				input: false,
 			},
 		},
 	},
