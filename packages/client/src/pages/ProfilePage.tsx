@@ -1,6 +1,7 @@
 import { Box, Button, Center, For, Heading, HStack, Input, Spinner, Stack, Tag, Text } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { updateUser, useSession } from "@/lib/auth";
+import { useNavigate } from "react-router-dom";
+import { signOut, updateUser, useSession } from "@/lib/auth";
 
 // TODO : add pfps
 
@@ -72,12 +73,17 @@ function FormField({ label, placeholder, value, onChange }: FormFieldProps) {
 }
 
 function ProfilePage() {
+	const navigate = useNavigate();
+
 	const { data, isPending } = useSession();
 	const user = data?.user;
 
 	const [isEditing, setIsEditing] = useState(false);
 	const [saveError, setSaveError] = useState("");
 	const [saving, setSaving] = useState(false);
+
+	const [signOutError, setSignOutError] = useState("");
+	const [signingOut, setSigningOut] = useState(false);
 
 	const [profile, setProfile] = useState({
 		name: "",
@@ -126,6 +132,25 @@ function ProfilePage() {
 			setSaveError(e instanceof Error ? e.message : "Could not save profile.");
 		} finally {
 			setSaving(false);
+		}
+	};
+
+	const handleSignOut = async () => {
+		setSignOutError("");
+		setSigningOut(true);
+
+		try {
+			await signOut({
+				fetchOptions: {
+					onSuccess: () => {
+						navigate("/login", { replace: true });
+					},
+				},
+			});
+		} catch (e) {
+			setSignOutError(e instanceof Error ? e.message : "Could not sign out.");
+		} finally {
+			setSigningOut(false);
 		}
 	};
 
@@ -234,7 +259,15 @@ function ProfilePage() {
 						</Heading>
 						{viewToolsTags.length ? <CustomTag tags={viewToolsTags} /> : <Text>—</Text>}
 					</Box>
-					<CustomButton onClick={() => setIsEditing(true)}>Edit profile</CustomButton>
+					<CustomButton onClick={() => setIsEditing(true)}>Edit Profile</CustomButton>
+					<CustomButton onClick={handleSignOut} loading={signingOut} disabled={signingOut}>
+						Sign Out
+					</CustomButton>
+					{signOutError ? (
+						<Text color="red.500" fontSize="sm">
+							{signOutError}
+						</Text>
+					) : null}
 				</Stack>
 			</Center>
 		</Stack>
