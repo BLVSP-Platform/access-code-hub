@@ -1,5 +1,5 @@
 import { HStack, IconButton, Image } from "@chakra-ui/react";
-import { LuCircleUserRound } from "react-icons/lu";
+import { LuCircleUserRound, LuLogIn } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
 import { useAuth } from "@/hooks/use-auth";
@@ -18,7 +18,7 @@ function Navbar() {
 			_hover={{ color: "var(--chakra-colors-contrast)" }}
 			onClick={isAuthenticated ? () => navigate("/profile") : undefined}
 		>
-			<LuCircleUserRound />
+			{isAuthenticated ? <LuCircleUserRound /> : <LuLogIn />}
 		</IconButton>
 	);
 
