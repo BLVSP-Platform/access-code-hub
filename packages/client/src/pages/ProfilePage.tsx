@@ -3,7 +3,6 @@ import {
 	Button,
 	type ButtonProps,
 	Center,
-	For,
 	Heading,
 	HStack,
 	Input,
