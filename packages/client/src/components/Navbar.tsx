@@ -10,17 +10,17 @@ function Navbar() {
 	const { isAuthenticated } = useAuth();
 	const navigate = useNavigate();
 
-	const profileButton = (
-		<IconButton
-			aria-label={isAuthenticated ? "Account menu" : "Sign in"}
-			variant="ghost"
-			color="white"
-			_hover={{ color: "var(--chakra-colors-contrast)" }}
-			_open={{ color: "var(--chakra-colors-contrast)" }}
-		>
-			<LuCircleUserRound />
-		</IconButton>
-	);
+const profileButton = (
+	<IconButton
+		aria-label={isAuthenticated ? "Account menu" : "Sign in"}
+		variant="ghost"
+		color="white"
+		_hover={{ color: "var(--chakra-colors-contrast)" }}
+		onClick={isAuthenticated ? () => navigate("/profile") : undefined}
+	>
+		<LuCircleUserRound />
+	</IconButton>
+);
 
 	return (
 		<NavigationMenu bg="primary" px={6} py={4} gap={8} align="center" justify="space-between">
