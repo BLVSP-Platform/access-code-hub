@@ -22,7 +22,7 @@ export const { signIn, signUp, signOut, useSession, updateUser } = createAuthCli
 				pfp: {
 					type: "string",
 					required: false,
-					defaultValue: "https://www.pngarts.com/files/10/Default-Profile-Picture-PNG-Image-Background.png",
+					defaultValue: "default-pfp.png",
 				},
 			},
 		}),

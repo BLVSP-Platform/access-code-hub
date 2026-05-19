@@ -10,17 +10,17 @@ function Navbar() {
 	const { isAuthenticated } = useAuth();
 	const navigate = useNavigate();
 
-const profileButton = (
-	<IconButton
-		aria-label={isAuthenticated ? "Account menu" : "Sign in"}
-		variant="ghost"
-		color="white"
-		_hover={{ color: "var(--chakra-colors-contrast)" }}
-		onClick={isAuthenticated ? () => navigate("/profile") : undefined}
-	>
-		<LuCircleUserRound />
-	</IconButton>
-);
+	const profileButton = (
+		<IconButton
+			aria-label={isAuthenticated ? "Account menu" : "Sign in"}
+			variant="ghost"
+			color="white"
+			_hover={{ color: "var(--chakra-colors-contrast)" }}
+			onClick={isAuthenticated ? () => navigate("/profile") : undefined}
+		>
+			<LuCircleUserRound />
+		</IconButton>
+	);
 
 	return (
 		<NavigationMenu bg="primary" px={6} py={4} gap={8} align="center" justify="space-between">
@@ -52,18 +52,7 @@ const profileButton = (
 			<NavigationMenuItem>
 				<HStack gap={4}>
 					<ColorModeButton color="white" _hover={{ color: "var(--chakra-colors-contrast)" }} />
-					{isAuthenticated ? (
-						<IconButton
-							variant="ghost"
-							color="white"
-							_hover={{ color: "var(--chakra-colors-contrast)" }}
-							onClick={() => navigate("/profile")}
-						>
-							<LuCircleUserRound />
-						</IconButton>
-					) : (
-						<AuthDialog>{profileButton}</AuthDialog>
-					)}
+					{isAuthenticated ? profileButton : <AuthDialog>{profileButton}</AuthDialog>}
 				</HStack>
 			</NavigationMenuItem>
 		</NavigationMenu>

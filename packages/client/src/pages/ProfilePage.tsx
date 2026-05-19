@@ -1,28 +1,25 @@
-import { Box, Button, Center, For, Heading, HStack, Input, Spinner, Stack, Tag, Text } from "@chakra-ui/react";
+import {
+	Box,
+	Button,
+	type ButtonProps,
+	Center,
+	For,
+	Heading,
+	HStack,
+	Input,
+	type InputProps,
+	Stack,
+	Tag,
+	Text,
+} from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signOut, updateUser, useSession } from "@/lib/auth";
+import { normalizeToolsList } from "@/lib/utils";
 
 // TODO : add pfps
 
-function parseToolsList(raw: string | null | undefined): string[] {
-	if (!raw?.trim()) return [];
-
-	return raw
-		.split(",")
-		.map((tool) => tool.trim())
-		.filter(Boolean);
-}
-
-type CustomButtonProps = {
-	children: React.ReactNode;
-	onClick?: () => void;
-	type?: "button" | "submit";
-	loading?: boolean;
-	disabled?: boolean;
-};
-
-function CustomButton({ children, onClick, type = "button", loading, disabled }: CustomButtonProps) {
+function ProfilePageButton(props: ButtonProps) {
 	return (
 		<Button
 			borderColor="primary"
@@ -30,47 +27,43 @@ function CustomButton({ children, onClick, type = "button", loading, disabled }:
 			_hover={{ bg: "primary", color: "white" }}
 			variant="outline"
 			size="lg"
-			type={type}
-			onClick={onClick}
-			loading={loading}
-			disabled={disabled}
-		>
-			{children}
-		</Button>
+			{...props}
+		/>
 	);
 }
 
-function CustomTag({ tags }: { tags: string[] }) {
+function TagList({ tags }: { tags: string[] }) {
 	return (
 		<HStack wrap="wrap" gap="2">
-			<For each={tags}>
-				{(tag, index) => (
-					<Tag.Root size="xl" key={`${tag}-${index}`}>
-						<Tag.Label>{tag}</Tag.Label>
-					</Tag.Root>
-				)}
-			</For>
+			{tags.map((tag) => (
+				<Tag.Root size="xl" key={tag}>
+					<Tag.Label>{tag}</Tag.Label>
+				</Tag.Root>
+			))}
 		</HStack>
 	);
 }
 
-type FormFieldProps = {
+type FormFieldProps = InputProps & {
 	label: string;
-	placeholder: string;
-	value: string;
-	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-function FormField({ label, placeholder, value, onChange }: FormFieldProps) {
+function FormField({ label, ...inputProps }: FormFieldProps) {
 	return (
 		<Box w="full">
 			<Box as="label" fontSize="2xl" fontWeight="medium" mb="2" display="block">
 				{label}
 			</Box>
-			<Input placeholder={placeholder} value={value} onChange={onChange} borderColor="gray.300" size="xl" />
+			<Input borderColor="gray.300" size="xl" {...inputProps} />
 		</Box>
 	);
 }
+
+type ProfileInfo = {
+	name: string;
+	about: string;
+	toolsText: string;
+};
 
 function ProfilePage() {
 	const navigate = useNavigate();
@@ -85,7 +78,7 @@ function ProfilePage() {
 	const [signOutError, setSignOutError] = useState("");
 	const [signingOut, setSigningOut] = useState(false);
 
-	const [profile, setProfile] = useState({
+	const [profile, setProfile] = useState<ProfileInfo>({
 		name: "",
 		about: "",
 		toolsText: "",
@@ -97,7 +90,7 @@ function ProfilePage() {
 		setProfile({
 			name: user.name ?? "",
 			about: user.about ?? "",
-			toolsText: parseToolsList(user.toolsList).join(", "),
+			toolsText: normalizeToolsList(user.toolsList).join(", "),
 		});
 	}, [user]);
 
@@ -105,7 +98,7 @@ function ProfilePage() {
 		syncFromUser();
 	}, [syncFromUser]);
 
-	const handleChange = (field: keyof typeof profile, value: string) => {
+	const handleChange = (field: keyof ProfileInfo, value: string) => {
 		setProfile((prev) => ({ ...prev, [field]: value }));
 	};
 
@@ -114,7 +107,7 @@ function ProfilePage() {
 		setSaving(true);
 
 		try {
-			const toolsList = parseToolsList(profile.toolsText).join(", ");
+			const toolsList = normalizeToolsList(profile.toolsText).join(", ");
 
 			const { error } = await updateUser({
 				name: profile.name,
@@ -155,11 +148,7 @@ function ProfilePage() {
 	};
 
 	if (isPending) {
-		return (
-			<Center minH="50vh">
-				<Spinner size="xl" />
-			</Center>
-		);
+		return <Text textStyle="2xl">Loading...</Text>;
 	}
 
 	if (!user) {
@@ -206,7 +195,7 @@ function ProfilePage() {
 						/>
 
 						<FormField
-							label="Tools"
+							label="Tools Used"
 							placeholder="TypeScript, React, Node"
 							value={profile.toolsText}
 							onChange={(e) => handleChange("toolsText", e.target.value)}
@@ -219,9 +208,9 @@ function ProfilePage() {
 						) : null}
 
 						<HStack w="full" gap="3">
-							<CustomButton onClick={handleSave} loading={saving}>
+							<ProfilePageButton onClick={handleSave} loading={saving}>
 								Save
-							</CustomButton>
+							</ProfilePageButton>
 						</HStack>
 					</Stack>
 				</Center>
@@ -229,7 +218,7 @@ function ProfilePage() {
 		);
 	}
 
-	const viewToolsTags = parseToolsList(user.toolsList);
+	const viewToolsTags = normalizeToolsList(user.toolsList);
 
 	return (
 		<Stack gap="8">
@@ -255,19 +244,19 @@ function ProfilePage() {
 
 					<Box>
 						<Heading as="h2" size="2xl" fontWeight="medium" mb="2">
-							Tools:
+							Tools Used:
 						</Heading>
-						{viewToolsTags.length ? <CustomTag tags={viewToolsTags} /> : <Text>—</Text>}
+						{viewToolsTags.length ? <TagList tags={viewToolsTags} /> : <Text>—</Text>}
 					</Box>
-					<CustomButton onClick={() => setIsEditing(true)}>Edit Profile</CustomButton>
-					<CustomButton onClick={handleSignOut} loading={signingOut} disabled={signingOut}>
+					<ProfilePageButton onClick={() => setIsEditing(true)}>Edit Profile</ProfilePageButton>
+					<ProfilePageButton onClick={handleSignOut} loading={signingOut} disabled={signingOut}>
 						Sign Out
-					</CustomButton>
-					{signOutError ? (
+					</ProfilePageButton>
+					{signOutError && (
 						<Text color="red.500" fontSize="sm">
 							{signOutError}
 						</Text>
-					) : null}
+					)}
 				</Stack>
 			</Center>
 		</Stack>
