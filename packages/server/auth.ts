@@ -6,6 +6,7 @@ import "dotenv/config";
 
 if (!process.env.CLIENT_URL) throw new Error("CLIENT_URL not provided");
 if (!process.env.SERVER_URL) throw new Error("SERVER_URL not provided");
+console.log("CLIENT_URL", process.env.CLIENT_URL);
 
 export const auth = betterAuth({
 	database: mongodbAdapter(client.db(), {
@@ -15,7 +16,7 @@ export const auth = betterAuth({
 		enabled: true,
 	},
 	rateLimit: {
-		enabled: false, // Change to true in prod
+		enabled: true,
 	},
 	trustedOrigins: [process.env.CLIENT_URL],
 	baseURL: process.env.SERVER_URL,
