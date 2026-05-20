@@ -4,7 +4,14 @@ import multer from "multer";
 import { auth } from "../../auth";
 import { insertMentorshipRequest } from "../../schema/mentorship";
 import { insertThread } from "../../schema/thread";
-import { getToolBySlug, insertToolSubmission, ToolFormModel } from "../../schema/tool";
+import {
+	addToolBookmark,
+	getToolBookmarksForUser,
+	getToolBySlug,
+	insertToolSubmission,
+	removeToolBookmark,
+	ToolFormModel,
+} from "../../schema/tool";
 import { insertVolunteerApplication } from "../../schema/volunteer";
 
 const formHandler = multer();
@@ -170,6 +177,74 @@ app.get("/tools/:slug", async (req, res) => {
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ message: "Server error" });
+	}
+});
+
+app.post("/tools/:toolId/bookmark", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({
+			headers: req.headers,
+		});
+
+		if (!session) {
+			return res.status(401).send("Unauthorized");
+		}
+
+		const { toolId } = req.params;
+
+		await addToolBookmark(session.user.id, toolId);
+
+		return res.status(201).json({
+			message: "Bookmarked",
+		});
+	} catch (err: any) {
+		if (err.code === 11000) {
+			return res.status(409).json({
+				message: "Already bookmarked",
+			});
+		}
+
+		return res.status(500).send(err);
+	}
+});
+
+app.delete("/tools/:toolId/bookmark", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({
+			headers: req.headers,
+		});
+
+		if (!session) {
+			return res.status(401).send("Unauthorized");
+		}
+
+		const { toolId } = req.params;
+
+		await removeToolBookmark(session.user.id, toolId);
+
+		return res.status(200).json({
+			message: "Bookmark removed",
+		});
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+app.get("/tools/bookmarks/me", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({
+			headers: req.headers,
+		});
+
+		if (!session) {
+			return res.status(401).send("Unauthorized");
+		}
+
+		const bookmarks = await getToolBookmarksForUser(session.user.id);
+
+		return res.status(200).json(bookmarks);
+	} catch (err) {
+		return res.status(500).send(err);
 	}
 });
 
