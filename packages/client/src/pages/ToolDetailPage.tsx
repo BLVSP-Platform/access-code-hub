@@ -1,6 +1,6 @@
 import { Heading, HStack, IconButton, Link, Stack, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { LuBookmark } from "react-icons/lu";
+import { LuBookmark, LuBookmarkCheck } from "react-icons/lu";
 import { useParams } from "react-router-dom";
 import { decodeEntities } from "@/lib/utils";
 import type { Tool } from "./ToolIndexPage";
@@ -84,9 +84,13 @@ export default function ToolDetailPage() {
 					variant="ghost"
 					onClick={toggleBookmark}
 					loading={bookmarkLoading}
-					color={bookmarked ? "yellow.400" : "gray.400"}
+					color={bookmarked ? "green.400" : "gray.400"}
 				>
-					<LuBookmark style={{ width: "32px", height: "32px" }} />
+					{bookmarked ? (
+						<LuBookmarkCheck style={{ width: "32px", height: "32px" }} />
+					) : (
+						<LuBookmark style={{ width: "32px", height: "32px" }} />
+					)}
 				</IconButton>
 				<Heading as="h1" size="4xl">
 					{tool?.name}
