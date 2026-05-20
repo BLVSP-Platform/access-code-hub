@@ -33,6 +33,7 @@ export interface Tool {
 	limits?: string;
 
 	link: string;
+	bookmarked: boolean;
 }
 
 // @todo: NEEDS ACCESSIBILITY

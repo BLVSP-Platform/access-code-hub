@@ -33,20 +33,9 @@ export default function ToolDetailPage() {
 	}, [slug]);
 
 	useEffect(() => {
-		if (!tool?._id) return;
-
-		const checkBookmark = async () => {
-			try {
-				const res = await fetch(`/api/tools/${tool._id}/bookmark/status`);
-				const data = await res.json();
-				setBookmarked(data.bookmarked);
-			} catch (err) {
-				console.error(err);
-			}
-		};
-
-		checkBookmark();
-	}, [tool?._id]);
+		if (!tool) return;
+		setBookmarked(tool.bookmarked);
+	}, [tool]);
 
 	const toggleBookmark = async () => {
 		if (!tool?._id || bookmarkLoading) return;

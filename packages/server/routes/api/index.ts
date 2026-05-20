@@ -167,17 +167,36 @@ app.get("/tools/last-updated", async (_req, res) => {
 app.get("/tools/:slug", async (req, res) => {
 	try {
 		const { slug } = req.params;
-
 		const tool = await getToolBySlug(slug);
 
 		if (!tool) {
-			return res.status(404).json({ message: "Tool not found" });
+			return res.status(404).json({
+				message: "Tool not found",
+			});
 		}
 
-		res.status(200).json(tool);
+		const session = await auth.api.getSession({
+			headers: req.headers,
+		});
+
+		let bookmarked = false;
+
+		if (session) {
+			bookmarked = !!(await ToolBookmarkModel.exists({
+				userId: session.user.id,
+				toolId: tool._id,
+			}));
+		}
+
+		return res.status(200).json({
+			...tool,
+			bookmarked,
+		});
 	} catch (error) {
-		console.error(error);
-		res.status(500).json({ message: "Server error" });
+		console.error("GET /tools/:slug error:", error);
+		return res.status(500).json({
+			message: "Server error",
+		});
 	}
 });
 
@@ -226,29 +245,6 @@ app.delete("/tools/:toolId/bookmark", async (req, res) => {
 		return res.status(200).json({
 			message: "Bookmark removed",
 		});
-	} catch (err) {
-		return res.status(500).send(err);
-	}
-});
-
-app.get("/tools/:toolId/bookmark/status", async (req, res) => {
-	try {
-		const session = await auth.api.getSession({
-			headers: req.headers,
-		});
-
-		if (!session) {
-			return res.status(401).json({ bookmarked: false });
-		}
-
-		const { toolId } = req.params;
-
-		const exists = await ToolBookmarkModel.exists({
-			userId: session.user.id,
-			toolId,
-		});
-
-		return res.json({ bookmarked: !!exists });
 	} catch (err) {
 		return res.status(500).send(err);
 	}
