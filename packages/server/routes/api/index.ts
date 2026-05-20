@@ -10,6 +10,7 @@ import {
 	getToolBySlug,
 	insertToolSubmission,
 	removeToolBookmark,
+	ToolBookmarkModel,
 	ToolFormModel,
 } from "../../schema/tool";
 import { insertVolunteerApplication } from "../../schema/volunteer";
@@ -225,6 +226,29 @@ app.delete("/tools/:toolId/bookmark", async (req, res) => {
 		return res.status(200).json({
 			message: "Bookmark removed",
 		});
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+app.get("/tools/:toolId/bookmark/status", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({
+			headers: req.headers,
+		});
+
+		if (!session) {
+			return res.status(401).json({ bookmarked: false });
+		}
+
+		const { toolId } = req.params;
+
+		const exists = await ToolBookmarkModel.exists({
+			userId: session.user.id,
+			toolId,
+		});
+
+		return res.json({ bookmarked: !!exists });
 	} catch (err) {
 		return res.status(500).send(err);
 	}

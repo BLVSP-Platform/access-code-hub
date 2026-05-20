@@ -21,15 +21,17 @@ import { InfoTip } from "@/components/ui/toggle-tip";
 
 // @todo: use backend type?
 export interface Tool {
-	id: string;
+	_id: string;
 	slug: string;
 	name: string;
-	compatibility: string;
+	compatibility?: string;
 	description: string;
 	rating: number;
-	video: string;
-	guidelines: string;
-	limitations: string;
+
+	videos?: string;
+	guidelines?: string;
+	limits?: string;
+
 	link: string;
 }
 
@@ -169,7 +171,7 @@ function ToolIndexPage() {
 					</Table.Header>
 					<Table.Body>
 						{filteredTools.map((tool) => (
-							<Table.Row key={tool.id} bg="tertiary" width="100%">
+							<Table.Row key={tool._id} bg="tertiary" width="100%">
 								<Table.Cell>
 									<Link href={`/tools/${tool.slug}`}>{tool.name}</Link>
 								</Table.Cell>
