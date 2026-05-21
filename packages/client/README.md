@@ -1,6 +1,6 @@
-# BLVSP Client
+# Access Code Hub Client
 
-React frontend for Access Code Hub.
+React + Chakra frontend for Access Code Hub.
 
 ## Setup
 

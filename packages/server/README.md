@@ -1,4 +1,4 @@
-# BLVSP Server
+# Access Code Hub Server
 
 Express backend for Access Code Hub.
 
@@ -16,4 +16,8 @@ Express backend for Access Code Hub.
 npm run dev
 ```
 
-Server starts on `SERVER_PORT` (default: `8000`).
+Server starts on `PORT` (default: `8000`).
+
+## Comments
+
+Better Auth uses MongoDB connection. All other MongoDB transactions should be done using Mongoose.

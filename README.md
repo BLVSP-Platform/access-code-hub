@@ -1,9 +1,18 @@
-# BLVSP Platform
+# Access Code Hub
 
-Monorepo for Access Code Hub.
+Access Code Hub is a screen reader accessible platform where Blind and Low Vision Software Professionals (BLVSPs) can find software tools for accessibility, network with other BLVSPs and get involved in community outreach through volunteering. 
 
-- **Client**: React + Vite + TypeScript
-- **Server**: Express + TypeScript + MongoDB + Better Auth
+- **Client**:
+    - [React](https://github.com/facebook/react)
+    - [Chakra UI](https://github.com/chakra-ui/chakra-ui)
+    - [Vite](https://github.com/vitejs/vite)
+    - [TypeScript](https://github.com/microsoft/TypeScript)
+- **Server**:
+    - [Express](https://github.com/expressjs/express) 
+    - [TypeScript](https://github.com/microsoft/TypeScript) 
+    - [Better Auth](https://github.com/better-auth/better-auth)
+    - [MongoDB](https://www.mongodb.com/docs/drivers/node/current/) 
+    - [Mongoose](https://github.com/Automattic/mongoose) 
 
 ## Quick Start
 
@@ -38,10 +47,10 @@ packages/
 Copy `.env.example` to `.env`:
 
 ```bash
-MONGODB_URI=mongodb://localhost:27017/blvsp       # MongoDB connection string
+MONGODB_URI=mongodb://localhost:27017/blvsp        # MongoDB connection string
 CLIENT_URL=http://localhost:5173                   # Frontend URL
 SERVER_URL=http://localhost:8000                   # Backend URL
-SERVER_PORT=8000                                   # Server port
+PORT=8000                                          # Server port
 BETTER_AUTH_SECRET=your-secret-here                # Random string for Better Auth signing
 ```
 
