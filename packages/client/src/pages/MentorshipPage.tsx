@@ -1,6 +1,7 @@
-import { Button, Dialog, Field, Flex, Heading, Input, Portal, RadioGroup, Stack } from "@chakra-ui/react";
+import { Button, Field, Flex, Heading, Input, RadioGroup, Stack } from "@chakra-ui/react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { FormDialog } from "@/components/FormDialog";
 import { InputTagsCombo } from "@/components/ui/input-tags-combo";
 
 interface MentorshipData {
@@ -10,6 +11,8 @@ interface MentorshipData {
 
 function MentorshipPage() {
 	const [dialogOpen, setDialogOpen] = useState(false);
+	const [dialogBody, setDialogBody] = useState<string>("");
+	const [dialogTitle, setDialogTitle] = useState<string>("");
 
 	const {
 		register,
@@ -24,10 +27,29 @@ function MentorshipPage() {
 
 	const role = watch("mentorshipRole");
 
-	// @todo: hook up to backend
-	const onSubmit = handleSubmit((data) => {
-		console.log(data);
-		setDialogOpen(true);
+	const onSubmit = handleSubmit(async (data) => {
+		try {
+			const res = await fetch("/api/mentorship", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
+			});
+			setDialogOpen(true);
+			if (res.ok) {
+				setDialogTitle("Mentorship request submitted!");
+				setDialogBody("A moderator will review this and get back to you.");
+			} else {
+				setDialogTitle(`Error: ${res.statusText}`);
+				setDialogBody("An error occurred while processing your submission.");
+			}
+		} catch (err) {
+			if (err instanceof Error) {
+				setDialogTitle(err.name);
+				setDialogBody(err.message);
+			}
+		}
 	});
 
 	const items = [
@@ -35,7 +57,6 @@ function MentorshipPage() {
 		{ label: "Mentee", value: "Mentee" },
 	];
 
-	// tags input
 	type Role = "Mentor" | "Mentee";
 
 	type RoleConfig = {
@@ -83,34 +104,6 @@ function MentorshipPage() {
 		);
 	};
 
-	const submitDialog = (
-		<Dialog.Root placement="center" open={dialogOpen} onOpenChange={(e) => setDialogOpen(e.open)}>
-			<Portal>
-				<Dialog.Backdrop>
-					<Dialog.Positioner>
-						<Dialog.Content>
-							<Dialog.Header>
-								<Dialog.Title>Thank you for signing up!</Dialog.Title>
-							</Dialog.Header>
-							<Dialog.Body>A moderator will review this and get back to you.</Dialog.Body>
-							<Dialog.Footer>
-								<Dialog.ActionTrigger asChild>
-									<Button
-										variant="outline"
-										borderColor="primary"
-										_hover={{ bg: "primary", color: "white" }}
-									>
-										Close
-									</Button>
-								</Dialog.ActionTrigger>
-							</Dialog.Footer>
-						</Dialog.Content>
-					</Dialog.Positioner>
-				</Dialog.Backdrop>
-			</Portal>
-		</Dialog.Root>
-	);
-
 	return (
 		<form onSubmit={onSubmit} noValidate>
 			<Stack gap="8" align="flex-start" maxW="70%">
@@ -118,7 +111,6 @@ function MentorshipPage() {
 					Mentorship
 				</Heading>
 
-				{/* mentor/mentee selection */}
 				<Field.Root required invalid={!!errors.mentorshipRole}>
 					<Field.Label>
 						Are you interested in giving or receiving mentorship?:
@@ -154,24 +146,29 @@ function MentorshipPage() {
 					<Field.ErrorText>{errors.mentorshipRole?.message}</Field.ErrorText>
 				</Field.Root>
 
-				{/* tags input */}
 				{role && <TagsInput />}
 			</Stack>
 
-			{/* submit button */}
-			<Flex gap="4" w="100%" justify="flex-end" mt="8">
-				<Button
-					borderColor="primary"
-					_hover={{ bg: "primary", color: "white" }}
-					size="xl"
-					variant="outline"
-					type="submit"
-				>
-					Submit
-				</Button>
-			</Flex>
-
-			{submitDialog}
+			<FormDialog
+				title={dialogTitle}
+				body={dialogBody}
+				isOpen={dialogOpen}
+				onOpenChange={(details) => {
+					if (!details.open) setDialogOpen(false);
+				}}
+			>
+				<Flex gap="4" w="100%" justify="flex-end" mt="8">
+					<Button
+						borderColor="primary"
+						_hover={{ bg: "primary", color: "white" }}
+						size="xl"
+						variant="outline"
+						type="submit"
+					>
+						Submit
+					</Button>
+				</Flex>
+			</FormDialog>
 		</form>
 	);
 }

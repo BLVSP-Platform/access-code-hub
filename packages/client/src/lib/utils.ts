@@ -52,3 +52,12 @@ export function decodeEntities(str: string): string {
 	const doc = new DOMParser().parseFromString(str, "text/html");
 	return doc.documentElement.textContent ?? str;
 }
+
+export function normalizeToolsList(rawTools?: string | null): string[] {
+	if (!rawTools?.trim()) return [];
+
+	return rawTools
+		.split(",")
+		.map((tool) => tool.trim())
+		.filter(Boolean);
+}

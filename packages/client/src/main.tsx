@@ -11,6 +11,7 @@ import HomePage from "./pages/HomePage.tsx";
 import { LoginPage } from "./pages/LoginPage.tsx";
 import MentorshipPage from "./pages/MentorshipPage.tsx";
 import PostThreadPage from "./pages/PostThreadPage.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx";
 import SubmitToolReviewsPage from "./pages/SubmitToolReviewsPage.tsx";
 import ThreadsPage from "./pages/ThreadsPage.tsx";
 import ToolDetailPage from "./pages/ToolDetailPage.tsx";
@@ -109,6 +110,10 @@ const router = createBrowserRouter([
 					{
 						path: "mentorship",
 						element: <MentorshipPage />,
+					},
+					{
+						path: "profile",
+						element: <ProfilePage />,
 					},
 				],
 			},
