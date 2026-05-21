@@ -6,7 +6,7 @@ React + Chakra frontend for Access Code Hub.
 
 1. Copy `.env.example` to `.env`:
 
-2. Verify `VITE_SERVER_URL` points to your running server (default: `http://localhost:8000/`).
+2. Verify `VITE_SERVER_URL` points to your running server (default: `http://localhost:8000`).
 
 ## Run
 

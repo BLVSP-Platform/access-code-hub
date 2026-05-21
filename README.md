@@ -1,6 +1,6 @@
 # Access Code Hub
 
-Access Code Hub is a screen reader accessible platform where Blind and Low Vision Software Professionals (BLVSPs) can find software tools for accessibility, network with other BLVSPs and get involved in community outreach through volunteering. 
+Access Code Hub is a screen reader accessible platform where Blind and Low Vision Software Professionals (BLVSPs) can find software tools for accessibility, network with other BLVSPs, and get involved in community outreach through volunteering. 
 
 - **Client**:
     - [React](https://github.com/facebook/react)
@@ -29,8 +29,8 @@ Client runs at `http://localhost:5173`. Server runs at `http://localhost:8000`.
 packages/
 ├── client/          # React frontend (Vite)
 │   ├── src/
-│   │   ├── components/   # UI components, datatable, navbar
-│   │   ├── pages/        # Route pages (Home, Create, ToolDetail)
+│   │   ├── components/   # Components (UI, Navbar, Dialogs)
+│   │   ├── pages/        # Route pages (Home, Create, Tools)
 │   │   ├── lib/          # Utils
 │   │   ├── App.tsx       # Router + Navbar
 │   │   └── main.tsx      # Entry point
@@ -59,8 +59,8 @@ BETTER_AUTH_SECRET=your-secret-here                # Random string for Better Au
 Copy `.env.example` to `.env`:
 
 ```bash
-VITE_CLIENT_URL=http://localhost:5173/
-VITE_SERVER_URL=http://localhost:8000/
+VITE_CLIENT_URL=http://localhost:5173
+VITE_SERVER_URL=http://localhost:8000
 ```
 
 ## Setup MongoDB
