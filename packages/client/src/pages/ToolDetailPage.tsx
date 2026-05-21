@@ -1,92 +1,102 @@
-/* pages/ToolDetailPage.tsx
-import { useParams } from 'react-router-dom'
-
-export default function ToolDetailPage() {
-  const { id } = useParams()
-
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold">Tool Detail Page</h2>
-      <p>Tool ID: {id}</p>
-      {/* You can fetch full tool details based on ID here }
-    </div>
-  )
-}
-*/
-
+import { Heading, HStack, IconButton, Link, Stack, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { LuBookmark } from "react-icons/lu";
+import { useParams } from "react-router-dom";
+import { decodeEntities } from "@/lib/utils";
+import type { Tool } from "./ToolIndexPage";
 
 export default function ToolDetailPage() {
-	const { id } = useParams();
-	const location = useLocation();
-	const name = location.state?.name as string | undefined;
-	const [textContent, setTextContent] = useState("Loading...");
+	const [tool, setTool] = useState<Tool>();
+	const [loading, setLoading] = useState(true);
+	const { slug } = useParams<{ slug: string }>();
 
 	useEffect(() => {
-		if (!id) return;
+		if (!slug) return;
 
-		// Fetch from public folder
-		fetch(`/${id}.txt`)
-			.then((res) => {
-				if (!res.ok) {
-					throw new Error("File not found");
-				}
-				return res.text();
-			})
-			.then((text) => setTextContent(text))
-			.catch((error) => {
-				console.error(error);
-				setTextContent("Could not load tool description.");
-			});
-	}, [id]);
+		const fetchTool = async () => {
+			try {
+				const res = await fetch(`/api/tools/${slug}`);
+				const data = await res.json();
+
+				setTool(data);
+			} catch (err) {
+				console.error("Failed to fetch tool:", err);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchTool();
+	}, [slug]);
+
+	if (loading) {
+		return <Text>Loading...</Text>;
+	}
 
 	return (
-		<div className="p-6 whitespace-pre-wrap">
-			<h2 className="text-2xl font-bold mb-4">{name ?? "Tool Detail Page"}</h2>
-			<p className="mb-4 font-medium text-gray-700">Tool ID: {id}</p>
-			<div className="bg-white dark:bg-gray-800 p-4 rounded shadow text-gray-900 dark:text-gray-100">
-				{textContent}
-			</div>
-		</div>
+		<Stack>
+			<HStack align="center" gap={1}>
+				<IconButton variant="ghost">
+					{" "}
+					{/** @todo: bookmark a tool */}
+					<LuBookmark style={{ width: "32px", height: "32px" }} />
+				</IconButton>
+				<Heading as="h1" size="4xl">
+					{tool?.name}
+				</Heading>
+			</HStack>
+
+			<VStack mt={4} gap={6} align="start">
+				<Text>
+					<Text as="span" fontWeight="bold">
+						Description:{" "}
+					</Text>
+					{tool?.description ?? "N/A"}
+				</Text>
+
+				<Text>
+					<Text as="span" fontWeight="bold">
+						Compatibility Information:{" "}
+					</Text>
+					{tool?.compatibility ?? "N/A"} {/* @todo: compatibility vs compatibility info*/}
+				</Text>
+
+				<Text>
+					<Text as="span" fontWeight="bold">
+						Tutorial Video(s):{" "}
+					</Text>
+					{tool?.video ?? "N/A"}
+				</Text>
+
+				<Text>
+					<Text as="span" fontWeight="bold">
+						Guidelines:{" "}
+					</Text>
+					{decodeEntities(tool?.guidelines ?? "N/A")}
+				</Text>
+
+				<Text>
+					<Text as="span" fontWeight="bold">
+						Limitations:{" "}
+					</Text>
+					{tool?.limitations ?? "N/A"}
+				</Text>
+
+				<Text>
+					<Text as="span" fontWeight="bold">
+						User Reviews:{" "}
+					</Text>
+					Reviews will go here! {/** @todo: reviews! */}
+				</Text>
+
+				<Text>
+					<Text as="span" fontWeight="bold">
+						Link:{" "}
+					</Text>
+					<Link href={tool?.link ?? "N/A"}>{decodeEntities(tool?.link ?? "N/A")}</Link>{" "}
+					{/** @todo: escape links in submission? */}
+				</Text>
+			</VStack>
+		</Stack>
 	);
 }
-
-/*
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-
-const ToolDetailPage: React.FC = () => {
-  const { name } = useParams()
-  const [textContent, setTextContent] = useState<string>('');
-  const filePath = '/123.txt'; // Adjust the path to your .txt file
-
-  useEffect(() => {
-    fetch(filePath)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.text();
-      })
-      .then(text => {
-        setTextContent(text);
-      })
-      .catch(error => {
-        console.error('Error fetching the text file:', error);
-        setTextContent('Failed to load text content.');
-      });
-  }, [filePath]); // Re-fetch if filePath changes
-
-  return (
-    <div className="p-6">
-    <h1 className="text-2xl font-bold mb-4">Tool Detail Page</h1>
-    <p>{name}</p>
-    <div className="bg-white dark:bg-gray-800 p-4 rounded shadow text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words max-w-full overflow-auto">
-      {textContent}
-    </div>
-  </div>
-  );
-};
-
-export default ToolDetailPage;*/
