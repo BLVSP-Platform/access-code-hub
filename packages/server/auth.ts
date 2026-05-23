@@ -46,6 +46,10 @@ export const auth = betterAuth({
 			sameSite: "none",
 			partitioned: true,
 		},
+		ipAddress: {
+			ipAddressHeaders: ["x-client-ip", "x-forwarded-for"],
+			disableIpTracking: false,
+		},
 	},
 	plugins: [
 		rateLimiter({
