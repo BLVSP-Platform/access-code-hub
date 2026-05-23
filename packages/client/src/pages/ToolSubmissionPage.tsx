@@ -31,24 +31,6 @@ const TextInput = ({ name, label, required = true }: TextInputProps) => {
 	);
 };
 
-const EmailField = () => <TextInput name="email" label="Email" />;
-
-const ToolLinkField = () => <TextInput name="link" label="Link to Tool" />;
-
-const DescriptionField = () => <TextInput name="description" label="Description" />;
-
-const CompatabilityField = () => <TextInput name="compatability" label="Compatability Information" required={false} />;
-
-const VideoField = () => <TextInput name="videos" label="Tutorial Video(s)" required={false} />;
-
-const GuidelinesField = () => (
-	<TextInput name="guidelines" label="Creator's Guidelines/Cautions for the Tool" required={false} />
-);
-
-const LimitsField = () => <TextInput name="limits" label="Limitations" required={false} />;
-
-const CommentsField = () => <TextInput name="comments" label="Extra Comments" required={false} />;
-
 const CreatorField = () => {
 	const [isEmailRequired, setEmailRequired] = useState<boolean>(false);
 	const toggleEmailRequired = (details: RadioGroupValueChangeDetails) => {
@@ -107,8 +89,8 @@ function ToolSubmissionPage() {
 				setDialogTitle(`Error: ${res.statusText}`);
 				setDialogBody("An error occurred while processing your submission.");
 			}
-		} catch (err) {
-			if (Error.isError(err)) {
+		} catch (err: unknown) {
+			if (err instanceof Error) {
 				setDialogTitle(err.name);
 				setDialogBody(err.message);
 			}
@@ -122,14 +104,20 @@ function ToolSubmissionPage() {
 				<VStack>
 					<Box w="sm" alignSelf="start">
 						<VStack gap={4} align="stretch">
-							<EmailField />
-							<ToolLinkField />
-							<DescriptionField />
-							<CompatabilityField />
-							<VideoField />
-							<GuidelinesField />
-							<LimitsField />
-							<CommentsField />
+							<TextInput name="email" label="Email" />
+							<TextInput name="name" label="Tool Name" />
+							<TextInput name="link" label="Link to Tool" />
+							<TextInput name="description" label="Description" />
+							<TextInput name="compatability" label="Compatability Information" required={false} />
+							<TextInput name="videos" label="Tutorial Video(s)" required={false} />
+							<TextInput
+								name="guidelines"
+								label="Creator's Guidelines/Cautions for the Tool"
+								required={false}
+							/>
+							<TextInput name="limits" label="Limitations" required={false} />
+							<TextInput name="comments" label="Extra Comments" required={false} />
+
 							<CreatorField />
 						</VStack>
 					</Box>

@@ -1,5 +1,6 @@
+import { Button, Heading, Stack } from "@chakra-ui/react";
 import { Navigate } from "react-router-dom";
-import { LoginForm } from "@/components/ui/login-form";
+import { AuthDialog } from "@/components/ui/AuthDialog";
 import { useAuth } from "@/hooks/use-auth";
 
 export const LoginPage = () => {
@@ -7,5 +8,15 @@ export const LoginPage = () => {
 
 	if (isAuthenticated) return <Navigate to="/" replace />;
 
-	return <LoginForm />;
+	return (
+		<Stack align="center" textAlign="center" gap="6">
+			<Heading as="h1" size="4xl">
+				You must be logged in to access this page.
+			</Heading>
+
+			<AuthDialog>
+				<Button bg="primary">Log in / Sign up</Button>
+			</AuthDialog>
+		</Stack>
+	);
 };
