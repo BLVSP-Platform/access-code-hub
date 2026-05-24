@@ -2,6 +2,7 @@ import { Heading, HStack, IconButton, Link, Stack, Text, VStack } from "@chakra-
 import { useEffect, useState } from "react";
 import { LuBookmark, LuBookmarkCheck } from "react-icons/lu";
 import { useParams } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
 import { decodeEntities } from "@/lib/utils";
 import type { Tool } from "./ToolIndexPage";
 
@@ -10,6 +11,7 @@ export default function ToolDetailPage() {
 	const [loading, setLoading] = useState(true);
 	const [bookmarked, setBookmarked] = useState(false);
 	const [bookmarkLoading, setBookmarkLoading] = useState(false);
+	const { isAuthenticated } = useAuth();
 
 	const { slug } = useParams<{ slug: string }>();
 
@@ -72,6 +74,7 @@ export default function ToolDetailPage() {
 					aria-label="bookmark tool"
 					variant="ghost"
 					onClick={toggleBookmark}
+					disabled={!isAuthenticated} // @todo: probably pop a toast here
 					loading={bookmarkLoading}
 					color={bookmarked ? "green.400" : "gray.400"}
 				>
