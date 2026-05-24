@@ -1,11 +1,12 @@
-import { Heading, Stack } from "@chakra-ui/react";
+import { Heading, Stack, Text } from "@chakra-ui/react";
 
 function CommunityNavPage() {
 	return (
 		<Stack>
 			<Heading as="h1" size="4xl">
-				Page not avaliable yet! Sorry!
+				Community
 			</Heading>
+			<Text mt={8}>Sorry, page not available yet! Come back soon!</Text>
 		</Stack>
 	);
 }
