@@ -1,7 +1,18 @@
-import { AbsoluteCenter, Grid, Heading, Stack } from "@chakra-ui/react";
-import { LuBookmark, LuFile, LuSearch } from "react-icons/lu";
-import { PageNavItem } from "@/components/ui/PageNavItem";
+import { Heading, Stack } from "@chakra-ui/react";
 
+function CommunityNavPage() {
+	return (
+		<Stack>
+			<Heading as="h1" size="4xl">
+				Page not avaliable yet! Sorry!
+			</Heading>
+		</Stack>
+	);
+}
+
+export default CommunityNavPage;
+
+/*
 function CommunityNavPage() {
 	return (
 		<Stack>
@@ -23,3 +34,4 @@ function CommunityNavPage() {
 }
 
 export default CommunityNavPage;
+*/
