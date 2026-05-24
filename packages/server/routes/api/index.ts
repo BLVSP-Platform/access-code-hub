@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
+import { MongoServerError } from "mongodb";
 import multer from "multer";
 import { auth } from "../../auth";
 import { insertMentorshipRequest } from "../../schema/mentorship";
@@ -217,8 +218,8 @@ app.post("/tools/:toolId/bookmark", async (req, res) => {
 		return res.status(201).json({
 			message: "Bookmarked",
 		});
-	} catch (err: any) {
-		if (err.code === 11000) {
+	} catch (err: unknown) {
+		if (err instanceof MongoServerError && err.code === 11000) {
 			return res.status(409).json({
 				message: "Already bookmarked",
 			});
