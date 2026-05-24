@@ -15,7 +15,6 @@ import ProfilePage from "./pages/ProfilePage.tsx";
 import SubmitToolReviewsPage from "./pages/SubmitToolReviewsPage.tsx";
 import ThreadsPage from "./pages/ThreadsPage.tsx";
 import ToolDetailPage from "./pages/ToolDetailPage.tsx";
-import ToolIndexMainMenuPage from "./pages/ToolIndexMainMenuPage.tsx";
 import ToolIndexPage from "./pages/ToolIndexPage.tsx";
 import ToolSubmissionPage from "./pages/ToolSubmissionPage.tsx";
 import VolunteerPage from "./pages/VolunteerPage.tsx";
@@ -32,19 +31,6 @@ const router = createBrowserRouter([
 			{
 				path: "login",
 				element: <LoginPage />,
-			},
-			{
-				path: "tools",
-				children: [
-					{
-						index: true,
-						element: <ToolIndexMainMenuPage />,
-					},
-					{
-						path: "index",
-						element: <ToolIndexPage />,
-					},
-				],
 			},
 			{
 				element: (
