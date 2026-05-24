@@ -29,6 +29,14 @@ const router = createBrowserRouter([
 				element: <HomePage />,
 			},
 			{
+				path: "index",
+				element: <ToolIndexPage />,
+			},
+			{
+				path: "tools/:slug",
+				element: <ToolDetailPage />,
+			},
+			{
 				path: "login",
 				element: <LoginPage />,
 			},
@@ -76,14 +84,6 @@ const router = createBrowserRouter([
 								element: <BookmarkedToolsPage />,
 							},
 						],
-					},
-					{
-						path: "tools/:slug",
-						element: <ToolDetailPage />,
-					},
-					{
-						path: "index",
-						element: <ToolIndexPage />,
 					},
 					{
 						path: "submission",
