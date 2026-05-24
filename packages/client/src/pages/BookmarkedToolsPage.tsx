@@ -1,5 +1,6 @@
 import { Box, Heading, Link, RatingGroup, Stack, Table, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { decodeEntities } from "@/lib/utils";
 import type { Tool } from "./ToolIndexPage";
 
 function BookmarkedToolsPage() {
@@ -52,7 +53,7 @@ function BookmarkedToolsPage() {
 							<Table.ColumnHeader>Name</Table.ColumnHeader>
 							<Table.ColumnHeader>Compatibility</Table.ColumnHeader>
 							<Table.ColumnHeader>Description</Table.ColumnHeader>
-							<Table.ColumnHeader>Overall Ratings</Table.ColumnHeader>
+							<Table.ColumnHeader>Link</Table.ColumnHeader>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
@@ -66,21 +67,7 @@ function BookmarkedToolsPage() {
 									<Text>{tool.description}</Text>
 								</Table.Cell>
 								<Table.Cell>
-									<RatingGroup.Root
-										readOnly
-										count={5}
-										value={tool.rating}
-										size="sm"
-										css={{
-											"--chakra-colors-bg-emphasized": "#b1b1b1",
-											_dark: {
-												"--chakra-colors-bg-emphasized": "#605d70",
-											},
-										}}
-									>
-										<RatingGroup.HiddenInput />
-										<RatingGroup.Control />
-									</RatingGroup.Root>
+									<Link>{decodeEntities(tool.link)}</Link>
 								</Table.Cell>
 							</Table.Row>
 						))}
