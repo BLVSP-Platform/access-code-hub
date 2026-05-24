@@ -6,6 +6,19 @@ function CommunityNavPage() {
 	return (
 		<Stack>
 			<Heading as="h1" size="4xl">
+				Page not avaliable yet! Sorry!
+			</Heading>
+		</Stack>
+	);
+}
+
+export default CommunityNavPage;
+
+/*
+function CommunityNavPage() {
+	return (
+		<Stack>
+			<Heading as="h1" size="4xl">
 				Community
 			</Heading>
 
@@ -23,3 +36,4 @@ function CommunityNavPage() {
 }
 
 export default CommunityNavPage;
+*/
