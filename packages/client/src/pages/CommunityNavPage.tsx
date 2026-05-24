@@ -1,6 +1,4 @@
-import { AbsoluteCenter, Grid, Heading, Stack } from "@chakra-ui/react";
-import { LuBookmark, LuFile, LuSearch } from "react-icons/lu";
-import { PageNavItem } from "@/components/ui/PageNavItem";
+import { Heading, Stack } from "@chakra-ui/react";
 
 function CommunityNavPage() {
 	return (
