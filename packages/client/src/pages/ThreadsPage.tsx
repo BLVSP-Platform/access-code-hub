@@ -8,34 +8,65 @@ import {
 	HStack,
 	Input,
 	InputGroup,
+	Link,
 	Portal,
 	Stack,
 	Table,
 	Text,
 	VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import { InfoTip } from "@/components/ui/toggle-tip";
 import { formatDate } from "@/lib/utils";
-import threadsData from "../data/sample_threads.json";
-
-interface Posts {
-	id: string;
-	title: string;
-	topic: string;
-	tags: string;
-	date: string;
-}
+import type { Thread } from "./ThreadDetailPage";
 
 // @todo: NEEDS ACCESSIBILITY
 
 function ThreadsPage() {
 	const [search, setSearch] = useState("");
-	const [filteredThreads, setFilteredThreads] = useState<Posts[]>(threadsData);
+	const [threads, setThreads] = useState<Thread[]>([]);
+	const [filteredThreads, setFilteredThreads] = useState<Thread[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [lastUpdated, setLastUpdated] = useState<string>("");
+
+	useEffect(() => {
+		const fetchTools = async () => {
+			try {
+				const res = await fetch("/api/thread");
+				const data = await res.json();
+
+				setThreads(data);
+				setFilteredThreads(data);
+			} catch (err) {
+				console.error("Failed to fetch threads:", err);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchTools();
+	}, []);
+
+	useEffect(() => {
+		fetch("/api/thread/last-updated")
+			.then((res) => res.json())
+			.then((data) =>
+				setLastUpdated(
+					new Date(data.lastUpdated).toLocaleString("en-US", {
+						month: "long",
+						day: "numeric",
+						year: "numeric",
+						hour: "numeric",
+						minute: "2-digit",
+						hour12: true,
+					}),
+				),
+			);
+	}, []);
 
 	const handleFilterSubmit = () => {
-		const results = threadsData.filter((post) => post.title.toLowerCase().includes(search.toLowerCase()));
+		const results = threads.filter((t) => t.title.toLowerCase().includes(search.toLowerCase()));
 		setFilteredThreads(results);
 	};
 
@@ -63,8 +94,6 @@ function ThreadsPage() {
 											onChange={(e) => setSearch(e.target.value)}
 										/>
 									</InputGroup>
-
-									{/** @TODO: implement filtering */}
 								</Box>
 							</VStack>
 						</Dialog.Body>
@@ -86,12 +115,16 @@ function ThreadsPage() {
 		</Dialog.Root>
 	);
 
+	if (loading) {
+		return <Text>Loading....</Text>;
+	}
+
 	return (
 		<Stack gap={4}>
 			<HStack mb={8}>
 				<Heading size="4xl">Browse Threads</Heading>
 				<Text fontSize="xs" mt={4}>
-					Last Updated: October 26, 2025 03:26am {/* @todo: shouldn't hardcode this */}
+					Last Updated: {lastUpdated}
 				</Text>
 			</HStack>
 
@@ -109,16 +142,18 @@ function ThreadsPage() {
 						<Table.ColumnHeader>Title</Table.ColumnHeader>
 						<Table.ColumnHeader>Topic</Table.ColumnHeader>
 						<Table.ColumnHeader>Tags</Table.ColumnHeader>
-						<Table.ColumnHeader>Date</Table.ColumnHeader>
+						<Table.ColumnHeader>Date Created</Table.ColumnHeader>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
-					{filteredThreads.map((posts) => (
-						<Table.Row key={posts.id} bg="tertiary">
-							<Table.Cell>{posts.title}</Table.Cell>
-							<Table.Cell>{posts.topic}</Table.Cell>
-							<Table.Cell>{posts.tags}</Table.Cell>
-							<Table.Cell>{formatDate(posts.date)}</Table.Cell>
+					{filteredThreads.map((t) => (
+						<Table.Row key={t._id} bg="tertiary">
+							<Table.Cell>
+								<Link href={`threads/${t._id}`}>{t.title}</Link>
+							</Table.Cell>
+							<Table.Cell>{t.topic}</Table.Cell>
+							<Table.Cell>{t.tags}</Table.Cell>
+							<Table.Cell>{formatDate(t.createdAt)}</Table.Cell>
 						</Table.Row>
 					))}
 				</Table.Body>

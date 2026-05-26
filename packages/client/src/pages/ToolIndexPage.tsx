@@ -21,16 +21,19 @@ import { InfoTip } from "@/components/ui/toggle-tip";
 
 // @todo: use backend type?
 export interface Tool {
-	id: string;
+	_id: string;
 	slug: string;
 	name: string;
-	compatibility: string;
+	compatibility?: string;
 	description: string;
-	rating: number;
-	video: string;
-	guidelines: string;
-	limitations: string;
+	avgRating: number | null;
+
+	videos?: string;
+	guidelines?: string;
+	limits?: string;
+
 	link: string;
+	bookmarked: boolean;
 }
 
 // @todo: NEEDS ACCESSIBILITY
@@ -169,7 +172,7 @@ function ToolIndexPage() {
 					</Table.Header>
 					<Table.Body>
 						{filteredTools.map((tool) => (
-							<Table.Row key={tool.id} bg="tertiary" width="100%">
+							<Table.Row key={tool._id} bg="tertiary" width="100%">
 								<Table.Cell>
 									<Link href={`/tools/${tool.slug}`}>{tool.name}</Link>
 								</Table.Cell>
@@ -181,7 +184,7 @@ function ToolIndexPage() {
 									<RatingGroup.Root
 										readOnly
 										count={5}
-										value={tool.rating}
+										value={tool.avgRating ?? 0}
 										size="sm"
 										css={{
 											"--chakra-colors-bg-emphasized": "#b1b1b1",
