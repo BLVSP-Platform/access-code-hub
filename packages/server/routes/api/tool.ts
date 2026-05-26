@@ -8,6 +8,7 @@ import {
 	getReviewsForTool,
 	getToolBookmarksForUser,
 	getToolBySlug,
+	getToolsWithRatings,
 	insertToolSubmission,
 	removeToolBookmark,
 	removeToolReview,
@@ -48,7 +49,7 @@ router.post(
 
 router.get("/", async (_req, res) => {
 	try {
-		const tools = await ToolFormModel.find().sort({ createdAt: -1 });
+		const tools = await getToolsWithRatings();
 		return res.status(200).json(tools);
 	} catch (err) {
 		return res.status(500).send(err);

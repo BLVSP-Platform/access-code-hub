@@ -146,3 +146,24 @@ export const getReviewsForTool = async (toolId: Types.ObjectId | string) => {
 export const getReviewByUser = async (userId: string, toolId: Types.ObjectId | string) => {
 	return ToolReviewModel.findOne({ userId, toolId }).lean();
 };
+
+export const getToolsWithRatings = async () => {
+	return ToolFormModel.aggregate([
+		{
+			$lookup: {
+				from: "toolreviews",
+				localField: "_id",
+				foreignField: "toolId",
+				as: "reviews",
+			},
+		},
+		{
+			$addFields: {
+				avgRating: { $avg: "$reviews.rating" },
+				reviewCount: { $size: "$reviews" },
+			},
+		},
+		{ $unset: "reviews" },
+		{ $sort: { createdAt: -1 } },
+	]);
+};
