@@ -5,12 +5,16 @@ import multer from "multer";
 import { auth } from "../../auth";
 import {
 	addToolBookmark,
+	getReviewsForTool,
 	getToolBookmarksForUser,
 	getToolBySlug,
+	getToolsWithRatings,
 	insertToolSubmission,
 	removeToolBookmark,
+	removeToolReview,
 	ToolBookmarkModel,
 	ToolFormModel,
+	upsertToolReview,
 } from "../../schema/tool";
 
 const formHandler = multer();
@@ -45,7 +49,7 @@ router.post(
 
 router.get("/", async (_req, res) => {
 	try {
-		const tools = await ToolFormModel.find().sort({ createdAt: -1 });
+		const tools = await getToolsWithRatings();
 		return res.status(200).json(tools);
 	} catch (err) {
 		return res.status(500).send(err);
@@ -119,6 +123,45 @@ router.delete("/:toolId/bookmark", async (req, res) => {
 
 		await removeToolBookmark(session.user.id, req.params.toolId);
 		return res.status(200).json({ message: "Bookmark removed" });
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+router.get("/:toolId/reviews", async (req, res) => {
+	try {
+		const reviews = await getReviewsForTool(req.params.toolId);
+		return res.status(200).json(reviews);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+router.put(
+	"/:toolId/reviews",
+	body("rating").isInt({ min: 1, max: 5 }),
+	body("body").optional().isString().trim().escape(),
+	async (req, res) => {
+		try {
+			const session = await auth.api.getSession({ headers: req.headers });
+			if (!session) return res.status(401).send("Unauthorized");
+
+			const { rating, body } = req.body;
+			const review = await upsertToolReview(session.user.id, req.params?.toolId, rating, body);
+			return res.status(200).json(review);
+		} catch (err) {
+			return res.status(500).send(err);
+		}
+	},
+);
+
+router.delete("/:toolId/reviews", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
+		await removeToolReview(session.user.id, req.params.toolId);
+		return res.status(200).json({ message: "Review removed" });
 	} catch (err) {
 		return res.status(500).send(err);
 	}

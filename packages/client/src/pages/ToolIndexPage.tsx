@@ -26,7 +26,7 @@ export interface Tool {
 	name: string;
 	compatibility?: string;
 	description: string;
-	rating: number;
+	avgRating: number | null;
 
 	videos?: string;
 	guidelines?: string;
@@ -184,7 +184,7 @@ function ToolIndexPage() {
 									<RatingGroup.Root
 										readOnly
 										count={5}
-										value={tool.rating}
+										value={tool.avgRating ?? 0}
 										size="sm"
 										css={{
 											"--chakra-colors-bg-emphasized": "#b1b1b1",
