@@ -92,6 +92,7 @@ export default function ThreadDetailPage() {
 			} else {
 				await fetch(`/api/thread/${thread._id}/bookmark`, {
 					method: "POST",
+					credentials: "include",
 				});
 				setBookmarked(true);
 			}
@@ -114,6 +115,7 @@ export default function ThreadDetailPage() {
 			const res = await fetch(`/api/thread/${id}/comments`, {
 				method: "POST",
 				body: fd,
+				credentials: "include",
 			});
 			if (!res.ok) throw new Error(res.statusText);
 

@@ -115,7 +115,7 @@ export default function ToolDetailPage() {
 				await fetch(`/api/tools/${tool._id}/bookmark`, { method: "DELETE" });
 				setBookmarked(false);
 			} else {
-				await fetch(`/api/tools/${tool._id}/bookmark`, { method: "POST" });
+				await fetch(`/api/tools/${tool._id}/bookmark`, { method: "POST", credentials: "include" });
 				setBookmarked(true);
 			}
 		} catch (err) {

@@ -105,6 +105,7 @@ function ToolSubmissionPage() {
 			const res = await fetch("/api/tools", {
 				method: "POST",
 				body: formData,
+				credentials: "include",
 			});
 
 			setDialogOpen(true);

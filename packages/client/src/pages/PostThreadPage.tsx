@@ -40,6 +40,7 @@ function PostThreadPage() {
 			const res = await fetch("/api/thread", {
 				method: "POST",
 				body: formData,
+				credentials: "include",
 			});
 			if (res.ok) {
 				const { id } = await res.json();

@@ -35,6 +35,7 @@ function MentorshipPage() {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(data),
+				credentials: "include",
 			});
 			setDialogOpen(true);
 			if (res.ok) {

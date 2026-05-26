@@ -26,6 +26,7 @@ function VolunteerPage() {
 			const res = await fetch("/api/volunteer", {
 				method: "POST",
 				body: formData,
+				credentials: "include",
 			});
 			setDialogOpen(true);
 			if (res.ok) {
