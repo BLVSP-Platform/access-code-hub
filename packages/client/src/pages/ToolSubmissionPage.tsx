@@ -21,7 +21,7 @@ interface ToolSubmissionData {
 	name: string;
 	link: string;
 	description: string;
-	compatability?: string;
+	compatibility?: string;
 	videos?: string;
 	guidelines?: string;
 	limits?: string;
@@ -172,8 +172,8 @@ function ToolSubmissionPage() {
 							/>
 
 							<TextInput
-								name="compatability"
-								label="Compatability Information"
+								name="compatibility"
+								label="Compatibility Information"
 								register={register}
 								required={false}
 							/>
