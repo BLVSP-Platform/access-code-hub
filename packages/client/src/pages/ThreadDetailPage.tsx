@@ -1,6 +1,7 @@
 import { Heading, HStack, IconButton, Stack, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { LuBookmark } from "react-icons/lu";
+import { useParams } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 
 export interface Thread {
@@ -17,10 +18,12 @@ export default function ThreadDetailPage() {
 	const [loading, setLoading] = useState(true);
 	const { isAuthenticated } = useAuth();
 
+	const { id } = useParams<{ id: string }>();
+
 	useEffect(() => {
 		const fetchThread = async () => {
 			try {
-				const res = await fetch(`/api/threads/${thread?._id}`);
+				const res = await fetch(`/api/thread/${id}`);
 				if (!res.ok) throw new Error(res.statusText);
 				const data: Thread = await res.json();
 				setThread(data);
@@ -32,7 +35,7 @@ export default function ThreadDetailPage() {
 		};
 
 		fetchThread();
-	});
+	}, [id]);
 
 	if (loading) {
 		return <Text>Loading...</Text>;

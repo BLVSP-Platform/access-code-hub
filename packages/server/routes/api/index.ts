@@ -4,7 +4,7 @@ import { MongoServerError } from "mongodb";
 import multer from "multer";
 import { auth } from "../../auth";
 import { insertMentorshipRequest } from "../../schema/mentorship";
-import { insertThread } from "../../schema/thread";
+import { insertThread, ThreadFormModel } from "../../schema/thread";
 import {
 	addToolBookmark,
 	getToolBookmarksForUser,
@@ -50,6 +50,21 @@ app.post(
 		}
 	},
 );
+
+app.get("/thread/:id", async (req, res) => {
+	try {
+		const { id } = req.params;
+		const thread = await ThreadFormModel.findById(id);
+
+		if (!thread) {
+			return res.status(404).json({ message: "Thread not found" });
+		}
+
+		return res.status(200).json(thread);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
 
 app.post(
 	"/mentorship",
