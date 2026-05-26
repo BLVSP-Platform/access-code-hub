@@ -146,7 +146,7 @@ function ToolSubmissionPage() {
 							<TextInput
 								name="name"
 								label="Tool Name"
-								placeholder="Tool name"
+								placeholder="My Awesome Tool"
 								register={register}
 								error={errors.name?.message}
 								errorMsg="Please enter a name for the tool"
@@ -166,6 +166,7 @@ function ToolSubmissionPage() {
 							<TextInput
 								name="description"
 								label="Description"
+								placeholder="Briefly describe what this tool does"
 								register={register}
 								error={errors.description?.message}
 								errorMsg="Please enter a description"
@@ -174,6 +175,7 @@ function ToolSubmissionPage() {
 							<TextInput
 								name="compatibility"
 								label="Compatibility Information"
+								placeholder="e.g. Windows 10+, macOS 12+, Chrome 110+"
 								register={register}
 								required={false}
 							/>
@@ -181,18 +183,31 @@ function ToolSubmissionPage() {
 								name="videos"
 								label="Tutorial Video(s)"
 								type="url"
-								placeholder="https://youtube.com/..."
+								placeholder="https://youtube.com/"
 								register={register}
 								required={false}
 							/>
 							<TextInput
 								name="guidelines"
 								label="Creator's Guidelines/Cautions for the Tool"
+								placeholder="e.g. Do not use with sensitive data"
 								register={register}
 								required={false}
 							/>
-							<TextInput name="limits" label="Limitations" register={register} required={false} />
-							<TextInput name="comments" label="Extra Comments" register={register} required={false} />
+							<TextInput
+								name="limits"
+								label="Limitations"
+								placeholder="e.g. Max file size 10MB, English only"
+								register={register}
+								required={false}
+							/>
+							<TextInput
+								name="comments"
+								label="Extra Comments"
+								placeholder="Anything else you'd like us to know"
+								register={register}
+								required={false}
+							/>
 
 							<Field.Root required invalid={!!errors.isCreator}>
 								<Field.Label>
