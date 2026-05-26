@@ -61,13 +61,13 @@ function App() {
 				className="directory"
 			>
 				<HomePageItem
-					to="tools/index"
+					to="index"
 					title="Tool Index"
 					description="Our Tool Index page is a configured list of accessible tools. Please visit here to find the most applicable tools for your use case."
 				/>
 
 				<HomePageItem
-					to="tools/submit"
+					to="submission"
 					title="Submit A Tool"
 					description="To submit a tool to the website please use our Tool Submission Form. This will create a new index in the Tool Index page, so that other developers can take advantage of this utility."
 				/>

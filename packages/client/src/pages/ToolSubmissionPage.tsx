@@ -102,7 +102,7 @@ function ToolSubmissionPage() {
 		});
 
 		try {
-			const res = await fetch("/api/tool", {
+			const res = await fetch("/api/tools", {
 				method: "POST",
 				body: formData,
 			});

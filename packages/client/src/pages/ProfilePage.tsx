@@ -10,15 +10,16 @@ import {
 	Stack,
 	Tag,
 	Text,
+	VStack,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, type LinkProps, useNavigate } from "react-router-dom";
 import { signOut, updateUser, useSession } from "@/lib/auth";
 import { normalizeToolsList } from "@/lib/utils";
 
 // TODO : add pfps
 
-function ProfilePageButton(props: ButtonProps) {
+function ProfilePageButton(props: ButtonProps & Partial<LinkProps>) {
 	return (
 		<Button
 			borderColor="primary"
@@ -220,12 +221,12 @@ function ProfilePage() {
 	const viewToolsTags = normalizeToolsList(user.toolsList);
 
 	return (
-		<Stack gap="8">
+		<Stack gap="8" px={16}>
 			<Heading as="h1" size="4xl">
 				Profile
 			</Heading>
 
-			<Center>
+			<HStack w="full" justify="space-between" align="start">
 				<Stack w="full" maxW="xl" gap="6" p="10" borderWidth="1px" borderRadius="2xl" boxShadow="sm">
 					<Box>
 						<Heading as="h2" size="2xl" fontWeight="medium" mb="2">
@@ -257,7 +258,23 @@ function ProfilePage() {
 						</Text>
 					)}
 				</Stack>
-			</Center>
+
+				<Stack p="10" alignItems="center">
+					<Heading as="h3" size="3xl">
+						My Activity Feed
+					</Heading>
+
+					<VStack gap={4} w="380px">
+						<ProfilePageButton disabled>Tool Submissions</ProfilePageButton>
+						<ProfilePageButton as={Link} to="/tools/bookmarked">
+							Tool Bookmarks
+						</ProfilePageButton>
+						<ProfilePageButton disabled>Reviews</ProfilePageButton>
+						<ProfilePageButton disabled>Threads</ProfilePageButton>
+						<ProfilePageButton disabled>Comments</ProfilePageButton>
+					</VStack>
+				</Stack>
+			</HStack>
 		</Stack>
 	);
 }

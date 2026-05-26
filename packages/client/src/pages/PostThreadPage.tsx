@@ -1,6 +1,7 @@
 import { Button, Field, Flex, Heading, Input, Stack, Textarea } from "@chakra-ui/react";
 import { useState } from "react";
 import { type FieldError, type RegisterOptions, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { FormDialog } from "@/components/FormDialog";
 import { formDataCast } from "@/lib/utils";
 
@@ -25,6 +26,7 @@ function PostThreadPage() {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [dialogBody, setDialogBody] = useState<string>("");
 	const [dialogTitle, setDialogTitle] = useState<string>("");
+	const navigate = useNavigate();
 
 	const {
 		register,
@@ -39,17 +41,17 @@ function PostThreadPage() {
 				method: "POST",
 				body: formData,
 			});
-			// Handle the response from the server
-			setDialogOpen(true);
 			if (res.ok) {
-				setDialogTitle("Thread Posted!");
-				setDialogBody("");
+				const { id } = await res.json();
+				navigate(`/community/threads/${id}`);
 			} else {
+				setDialogOpen(true);
 				setDialogTitle(`Error: ${res.statusText}`);
 				setDialogBody("An error occurred while processing your submission.");
 			}
 		} catch (err) {
 			if (err instanceof Error) {
+				setDialogOpen(true);
 				setDialogTitle(err.name);
 				setDialogBody(err.message);
 			}

@@ -13,9 +13,9 @@ import MentorshipPage from "./pages/MentorshipPage.tsx";
 import PostThreadPage from "./pages/PostThreadPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import SubmitToolReviewsPage from "./pages/SubmitToolReviewsPage.tsx";
+import ThreadDetailPage from "./pages/ThreadDetailPage.tsx";
 import ThreadsPage from "./pages/ThreadsPage.tsx";
 import ToolDetailPage from "./pages/ToolDetailPage.tsx";
-import ToolIndexMainMenuPage from "./pages/ToolIndexMainMenuPage.tsx";
 import ToolIndexPage from "./pages/ToolIndexPage.tsx";
 import ToolSubmissionPage from "./pages/ToolSubmissionPage.tsx";
 import VolunteerPage from "./pages/VolunteerPage.tsx";
@@ -30,21 +30,16 @@ const router = createBrowserRouter([
 				element: <HomePage />,
 			},
 			{
-				path: "login",
-				element: <LoginPage />,
+				path: "index",
+				element: <ToolIndexPage />,
 			},
 			{
-				path: "tools",
-				children: [
-					{
-						index: true,
-						element: <ToolIndexMainMenuPage />,
-					},
-					{
-						path: "index",
-						element: <ToolIndexPage />,
-					},
-				],
+				path: "tools/:slug",
+				element: <ToolDetailPage />,
+			},
+			{
+				path: "login",
+				element: <LoginPage />,
 			},
 			{
 				element: (
@@ -61,16 +56,20 @@ const router = createBrowserRouter([
 								element: <CommunityNavPage />,
 							},
 							{
-								path: "browsethreads",
+								path: "threads",
 								element: <ThreadsPage />,
 							},
 							{
-								path: "postthread",
+								path: "threads/post",
 								element: <PostThreadPage />,
 							},
 							{
-								path: "bookmarkthread",
+								path: "threads/bookmarked",
 								element: <BookmarkedThreadsPage />,
+							},
+							{
+								path: "threads/:id",
+								element: <ThreadDetailPage />,
 							},
 						],
 					},
@@ -90,14 +89,6 @@ const router = createBrowserRouter([
 								element: <BookmarkedToolsPage />,
 							},
 						],
-					},
-					{
-						path: "tools/:slug",
-						element: <ToolDetailPage />,
-					},
-					{
-						path: "index",
-						element: <ToolIndexPage />,
 					},
 					{
 						path: "submission",
