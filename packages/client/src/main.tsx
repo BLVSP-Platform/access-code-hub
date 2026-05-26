@@ -56,15 +56,15 @@ const router = createBrowserRouter([
 								element: <CommunityNavPage />,
 							},
 							{
-								path: "browsethreads",
+								path: "threads",
 								element: <ThreadsPage />,
 							},
 							{
-								path: "postthread",
+								path: "threads/post",
 								element: <PostThreadPage />,
 							},
 							{
-								path: "bookmarkthread",
+								path: "threads/bookmarked",
 								element: <BookmarkedThreadsPage />,
 							},
 							{
