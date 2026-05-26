@@ -5,7 +5,10 @@ import multer from "multer";
 import { auth } from "../../auth";
 import {
 	addThreadBookmark,
+	deleteComment,
+	getCommentsForThread,
 	getThreadBookmarksForUser,
+	insertComment,
 	insertThread,
 	removeThreadBookmark,
 	ThreadBookmarkModel,
@@ -111,6 +114,55 @@ router.delete("/:threadId/bookmark", async (req, res) => {
 
 		await removeThreadBookmark(session.user.id, req.params.threadId);
 		return res.status(200).json({ message: "Bookmark removed" });
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+router.get("/:threadId/comments", async (req, res) => {
+	try {
+		const comments = await getCommentsForThread(req.params.threadId);
+		return res.status(200).json(comments);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+router.post(
+	"/:threadId/comments",
+	formHandler.none(),
+	body("content").trim().isString().notEmpty().escape(),
+	async (req, res) => {
+		try {
+			const session = await auth.api.getSession({ headers: req.headers });
+			if (!session) return res.status(401).send("Unauthorized");
+
+			const { threadId } = req.params as { threadId: string };
+			const content = req.body.content as string | undefined;
+			if (!content) return res.status(400).json({ message: "Content is required" });
+
+			const comment = await insertComment({
+				threadId,
+				userId: session.user.id,
+				username: session.user.name,
+				content,
+			});
+			return res.status(201).json(comment);
+		} catch (err) {
+			return res.status(500).send(err);
+		}
+	},
+);
+
+router.delete("/:threadId/comments/:commentId", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
+		const result = await deleteComment(req.params.commentId, session.user.id);
+		if (result.deletedCount === 0) return res.status(404).json({ message: "Comment not found or not yours" });
+
+		return res.status(200).json({ message: "Comment deleted" });
 	} catch (err) {
 		return res.status(500).send(err);
 	}

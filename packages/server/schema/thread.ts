@@ -45,3 +45,24 @@ export const getThreadBookmarksForUser = async (userId: string) => {
 	const threadIds = bookmarks.map((b) => b.threadId);
 	return ThreadFormModel.find({ _id: { $in: threadIds } }).sort({ createdAt: -1 });
 };
+
+export const commentSchema = new mongoose.Schema(
+	{
+		threadId: { type: String, required: true, index: true },
+		userId: { type: String, required: true },
+		username: { type: String, required: true },
+		content: { type: String, required: true },
+	},
+	{ timestamps: true },
+);
+
+export const CommentModel = mongoose.model("thread_comment", commentSchema);
+
+export type CommentParameters = Omit<InferSchemaType<typeof commentSchema>, "createdAt" | "updatedAt">;
+
+export const getCommentsForThread = async (threadId: string) => CommentModel.find({ threadId }).sort({ createdAt: -1 });
+
+export const insertComment = async (params: CommentParameters) => CommentModel.create(params);
+
+export const deleteComment = async (commentId: string, userId: string) =>
+	CommentModel.deleteOne({ _id: commentId, userId });
