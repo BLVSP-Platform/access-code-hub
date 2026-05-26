@@ -76,7 +76,7 @@ function ToolSubmissionPage() {
 		const form = event.target as HTMLFormElement;
 		const formData = new FormData(form);
 		try {
-			const res = await fetch("/api/tool", {
+			const res = await fetch("/api/tools", {
 				method: "POST",
 				body: formData,
 			});
