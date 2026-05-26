@@ -11,6 +11,7 @@ export interface Thread {
 	topic: string;
 	content: string;
 	tags: string;
+	createdAt: string;
 }
 
 export default function ThreadDetailPage() {

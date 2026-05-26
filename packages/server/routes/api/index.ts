@@ -75,6 +75,15 @@ app.get("/thread/:id", async (req, res) => {
 	}
 });
 
+app.get("/thread/last-updated", async (_req, res) => {
+	try {
+		const latest = await ThreadFormModel.findOne().sort({ updatedAt: -1 }).select("updatedAt");
+		return res.status(200).json({ lastUpdated: latest?.updatedAt ?? null });
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
 app.post(
 	"/mentorship",
 	body("mentorshipRole").trim().isString().escape(),
