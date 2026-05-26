@@ -67,6 +67,27 @@ app.get("/thread", async (_req, res) => {
 	}
 });
 
+app.get("/thread/bookmarks/me", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
+		const bookmarks = await getThreadBookmarksForUser(session.user.id);
+		return res.status(200).json(bookmarks);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+app.get("/thread/last-updated", async (_req, res) => {
+	try {
+		const latest = await ThreadFormModel.findOne().sort({ updatedAt: -1 }).select("updatedAt");
+		return res.status(200).json({ lastUpdated: latest?.updatedAt ?? null });
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
 app.get("/thread/:id", async (req, res) => {
 	try {
 		const { id } = req.params;
@@ -114,27 +135,6 @@ app.delete("/thread/:threadId/bookmark", async (req, res) => {
 
 		await removeThreadBookmark(session.user.id, req.params.threadId);
 		return res.status(200).json({ message: "Bookmark removed" });
-	} catch (err) {
-		return res.status(500).send(err);
-	}
-});
-
-app.get("/thread/bookmarks/me", async (req, res) => {
-	try {
-		const session = await auth.api.getSession({ headers: req.headers });
-		if (!session) return res.status(401).send("Unauthorized");
-
-		const bookmarks = await getThreadBookmarksForUser(session.user.id);
-		return res.status(200).json(bookmarks);
-	} catch (err) {
-		return res.status(500).send(err);
-	}
-});
-
-app.get("/thread/last-updated", async (_req, res) => {
-	try {
-		const latest = await ThreadFormModel.findOne().sort({ updatedAt: -1 }).select("updatedAt");
-		return res.status(200).json({ lastUpdated: latest?.updatedAt ?? null });
 	} catch (err) {
 		return res.status(500).send(err);
 	}
