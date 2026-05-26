@@ -51,6 +51,15 @@ app.post(
 	},
 );
 
+app.get("/thread", async (_req, res) => {
+	try {
+		const threads = await ThreadFormModel.find().sort({ createdAt: -1 });
+		return res.status(200).json(threads);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
 app.get("/thread/:id", async (req, res) => {
 	try {
 		const { id } = req.params;
