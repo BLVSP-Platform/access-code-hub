@@ -142,7 +142,7 @@ function ThreadsPage() {
 						<Table.ColumnHeader>Title</Table.ColumnHeader>
 						<Table.ColumnHeader>Topic</Table.ColumnHeader>
 						<Table.ColumnHeader>Tags</Table.ColumnHeader>
-						<Table.ColumnHeader>Date</Table.ColumnHeader>
+						<Table.ColumnHeader>Date Created</Table.ColumnHeader>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
