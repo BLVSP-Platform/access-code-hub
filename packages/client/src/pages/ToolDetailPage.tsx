@@ -1,13 +1,18 @@
 import { Heading, HStack, IconButton, Link, Stack, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { LuBookmark } from "react-icons/lu";
+import { LuBookmark, LuBookmarkCheck } from "react-icons/lu";
 import { useParams } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
 import { decodeEntities } from "@/lib/utils";
 import type { Tool } from "./ToolIndexPage";
 
 export default function ToolDetailPage() {
 	const [tool, setTool] = useState<Tool>();
 	const [loading, setLoading] = useState(true);
+	const [bookmarked, setBookmarked] = useState(false);
+	const [bookmarkLoading, setBookmarkLoading] = useState(false);
+	const { isAuthenticated } = useAuth();
+
 	const { slug } = useParams<{ slug: string }>();
 
 	useEffect(() => {
@@ -29,6 +34,35 @@ export default function ToolDetailPage() {
 		fetchTool();
 	}, [slug]);
 
+	useEffect(() => {
+		if (!tool) return;
+		setBookmarked(tool.bookmarked);
+	}, [tool]);
+
+	const toggleBookmark = async () => {
+		if (!tool?._id || bookmarkLoading) return;
+
+		setBookmarkLoading(true);
+
+		try {
+			if (bookmarked) {
+				await fetch(`/api/tools/${tool._id}/bookmark`, {
+					method: "DELETE",
+				});
+				setBookmarked(false);
+			} else {
+				await fetch(`/api/tools/${tool._id}/bookmark`, {
+					method: "POST",
+				});
+				setBookmarked(true);
+			}
+		} catch (err) {
+			console.error("Bookmark toggle failed:", err);
+		} finally {
+			setBookmarkLoading(false);
+		}
+	};
+
 	if (loading) {
 		return <Text>Loading...</Text>;
 	}
@@ -36,10 +70,19 @@ export default function ToolDetailPage() {
 	return (
 		<Stack>
 			<HStack align="center" gap={1}>
-				<IconButton variant="ghost">
-					{" "}
-					{/** @todo: bookmark a tool */}
-					<LuBookmark style={{ width: "32px", height: "32px" }} />
+				<IconButton
+					aria-label="bookmark tool"
+					variant="ghost"
+					onClick={toggleBookmark}
+					disabled={!isAuthenticated} // @todo: probably pop a toast here
+					loading={bookmarkLoading}
+					color={bookmarked ? "green.400" : "gray.400"}
+				>
+					{bookmarked ? (
+						<LuBookmarkCheck style={{ width: "32px", height: "32px" }} />
+					) : (
+						<LuBookmark style={{ width: "32px", height: "32px" }} />
+					)}
 				</IconButton>
 				<Heading as="h1" size="4xl">
 					{tool?.name}
@@ -65,7 +108,7 @@ export default function ToolDetailPage() {
 					<Text as="span" fontWeight="bold">
 						Tutorial Video(s):{" "}
 					</Text>
-					{tool?.video ?? "N/A"}
+					{tool?.videos ?? "N/A"}
 				</Text>
 
 				<Text>
@@ -79,7 +122,7 @@ export default function ToolDetailPage() {
 					<Text as="span" fontWeight="bold">
 						Limitations:{" "}
 					</Text>
-					{tool?.limitations ?? "N/A"}
+					{tool?.limits ?? "N/A"}
 				</Text>
 
 				<Text>
