@@ -51,7 +51,7 @@ app.post(
 			if (!result) {
 				return res.status(502);
 			}
-			return res.status(201).send("Success");
+			return res.status(201).json({ id: result });
 		} catch (err) {
 			return res.status(500).send(err);
 		}
