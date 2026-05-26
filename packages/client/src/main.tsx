@@ -13,6 +13,7 @@ import MentorshipPage from "./pages/MentorshipPage.tsx";
 import PostThreadPage from "./pages/PostThreadPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import SubmitToolReviewsPage from "./pages/SubmitToolReviewsPage.tsx";
+import ThreadDetailPage from "./pages/ThreadDetailPage.tsx";
 import ThreadsPage from "./pages/ThreadsPage.tsx";
 import ToolDetailPage from "./pages/ToolDetailPage.tsx";
 import ToolIndexPage from "./pages/ToolIndexPage.tsx";
@@ -55,16 +56,20 @@ const router = createBrowserRouter([
 								element: <CommunityNavPage />,
 							},
 							{
-								path: "browsethreads",
+								path: "threads",
 								element: <ThreadsPage />,
 							},
 							{
-								path: "postthread",
+								path: "threads/post",
 								element: <PostThreadPage />,
 							},
 							{
-								path: "bookmarkthread",
+								path: "threads/bookmarked",
 								element: <BookmarkedThreadsPage />,
+							},
+							{
+								path: "threads/:id",
+								element: <ThreadDetailPage />,
 							},
 						],
 					},
