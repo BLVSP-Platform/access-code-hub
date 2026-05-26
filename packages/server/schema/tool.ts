@@ -102,3 +102,47 @@ export const isToolBookmarked = async (userId: string, toolId: Types.ObjectId | 
 
 	return !!bookmark;
 };
+
+export const toolReviewSchema = new mongoose.Schema(
+	{
+		userId: { type: String, required: true, index: true },
+		toolId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "tool",
+			required: true,
+		},
+		rating: { type: Number, required: true, min: 1, max: 5 },
+		body: { type: String, trim: true },
+	},
+	{ timestamps: true },
+);
+
+toolReviewSchema.index({ userId: 1, toolId: 1 }, { unique: true });
+
+export const ToolReviewModel = mongoose.model("toolReview", toolReviewSchema);
+export type ToolReviewParameters = InferSchemaType<typeof toolReviewSchema>;
+
+export const upsertToolReview = async (
+	userId: string,
+	toolId: Types.ObjectId | string,
+	rating: number,
+	body?: string,
+) => {
+	return ToolReviewModel.findOneAndUpdate(
+		{ userId, toolId },
+		{ rating, body },
+		{ upsert: true, new: true, setDefaultsOnInsert: true },
+	);
+};
+
+export const removeToolReview = async (userId: string, toolId: Types.ObjectId | string) => {
+	return ToolReviewModel.deleteOne({ userId, toolId });
+};
+
+export const getReviewsForTool = async (toolId: Types.ObjectId | string) => {
+	return ToolReviewModel.find({ toolId }).sort({ createdAt: -1 }).lean();
+};
+
+export const getReviewByUser = async (userId: string, toolId: Types.ObjectId | string) => {
+	return ToolReviewModel.findOne({ userId, toolId }).lean();
+};
