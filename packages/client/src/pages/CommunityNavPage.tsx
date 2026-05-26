@@ -1,19 +1,7 @@
-import { Heading, Stack, Text } from "@chakra-ui/react";
+import { AbsoluteCenter, Grid, Heading, Stack } from "@chakra-ui/react";
+import { LuBookmark, LuFile, LuSearch } from "react-icons/lu";
+import { PageNavItem } from "@/components/ui/PageNavItem";
 
-function CommunityNavPage() {
-	return (
-		<Stack>
-			<Heading as="h1" size="4xl">
-				Community
-			</Heading>
-			<Text mt={8}>Sorry, page not available yet! Come back soon!</Text>
-		</Stack>
-	);
-}
-
-export default CommunityNavPage;
-
-/*
 function CommunityNavPage() {
 	return (
 		<Stack>
@@ -25,7 +13,7 @@ function CommunityNavPage() {
 				<AbsoluteCenter>
 					<Grid templateColumns="1fr" gap={6}>
 						<PageNavItem to="browsethreads" title="Browse Threads" icon={<LuSearch />} />
-						<PageNavItem to="postthread" title="Create Post" icon={<LuFile />} />
+						<PageNavItem to="postthread" title="Create Thread" icon={<LuFile />} />
 						<PageNavItem to="bookmarkthread" title="Bookmarked Threads" icon={<LuBookmark />} />
 					</Grid>
 				</AbsoluteCenter>
@@ -35,4 +23,3 @@ function CommunityNavPage() {
 }
 
 export default CommunityNavPage;
-*/
