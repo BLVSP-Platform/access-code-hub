@@ -4,7 +4,14 @@ import { MongoServerError } from "mongodb";
 import multer from "multer";
 import { auth } from "../../auth";
 import { insertMentorshipRequest } from "../../schema/mentorship";
-import { insertThread, ThreadFormModel } from "../../schema/thread";
+import {
+	addThreadBookmark,
+	getThreadBookmarksForUser,
+	insertThread,
+	removeThreadBookmark,
+	ThreadBookmarkModel,
+	ThreadFormModel,
+} from "../../schema/thread";
 import {
 	addToolBookmark,
 	getToolBookmarksForUser,
@@ -69,7 +76,56 @@ app.get("/thread/:id", async (req, res) => {
 			return res.status(404).json({ message: "Thread not found" });
 		}
 
-		return res.status(200).json(thread);
+		const session = await auth.api.getSession({ headers: req.headers });
+
+		let bookmarked = false;
+		if (session) {
+			bookmarked = !!(await ThreadBookmarkModel.exists({
+				userId: session.user.id,
+				threadId: thread._id,
+			}));
+		}
+
+		return res.status(200).json({ ...thread.toObject(), bookmarked });
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+app.post("/thread/:threadId/bookmark", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
+		await addThreadBookmark(session.user.id, req.params.threadId);
+		return res.status(201).json({ message: "Bookmarked" });
+	} catch (err: unknown) {
+		if (err instanceof MongoServerError && err.code === 11000) {
+			return res.status(409).json({ message: "Already bookmarked" });
+		}
+		return res.status(500).send(err);
+	}
+});
+
+app.delete("/thread/:threadId/bookmark", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
+		await removeThreadBookmark(session.user.id, req.params.threadId);
+		return res.status(200).json({ message: "Bookmark removed" });
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+app.get("/thread/bookmarks/me", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
+		const bookmarks = await getThreadBookmarksForUser(session.user.id);
+		return res.status(200).json(bookmarks);
 	} catch (err) {
 		return res.status(500).send(err);
 	}

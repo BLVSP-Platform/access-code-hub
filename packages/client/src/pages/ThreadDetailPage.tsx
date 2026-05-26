@@ -1,6 +1,6 @@
 import { Heading, HStack, IconButton, Stack, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { LuBookmark } from "react-icons/lu";
+import { LuBookmark, LuBookmarkCheck } from "react-icons/lu";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -12,11 +12,15 @@ export interface Thread {
 	content: string;
 	tags: string;
 	createdAt: string;
+
+	bookmarked: boolean;
 }
 
 export default function ThreadDetailPage() {
 	const [thread, setThread] = useState<Thread>();
 	const [loading, setLoading] = useState(true);
+	const [bookmarked, setBookmarked] = useState(false);
+	const [bookmarkLoading, setBookmarkLoading] = useState(false);
 	const { isAuthenticated } = useAuth();
 
 	const { id } = useParams<{ id: string }>();
@@ -38,6 +42,35 @@ export default function ThreadDetailPage() {
 		fetchThread();
 	}, [id]);
 
+	useEffect(() => {
+		if (!thread) return;
+		setBookmarked(thread.bookmarked);
+	}, [thread]);
+
+	const toggleBookmark = async () => {
+		if (!thread?._id || bookmarkLoading) return;
+
+		setBookmarkLoading(true);
+
+		try {
+			if (bookmarked) {
+				await fetch(`/api/thread/${thread._id}/bookmark`, {
+					method: "DELETE",
+				});
+				setBookmarked(false);
+			} else {
+				await fetch(`/api/thread/${thread._id}/bookmark`, {
+					method: "POST",
+				});
+				setBookmarked(true);
+			}
+		} catch (err) {
+			console.error("Bookmark toggle failed:", err);
+		} finally {
+			setBookmarkLoading(false);
+		}
+	};
+
 	if (loading) {
 		return <Text>Loading...</Text>;
 	}
@@ -48,18 +81,16 @@ export default function ThreadDetailPage() {
 				<IconButton
 					aria-label="bookmark tool"
 					variant="ghost"
-					// onClick={toggleBookmark}
+					onClick={toggleBookmark}
 					disabled={!isAuthenticated} // @todo: probably pop a toast here
-					// loading={bookmarkLoading}
-					// color={bookmarked ? "green.400" : "gray.400"}
-					color={"gray.400"}
+					loading={bookmarkLoading}
+					color={bookmarked ? "green.400" : "gray.400"}
 				>
-					{/* {bookmarked ? (
-            <LuBookmarkCheck style={{ width: "32px", height: "32px" }} />
-          ) : (
-            <LuBookmark style={{ width: "32px", height: "32px" }} />
-          )} */}
-					<LuBookmark style={{ width: "32px", height: "32px" }} />
+					{bookmarked ? (
+						<LuBookmarkCheck style={{ width: "32px", height: "32px" }} />
+					) : (
+						<LuBookmark style={{ width: "32px", height: "32px" }} />
+					)}
 				</IconButton>
 				<Heading as="h1" size="4xl">
 					{thread?.title}
