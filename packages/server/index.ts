@@ -1,6 +1,5 @@
 import { toNodeHandler } from "better-auth/node";
 import express from "express";
-import pinoHttp from "pino-http";
 import { auth } from "./auth";
 import apiRouter from "./routes/api";
 import "dotenv/config";
@@ -14,15 +13,15 @@ await initializeDatabase();
 const app = express();
 const port = Number(process.env.PORT);
 
-const logger = pinoHttp({
-	transport: {
-		target: "pino-pretty",
-		options: { colorize: true },
-	},
-	redact: ["headers.cookie"],
-});
+// const logger = pinoHttp({
+// 	transport: {
+// 		target: "pino-pretty",
+// 		options: { colorize: true },
+// 	},
+// 	redact: ["headers.cookie"],
+// });
 
-app.use(logger);
+// app.use(logger);
 
 const corsOptions = {
 	origin: [process.env.CLIENT_URL],
