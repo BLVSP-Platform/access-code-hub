@@ -63,7 +63,7 @@ function BookmarkedThreadsPage() {
 							bookmarkedThreads.map((t) => (
 								<Table.Row key={t._id} bg="tertiary">
 									<Table.Cell>
-										<Link href={`/thread/${t._id}`}>{t.title}</Link>
+										<Link href={`/community/threads/${t._id}`}>{t.title}</Link>
 									</Table.Cell>
 									<Table.Cell>{t.topic}</Table.Cell>
 									<Table.Cell>{t.tags}</Table.Cell>
