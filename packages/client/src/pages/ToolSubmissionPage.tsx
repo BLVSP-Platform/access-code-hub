@@ -15,6 +15,7 @@ import {
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FormDialog } from "@/components/FormDialog";
+import { api } from "@/lib/utils";
 
 interface ToolSubmissionData {
 	email: string;
@@ -102,7 +103,7 @@ function ToolSubmissionPage() {
 		});
 
 		try {
-			const res = await fetch("/api/tools", {
+			const res = await fetch(api("/api/tools"), {
 				method: "POST",
 				body: formData,
 				credentials: "include",

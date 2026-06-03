@@ -1,6 +1,6 @@
 import { Box, Heading, Link, Stack, Table, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { decodeEntities } from "@/lib/utils";
+import { api, decodeEntities } from "@/lib/utils";
 import type { Tool } from "./ToolIndexPage";
 
 type Bookmark = {
@@ -14,7 +14,9 @@ function BookmarkedToolsPage() {
 	useEffect(() => {
 		const fetchTools = async () => {
 			try {
-				const res = await fetch("/api/tools/bookmarks/me");
+				const res = await fetch(api("/api/tools/bookmarks/me"), {
+					credentials: "include",
+				});
 				const data: Bookmark[] = await res.json();
 				const tools = data.map((b) => b.toolId);
 				setBookmarkedTools(tools);

@@ -2,7 +2,7 @@ import { Button, Field, Flex, Heading, Input, Stack, Textarea } from "@chakra-ui
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FormDialog } from "@/components/FormDialog";
-import { formDataCast } from "@/lib/utils";
+import { api, formDataCast } from "@/lib/utils";
 
 interface VolunteerData {
 	shortAnswer: string;
@@ -23,7 +23,7 @@ function VolunteerPage() {
 	const onSubmit = handleSubmit(async (data) => {
 		const formData = formDataCast(data);
 		try {
-			const res = await fetch("/api/volunteer", {
+			const res = await fetch(api("/api/volunteer"), {
 				method: "POST",
 				body: formData,
 				credentials: "include",

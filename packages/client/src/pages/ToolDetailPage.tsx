@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { LuBookmark, LuBookmarkCheck } from "react-icons/lu";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
-import { decodeEntities } from "@/lib/utils";
+import { api, decodeEntities } from "@/lib/utils";
 import type { Tool } from "./ToolIndexPage";
 
 type Review = {
@@ -69,7 +69,7 @@ export default function ToolDetailPage() {
 		if (!slug) return;
 		const fetchTool = async () => {
 			try {
-				const res = await fetch(`/api/tools/${slug}`);
+				const res = await fetch(api(`/api/tools/${slug}`));
 				const data = await res.json();
 				setTool(data);
 			} catch (err) {
@@ -87,7 +87,7 @@ export default function ToolDetailPage() {
 
 		const fetchReviews = async () => {
 			try {
-				const res = await fetch(`/api/tools/${tool._id}/reviews`);
+				const res = await fetch(api(`/api/tools/${tool._id}/reviews`));
 				const data: Review[] = await res.json();
 				setReviews(data);
 
@@ -112,10 +112,10 @@ export default function ToolDetailPage() {
 		setBookmarkLoading(true);
 		try {
 			if (bookmarked) {
-				await fetch(`/api/tools/${tool._id}/bookmark`, { method: "DELETE" });
+				await fetch(api(`/api/tools/${tool._id}/bookmark`), { method: "DELETE" });
 				setBookmarked(false);
 			} else {
-				await fetch(`/api/tools/${tool._id}/bookmark`, { method: "POST", credentials: "include" });
+				await fetch(api(`/api/tools/${tool._id}/bookmark`), { method: "POST", credentials: "include" });
 				setBookmarked(true);
 			}
 		} catch (err) {
@@ -129,7 +129,7 @@ export default function ToolDetailPage() {
 		if (!tool?._id || draftRating === 0 || reviewLoading) return;
 		setReviewLoading(true);
 		try {
-			const res = await fetch(`/api/tools/${tool._id}/reviews`, {
+			const res = await fetch(api(`/api/tools/${tool._id}/reviews`), {
 				method: "PUT",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ rating: draftRating, body: draftBody }),
@@ -152,7 +152,7 @@ export default function ToolDetailPage() {
 		if (!tool?._id || !myReview || reviewLoading) return;
 		setReviewLoading(true);
 		try {
-			await fetch(`/api/tools/${tool._id}/reviews`, { method: "DELETE" });
+			await fetch(api(`/api/tools/${tool._id}/reviews`), { method: "DELETE" });
 			setReviews((prev) => prev.filter((r) => r._id !== myReview._id));
 			setMyReview(null);
 			setDraftRating(0);
