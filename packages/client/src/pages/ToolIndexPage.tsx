@@ -187,6 +187,11 @@ function ToolIndexPage() {
 										count={5}
 										value={tool.avgRating ?? 0}
 										size="sm"
+										aria-label={
+											tool.avgRating != null
+												? `Rated ${tool.avgRating} out of 5 stars`
+												: "No rating available"
+										}
 										css={{
 											"--chakra-colors-bg-emphasized": "#b1b1b1",
 											_dark: {
@@ -194,8 +199,8 @@ function ToolIndexPage() {
 											},
 										}}
 									>
-										<RatingGroup.HiddenInput />
-										<RatingGroup.Control />
+										<RatingGroup.HiddenInput aria-hidden="true" />
+										<RatingGroup.Control aria-hidden="true" />
 									</RatingGroup.Root>
 								</Table.Cell>
 							</Table.Row>
