@@ -10,7 +10,9 @@ function BookmarkedThreadsPage() {
 	useEffect(() => {
 		const fetchBookmarkedThreads = async () => {
 			try {
-				const res = await fetch(api("/api/thread/bookmarks/me"));
+				const res = await fetch(api("/api/thread/bookmarks/me"), {
+					credentials: "include",
+				});
 				if (!res.ok) throw new Error(res.statusText);
 				const data: Thread[] = await res.json();
 				setBookmarkedThreads(data);

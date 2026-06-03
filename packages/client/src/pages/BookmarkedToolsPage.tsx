@@ -14,7 +14,9 @@ function BookmarkedToolsPage() {
 	useEffect(() => {
 		const fetchTools = async () => {
 			try {
-				const res = await fetch(api("/api/tools/bookmarks/me"));
+				const res = await fetch(api("/api/tools/bookmarks/me"), {
+					credentials: "include",
+				});
 				const data: Bookmark[] = await res.json();
 				const tools = data.map((b) => b.toolId);
 				setBookmarkedTools(tools);
