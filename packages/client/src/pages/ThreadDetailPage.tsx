@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { LuBookmark, LuBookmarkCheck, LuTrash2 } from "react-icons/lu";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import { api } from "@/lib/utils";
 
 export interface Thread {
 	_id: string;
@@ -43,7 +44,7 @@ export default function ThreadDetailPage() {
 	useEffect(() => {
 		const fetchThread = async () => {
 			try {
-				const res = await fetch(`/api/thread/${id}`);
+				const res = await fetch(api(`/api/thread/${id}`));
 				if (!res.ok) throw new Error(res.statusText);
 				const data: Thread = await res.json();
 				setThread(data);
@@ -66,7 +67,7 @@ export default function ThreadDetailPage() {
 		if (!id) return;
 		const fetchComments = async () => {
 			try {
-				const res = await fetch(`/api/thread/${id}/comments`);
+				const res = await fetch(api(`/api/thread/${id}/comments`));
 				if (!res.ok) throw new Error(res.statusText);
 				setComments(await res.json());
 			} catch (err) {
@@ -85,12 +86,12 @@ export default function ThreadDetailPage() {
 
 		try {
 			if (bookmarked) {
-				await fetch(`/api/thread/${thread._id}/bookmark`, {
+				await fetch(api(`/api/thread/${thread._id}/bookmark`), {
 					method: "DELETE",
 				});
 				setBookmarked(false);
 			} else {
-				await fetch(`/api/thread/${thread._id}/bookmark`, {
+				await fetch(api(`/api/thread/${thread._id}/bookmark`), {
 					method: "POST",
 					credentials: "include",
 				});
@@ -112,7 +113,7 @@ export default function ThreadDetailPage() {
 			const fd = new FormData();
 			fd.append("content", content);
 
-			const res = await fetch(`/api/thread/${id}/comments`, {
+			const res = await fetch(api(`/api/thread/${id}/comments`), {
 				method: "POST",
 				body: fd,
 				credentials: "include",
@@ -131,7 +132,7 @@ export default function ThreadDetailPage() {
 
 	const deleteComment = async (commentId: string) => {
 		try {
-			const res = await fetch(`/api/thread/${id}/comments/${commentId}`, {
+			const res = await fetch(api(`/api/thread/${id}/comments/${commentId}`), {
 				method: "DELETE",
 			});
 			if (!res.ok) throw new Error(res.statusText);

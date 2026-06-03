@@ -18,7 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import { InfoTip } from "@/components/ui/toggle-tip";
-import { formatDate } from "@/lib/utils";
+import { api, formatDate } from "@/lib/utils";
 import type { Thread } from "./ThreadDetailPage";
 
 // @todo: NEEDS ACCESSIBILITY
@@ -33,7 +33,7 @@ function ThreadsPage() {
 	useEffect(() => {
 		const fetchTools = async () => {
 			try {
-				const res = await fetch("/api/thread");
+				const res = await fetch(api("/api/thread"));
 				const data = await res.json();
 
 				setThreads(data);
@@ -49,7 +49,7 @@ function ThreadsPage() {
 	}, []);
 
 	useEffect(() => {
-		fetch("/api/thread/last-updated")
+		fetch(api("/api/thread/last-updated"))
 			.then((res) => res.json())
 			.then((data) =>
 				setLastUpdated(

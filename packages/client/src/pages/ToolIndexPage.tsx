@@ -18,6 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import { InfoTip } from "@/components/ui/toggle-tip";
+import { api } from "@/lib/utils";
 
 // @todo: use backend type?
 export interface Tool {
@@ -48,7 +49,7 @@ function ToolIndexPage() {
 	useEffect(() => {
 		const fetchTools = async () => {
 			try {
-				const res = await fetch("/api/tools");
+				const res = await fetch(api("/api/tools"));
 				const data = await res.json();
 
 				setTools(data);
@@ -64,7 +65,7 @@ function ToolIndexPage() {
 	}, []);
 
 	useEffect(() => {
-		fetch("/api/tools/last-updated")
+		fetch(api("/api/tools/last-updated"))
 			.then((res) => res.json())
 			.then((data) =>
 				setLastUpdated(

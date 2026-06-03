@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { FormDialog } from "@/components/FormDialog";
 import { InputTagsCombo } from "@/components/ui/input-tags-combo";
+import { api } from "@/lib/utils";
 
 interface MentorshipData {
 	mentorshipRole: "Mentor" | "Mentee";
@@ -29,7 +30,7 @@ function MentorshipPage() {
 
 	const onSubmit = handleSubmit(async (data) => {
 		try {
-			const res = await fetch("/api/mentorship", {
+			const res = await fetch(api("/api/mentorship"), {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
