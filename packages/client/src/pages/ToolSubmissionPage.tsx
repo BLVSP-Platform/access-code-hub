@@ -87,11 +87,8 @@ function ToolSubmissionPage() {
 		register,
 		handleSubmit,
 		setValue,
-		watch,
 		formState: { errors },
 	} = useForm<ToolSubmissionData>();
-
-	const isCreator = watch("isCreator");
 
 	const onSubmit = handleSubmit(async (data) => {
 		const formData = new FormData();
