@@ -2,6 +2,7 @@ import { toNodeHandler } from "better-auth/node";
 import express from "express";
 import { auth } from "./auth";
 import apiRouter from "./routes/api";
+import adminRouter from "./routes/api/admin/tools";
 import "dotenv/config";
 import cors from "cors";
 import { initializeDatabase } from "./db";
@@ -35,6 +36,7 @@ app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.json({ limit: "4mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", apiRouter);
+app.use("/api/admin", adminRouter);
 
 app.listen(port, "0.0.0.0", () => {
 	console.log(`ACH Server listening on port ${port}`);
