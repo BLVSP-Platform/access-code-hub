@@ -3,10 +3,12 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
-import { RequireAuth } from "./components/AuthProvider.tsx";
+import { RequireAdmin, RequireAuth } from "./components/AuthProvider.tsx";
+import AdminPage from "./pages/AdminPage.tsx";
 import BookmarkedThreadsPage from "./pages/BookmarkedThreadsPage.tsx";
 import BookmarkedToolsPage from "./pages/BookmarkedToolsPage.tsx";
 import CommunityNavPage from "./pages/CommunityNavPage.tsx";
+import ForbiddenPage from "./pages/ForbiddenPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import { LoginPage } from "./pages/LoginPage.tsx";
 import MentorshipPage from "./pages/MentorshipPage.tsx";
@@ -40,6 +42,10 @@ const router = createBrowserRouter([
 			{
 				path: "login",
 				element: <LoginPage />,
+			},
+			{
+				path: "forbidden",
+				element: <ForbiddenPage />,
 			},
 			{
 				element: (
@@ -107,6 +113,14 @@ const router = createBrowserRouter([
 						element: <ProfilePage />,
 					},
 				],
+			},
+			{
+				path: "admin",
+				element: (
+					<RequireAdmin>
+						<AdminPage />
+					</RequireAdmin>
+				),
 			},
 		],
 	},

@@ -1,5 +1,6 @@
-import { inferAdditionalFields } from "better-auth/client/plugins";
+import { adminClient, inferAdditionalFields } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
+import { ac, admin as adminRole, moderator, user } from "./permissions";
 
 export const { signIn, signUp, signOut, useSession, updateUser } = createAuthClient({
 	baseURL: import.meta.env.VITE_SERVER_URL,
@@ -7,6 +8,10 @@ export const { signIn, signUp, signOut, useSession, updateUser } = createAuthCli
 		credentials: "include",
 	},
 	plugins: [
+		adminClient({
+			ac,
+			roles: { admin: adminRole, moderator, user },
+		}),
 		inferAdditionalFields({
 			user: {
 				about: {
