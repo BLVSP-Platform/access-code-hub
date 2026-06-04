@@ -4,6 +4,7 @@ import "./index.css";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
 import { RequireAuth } from "./components/AuthProvider.tsx";
+import AdminPage from "./pages/AdminPage.tsx";
 import BookmarkedThreadsPage from "./pages/BookmarkedThreadsPage.tsx";
 import BookmarkedToolsPage from "./pages/BookmarkedToolsPage.tsx";
 import CommunityNavPage from "./pages/CommunityNavPage.tsx";
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
 					{
 						path: "profile",
 						element: <ProfilePage />,
+					},
+					{
+						path: "admin",
+						element: <AdminPage />,
 					},
 				],
 			},
