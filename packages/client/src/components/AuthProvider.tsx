@@ -14,3 +14,16 @@ export function RequireAuth({ children }: { children?: React.ReactNode }) {
 
 	return <>{children}</>;
 }
+
+export function RequireAdmin({ children }: { children: React.ReactNode }) {
+	const { isAuthenticated, isAdminOrModerator, isLoading } = useAuth();
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
+	if (!isAuthenticated) return <Navigate to="/login" replace />;
+
+	if (!isAdminOrModerator) return <Navigate to="/forbidden" replace />;
+
+	return <>{children}</>;
+}
