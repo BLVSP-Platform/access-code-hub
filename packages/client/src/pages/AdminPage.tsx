@@ -1,7 +1,7 @@
-import { Badge, Button, Dialog, Heading, HStack, Link, Portal, Stack, Table, Tabs, Text } from "@chakra-ui/react";
+import { Badge, Box, Button, Dialog, Heading, HStack, Link, Portal, Stack, Table, Tabs, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { LuCheck, LuX } from "react-icons/lu";
-import { api } from "@/lib/utils";
+import { api, decodeEntities } from "@/lib/utils";
 
 interface PendingTool {
 	_id: string;
@@ -11,6 +11,11 @@ interface PendingTool {
 	link: string;
 	email: string;
 	compatibility?: string;
+	videos?: string;
+	guidelines?: string;
+	limits?: string;
+	comments?: string;
+	isCreator?: boolean;
 	createdAt: string;
 }
 
@@ -22,13 +27,12 @@ function ToolModerationTab() {
 	const [selectedTool, setSelectedTool] = useState<PendingTool | null>(null);
 	const [action, setAction] = useState<ActionType | null>(null);
 	const [submitting, setSubmitting] = useState(false);
+	const [detailTool, setDetailTool] = useState<PendingTool | null>(null);
 
 	useEffect(() => {
 		const fetchPending = async () => {
 			try {
-				const res = await fetch(api("/api/admin/tools/pending"), {
-					credentials: "include",
-				});
+				const res = await fetch(api("/api/admin/tools/pending"), { credentials: "include" });
 				const data = await res.json();
 				setTools(data);
 			} catch (err) {
@@ -37,7 +41,6 @@ function ToolModerationTab() {
 				setLoading(false);
 			}
 		};
-
 		fetchPending();
 	}, []);
 
@@ -78,31 +81,19 @@ function ToolModerationTab() {
 					<Table.Row bg="secondary">
 						<Table.ColumnHeader>Name</Table.ColumnHeader>
 						<Table.ColumnHeader>Submitted By</Table.ColumnHeader>
-						<Table.ColumnHeader>Compatibility</Table.ColumnHeader>
-						<Table.ColumnHeader>Description</Table.ColumnHeader>
-						<Table.ColumnHeader>Submitted</Table.ColumnHeader>
+						<Table.ColumnHeader>Details</Table.ColumnHeader>
 						<Table.ColumnHeader>Actions</Table.ColumnHeader>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					{tools.map((tool) => (
 						<Table.Row key={tool._id} bg="tertiary">
-							<Table.Cell>
-								<Link href={tool.link} target="_blank">
-									{tool.name}
-								</Link>
-							</Table.Cell>
+							<Table.Cell>{tool.name}</Table.Cell>
 							<Table.Cell>{tool.email}</Table.Cell>
-							<Table.Cell>{tool.compatibility ?? "—"}</Table.Cell>
-							<Table.Cell maxWidth="400px">
-								<Text lineClamp={2}>{tool.description}</Text>
-							</Table.Cell>
-							<Table.Cell whiteSpace="nowrap">
-								{new Date(tool.createdAt).toLocaleDateString("en-US", {
-									month: "short",
-									day: "numeric",
-									year: "numeric",
-								})}
+							<Table.Cell>
+								<Button variant="subtle" size="sm" onClick={() => setDetailTool(tool)}>
+									More Details
+								</Button>
 							</Table.Cell>
 							<Table.Cell>
 								<HStack gap={2}>
@@ -128,6 +119,80 @@ function ToolModerationTab() {
 					))}
 				</Table.Body>
 			</Table.Root>
+
+			<Dialog.Root
+				open={!!detailTool}
+				onOpenChange={({ open }) => {
+					if (!open) setDetailTool(null);
+				}}
+			>
+				<Portal>
+					<Dialog.Backdrop />
+					<Dialog.Positioner>
+						<Dialog.Content maxWidth="600px">
+							<Dialog.Header>
+								<Dialog.Title>{detailTool?.name}</Dialog.Title>
+							</Dialog.Header>
+							<Dialog.Body>
+								<Stack gap={4}>
+									<Box>
+										<Text fontWeight="bold" mb={1}>
+											Description
+										</Text>
+										<Text>{detailTool?.description}</Text>
+									</Box>
+									{[
+										{
+											label: "Link",
+											value: detailTool?.link ? decodeEntities(detailTool.link) : undefined,
+										},
+										{ label: "Submitted By", value: detailTool?.email },
+										{ label: "Compatibility", value: detailTool?.compatibility },
+										{ label: "Videos", value: detailTool?.videos },
+										{ label: "Guidelines", value: detailTool?.guidelines },
+										{ label: "Limits", value: detailTool?.limits },
+										{ label: "Comments", value: detailTool?.comments },
+										{ label: "Is Creator", value: detailTool?.isCreator ? "Yes" : "No" },
+										{
+											label: "Submitted",
+											value: detailTool
+												? new Date(detailTool.createdAt).toLocaleString("en-US", {
+														month: "long",
+														day: "numeric",
+														year: "numeric",
+														hour: "numeric",
+														minute: "2-digit",
+														hour12: true,
+													})
+												: undefined,
+										},
+									].map(({ label, value }) =>
+										value ? (
+											<Box key={label}>
+												<Text fontWeight="bold" mb={1}>
+													{label}
+												</Text>
+												{label === "Link" ? (
+													<Link href={value} target="_blank" color="blue.400">
+														{value}
+													</Link>
+												) : (
+													<Text>{value}</Text>
+												)}
+											</Box>
+										) : null,
+									)}
+								</Stack>
+							</Dialog.Body>
+							<Dialog.Footer>
+								<Button variant="ghost" onClick={() => setDetailTool(null)}>
+									Close
+								</Button>
+							</Dialog.Footer>
+						</Dialog.Content>
+					</Dialog.Positioner>
+				</Portal>
+			</Dialog.Root>
 
 			<Dialog.Root
 				open={!!selectedTool}
