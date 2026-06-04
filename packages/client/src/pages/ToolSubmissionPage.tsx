@@ -4,7 +4,6 @@ import {
 	Field,
 	Flex,
 	Heading,
-	HStack,
 	Input,
 	RadioGroup,
 	type RadioGroupValueChangeDetails,
@@ -28,7 +27,6 @@ interface ToolSubmissionData {
 	limits?: string;
 	comments?: string;
 	isCreator: "true" | "false";
-	creatorEmail?: string;
 }
 
 interface TextInputProps {
@@ -234,32 +232,11 @@ function ToolSubmissionPage() {
 									}}
 								>
 									<VStack align="start">
-										<HStack align="center" justifyContent="space-between">
-											<RadioGroup.Item value="true" w="1/2">
-												<RadioGroup.ItemHiddenInput />
-												<RadioGroup.ItemIndicator />
-												<RadioGroup.ItemText>Yes, provide email:</RadioGroup.ItemText>
-											</RadioGroup.Item>
-
-											<Input
-												type="email"
-												placeholder="Email"
-												w="1/2"
-												{...register("creatorEmail", {
-													required:
-														isCreator === "true"
-															? "Please enter your creator email."
-															: false,
-													pattern:
-														isCreator === "true"
-															? {
-																	value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-																	message: "Please enter a valid creator email.",
-																}
-															: undefined,
-												})}
-											/>
-										</HStack>
+										<RadioGroup.Item value="true" w="1/2">
+											<RadioGroup.ItemHiddenInput />
+											<RadioGroup.ItemIndicator />
+											<RadioGroup.ItemText>Yes</RadioGroup.ItemText>
+										</RadioGroup.Item>
 
 										<RadioGroup.Item value="false">
 											<RadioGroup.ItemHiddenInput />
@@ -268,10 +245,6 @@ function ToolSubmissionPage() {
 										</RadioGroup.Item>
 									</VStack>
 								</RadioGroup.Root>
-
-								<Field.ErrorText>
-									{errors.isCreator?.message || errors.creatorEmail?.message}
-								</Field.ErrorText>
 							</Field.Root>
 						</VStack>
 					</Box>
