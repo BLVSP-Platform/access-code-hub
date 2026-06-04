@@ -24,10 +24,15 @@ type ActionType = "approve" | "reject";
 function ToolModerationTab() {
 	const [tools, setTools] = useState<PendingTool[]>([]);
 	const [loading, setLoading] = useState(true);
-	const [selectedTool, setSelectedTool] = useState<PendingTool | null>(null);
-	const [action, setAction] = useState<ActionType | null>(null);
 	const [submitting, setSubmitting] = useState(false);
-	const [detailTool, setDetailTool] = useState<PendingTool | null>(null);
+
+	// Detail dialog
+	const [detailOpen, setDetailOpen] = useState(false);
+	const [detailContent, setDetailContent] = useState<PendingTool | null>(null);
+
+	// Confirm dialog
+	const [confirmOpen, setConfirmOpen] = useState(false);
+	const [confirmContent, setConfirmContent] = useState<{ tool: PendingTool; action: ActionType } | null>(null);
 
 	useEffect(() => {
 		const fetchPending = async () => {
@@ -44,26 +49,27 @@ function ToolModerationTab() {
 		fetchPending();
 	}, []);
 
-	const openDialog = (tool: PendingTool, actionType: ActionType) => {
-		setSelectedTool(tool);
-		setAction(actionType);
+	const openDetailDialog = (tool: PendingTool) => {
+		setDetailContent(tool);
+		setDetailOpen(true);
 	};
 
-	const closeDialog = () => {
-		setSelectedTool(null);
-		setAction(null);
+	const openConfirmDialog = (tool: PendingTool, action: ActionType) => {
+		setConfirmContent({ tool, action });
+		setConfirmOpen(true);
 	};
 
 	const handleConfirm = async () => {
-		if (!selectedTool || !action) return;
+		if (!confirmContent) return;
+		const { tool, action } = confirmContent;
 		setSubmitting(true);
 		try {
-			await fetch(api(`/api/admin/tools/${selectedTool.slug}/${action}`), {
+			await fetch(api(`/api/admin/tools/${tool.slug}/${action}`), {
 				method: "POST",
 				credentials: "include",
 			});
-			setTools((prev) => prev.filter((t) => t._id !== selectedTool._id));
-			closeDialog();
+			setTools((prev) => prev.filter((t) => t._id !== tool._id));
+			setConfirmOpen(false);
 		} catch (err) {
 			console.error("Failed to update tool:", err);
 		} finally {
@@ -91,7 +97,7 @@ function ToolModerationTab() {
 							<Table.Cell>{tool.name}</Table.Cell>
 							<Table.Cell>{tool.email}</Table.Cell>
 							<Table.Cell>
-								<Button variant="subtle" size="sm" onClick={() => setDetailTool(tool)}>
+								<Button variant="subtle" size="sm" onClick={() => openDetailDialog(tool)}>
 									More Details
 								</Button>
 							</Table.Cell>
@@ -101,7 +107,7 @@ function ToolModerationTab() {
 										size="sm"
 										bg="green.500"
 										variant="subtle"
-										onClick={() => openDialog(tool, "approve")}
+										onClick={() => openConfirmDialog(tool, "approve")}
 									>
 										<LuCheck /> Approve
 									</Button>
@@ -109,7 +115,7 @@ function ToolModerationTab() {
 										size="sm"
 										bg="red.400"
 										variant="subtle"
-										onClick={() => openDialog(tool, "reject")}
+										onClick={() => openConfirmDialog(tool, "reject")}
 									>
 										<LuX /> Reject
 									</Button>
@@ -120,18 +126,14 @@ function ToolModerationTab() {
 				</Table.Body>
 			</Table.Root>
 
-			<Dialog.Root
-				open={!!detailTool}
-				onOpenChange={({ open }) => {
-					if (!open) setDetailTool(null);
-				}}
-			>
+			{/* Detail dialog */}
+			<Dialog.Root open={detailOpen} onOpenChange={({ open }) => setDetailOpen(open)}>
 				<Portal>
 					<Dialog.Backdrop />
 					<Dialog.Positioner>
 						<Dialog.Content maxWidth="600px">
 							<Dialog.Header>
-								<Dialog.Title>{detailTool?.name}</Dialog.Title>
+								<Dialog.Title>{detailContent?.name}</Dialog.Title>
 							</Dialog.Header>
 							<Dialog.Body>
 								<Stack gap={4}>
@@ -139,24 +141,24 @@ function ToolModerationTab() {
 										<Text fontWeight="bold" mb={1}>
 											Description
 										</Text>
-										<Text>{detailTool?.description}</Text>
+										<Text>{detailContent?.description}</Text>
 									</Box>
 									{[
 										{
 											label: "Link",
-											value: detailTool?.link ? decodeEntities(detailTool.link) : undefined,
+											value: detailContent?.link ? decodeEntities(detailContent.link) : undefined,
 										},
-										{ label: "Submitted By", value: detailTool?.email },
-										{ label: "Compatibility", value: detailTool?.compatibility },
-										{ label: "Videos", value: detailTool?.videos },
-										{ label: "Guidelines", value: detailTool?.guidelines },
-										{ label: "Limits", value: detailTool?.limits },
-										{ label: "Comments", value: detailTool?.comments },
-										{ label: "Is Creator", value: detailTool?.isCreator ? "Yes" : "No" },
+										{ label: "Submitted By", value: detailContent?.email },
+										{ label: "Compatibility", value: detailContent?.compatibility },
+										{ label: "Videos", value: detailContent?.videos },
+										{ label: "Guidelines", value: detailContent?.guidelines },
+										{ label: "Limits", value: detailContent?.limits },
+										{ label: "Comments", value: detailContent?.comments },
+										{ label: "Is Creator", value: detailContent?.isCreator ? "Yes" : "No" },
 										{
 											label: "Submitted",
-											value: detailTool
-												? new Date(detailTool.createdAt).toLocaleString("en-US", {
+											value: detailContent
+												? new Date(detailContent.createdAt).toLocaleString("en-US", {
 														month: "long",
 														day: "numeric",
 														year: "numeric",
@@ -185,7 +187,7 @@ function ToolModerationTab() {
 								</Stack>
 							</Dialog.Body>
 							<Dialog.Footer>
-								<Button variant="ghost" onClick={() => setDetailTool(null)}>
+								<Button variant="ghost" onClick={() => setDetailOpen(false)}>
 									Close
 								</Button>
 							</Dialog.Footer>
@@ -194,38 +196,38 @@ function ToolModerationTab() {
 				</Portal>
 			</Dialog.Root>
 
-			<Dialog.Root
-				open={!!selectedTool}
-				onOpenChange={({ open }) => {
-					if (!open) closeDialog();
-				}}
-			>
+			{/* Confirm dialog */}
+			<Dialog.Root open={confirmOpen} onOpenChange={({ open }) => setConfirmOpen(open)}>
 				<Portal>
 					<Dialog.Backdrop />
 					<Dialog.Positioner>
 						<Dialog.Content>
 							<Dialog.Header>
-								<Dialog.Title>{action === "approve" ? "Approve Tool" : "Reject Tool"}</Dialog.Title>
+								<Dialog.Title>
+									{confirmContent?.action === "approve" ? "Approve Tool" : "Reject Tool"}
+								</Dialog.Title>
 							</Dialog.Header>
 							<Dialog.Body>
 								<Text>
 									Are you sure you want to{" "}
-									<Badge colorScheme={action === "approve" ? "green" : "red"}>{action}</Badge>{" "}
-									<strong>{selectedTool?.name}</strong>?
-									{action === "reject" &&
+									<Badge color={confirmContent?.action === "approve" ? "green" : "red"}>
+										{confirmContent?.action}
+									</Badge>{" "}
+									<strong>{confirmContent?.tool.name}</strong>?
+									{confirmContent?.action === "reject" &&
 										" This will mark it as rejected and hide it from the public index."}
 								</Text>
 							</Dialog.Body>
 							<Dialog.Footer>
-								<Button variant="ghost" onClick={closeDialog} disabled={submitting}>
+								<Button variant="ghost" onClick={() => setConfirmOpen(false)} disabled={submitting}>
 									Cancel
 								</Button>
 								<Button
-									colorScheme={action === "approve" ? "green" : "red"}
+									bg={confirmContent?.action === "approve" ? "green.500" : "red.400"}
 									onClick={handleConfirm}
 									loading={submitting}
 								>
-									Confirm {action === "approve" ? "Approval" : "Rejection"}
+									Confirm {confirmContent?.action === "approve" ? "Approval" : "Rejection"}
 								</Button>
 							</Dialog.Footer>
 						</Dialog.Content>
