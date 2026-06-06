@@ -28,6 +28,17 @@ export interface Comment {
 	createdAt: string;
 }
 
+export interface Reply {
+	_id: string;
+	threadId: string;
+	parentId: string;
+	userId: string;
+	username: string;
+	content: string;
+	createdAt: string;
+	replies: Reply[];
+}
+
 export default function ThreadDetailPage() {
 	const [thread, setThread] = useState<Thread>();
 	const [loading, setLoading] = useState(true);
