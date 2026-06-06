@@ -6,7 +6,6 @@ import multer from "multer";
 import { auth } from "../../auth";
 import {
 	addThreadBookmark,
-	CommentModel,
 	deleteComment,
 	getCommentsForThread,
 	getThreadBookmarksForUser,

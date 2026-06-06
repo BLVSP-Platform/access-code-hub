@@ -61,7 +61,8 @@ export const CommentModel = mongoose.model("thread_comment", commentSchema);
 
 export type CommentParameters = Omit<InferSchemaType<typeof commentSchema>, "createdAt" | "updatedAt">;
 
-export const getCommentsForThread = async (threadId: string) => CommentModel.find({ threadId }).sort({ createdAt: -1 });
+export const getCommentsForThread = async (threadId: string) =>
+	CommentModel.find({ threadId: new mongoose.Types.ObjectId(threadId) }).sort({ createdAt: -1 });
 
 export const insertComment = async (params: CommentParameters) => CommentModel.create(params);
 
