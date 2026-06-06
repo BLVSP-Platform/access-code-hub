@@ -333,7 +333,7 @@ export default function ThreadDetailPage() {
 									>
 										{comment.replies.map((reply) => (
 											<Box key={reply._id}>
-												<HStack justify="space-between" mb={1}>
+												<HStack justify="space-between">
 													<Text fontWeight="bold" fontSize="sm">
 														{reply.username}
 													</Text>
@@ -354,6 +354,9 @@ export default function ThreadDetailPage() {
 														)}
 													</HStack>
 												</HStack>
+												<Text fontSize="xs" color="gray.500" mt={-2} mb={2}>
+													Replying to {comment.username}
+												</Text>
 												<Text fontSize="sm">{reply.content}</Text>
 											</Box>
 										))}
