@@ -1,4 +1,18 @@
-import { Badge, Box, Button, Dialog, Heading, HStack, Link, Portal, Stack, Table, Tabs, Text } from "@chakra-ui/react";
+import {
+	Badge,
+	Box,
+	Button,
+	Dialog,
+	Heading,
+	HStack,
+	Link,
+	Portal,
+	Stack,
+	Table,
+	Tabs,
+	Tag,
+	Text,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { LuCheck, LuX } from "react-icons/lu";
 import { api, decodeEntities } from "@/lib/utils";
@@ -17,6 +31,14 @@ interface PendingTool {
 	comments?: string;
 	isCreator?: boolean;
 	createdAt: string;
+}
+
+interface MentorshipSubmission {
+	_id: string;
+	userId: string;
+	email: string;
+	mentorshipRole: string;
+	tags: string[];
 }
 
 type ActionType = "approve" | "reject";
@@ -238,6 +260,126 @@ function ToolModerationTab() {
 	);
 }
 
+function MentorshipTab() {
+	const [submissions, setSubmissions] = useState<MentorshipSubmission[]>([]);
+	const [loading, setLoading] = useState(true);
+
+	// Detail dialog
+	const [detailOpen, setDetailOpen] = useState(false);
+	const [detailContent, setDetailContent] = useState<MentorshipSubmission | null>(null);
+
+	useEffect(() => {
+		const fetchSubmissions = async () => {
+			try {
+				const res = await fetch(api("/api/admin/mentorship"), { credentials: "include" });
+				const data = await res.json();
+				setSubmissions(data);
+			} catch (err) {
+				console.error("Failed to fetch mentorship submissions:", err);
+			} finally {
+				setLoading(false);
+			}
+		};
+		fetchSubmissions();
+	}, []);
+
+	const openDetailDialog = (submission: MentorshipSubmission) => {
+		setDetailContent(submission);
+		setDetailOpen(true);
+	};
+
+	if (loading) return <Text>Loading mentorship submissions...</Text>;
+	if (submissions.length === 0) return <Text color="fg.muted">No mentorship submissions to review.</Text>;
+
+	return (
+		<>
+			<Table.Root size="lg" variant="outline" showColumnBorder css={{ "--chakra-colors-border": "#5B5B5B" }}>
+				<Table.Header>
+					<Table.Row bg="secondary">
+						<Table.ColumnHeader>Email</Table.ColumnHeader>
+						<Table.ColumnHeader>Role</Table.ColumnHeader>
+						<Table.ColumnHeader>Tags</Table.ColumnHeader>
+						<Table.ColumnHeader>Details</Table.ColumnHeader>
+					</Table.Row>
+				</Table.Header>
+				<Table.Body>
+					{submissions.map((submission) => (
+						<Table.Row key={submission._id} bg="tertiary">
+							<Table.Cell>{submission.email}</Table.Cell>
+							<Table.Cell>{submission.mentorshipRole}</Table.Cell>
+							<Table.Cell>
+								<HStack gap={1} flexWrap="wrap">
+									{submission.tags.map((tag) => (
+										<Tag.Root key={tag} size="sm" variant="subtle">
+											<Tag.Label>{tag}</Tag.Label>
+										</Tag.Root>
+									))}
+								</HStack>
+							</Table.Cell>
+							<Table.Cell>
+								<Button variant="subtle" size="sm" onClick={() => openDetailDialog(submission)}>
+									More Details
+								</Button>
+							</Table.Cell>
+						</Table.Row>
+					))}
+				</Table.Body>
+			</Table.Root>
+
+			{/* Detail dialog */}
+			<Dialog.Root open={detailOpen} onOpenChange={({ open }) => setDetailOpen(open)}>
+				<Portal>
+					<Dialog.Backdrop />
+					<Dialog.Positioner>
+						<Dialog.Content maxWidth="500px">
+							<Dialog.Header>
+								<Dialog.Title>Mentorship Submission</Dialog.Title>
+							</Dialog.Header>
+							<Dialog.Body>
+								<Stack gap={4}>
+									{[
+										{ label: "Email", value: detailContent?.email },
+										{ label: "User ID", value: detailContent?.userId },
+										{ label: "Role", value: detailContent?.mentorshipRole },
+									].map(({ label, value }) =>
+										value ? (
+											<Box key={label}>
+												<Text fontWeight="bold" mb={1}>
+													{label}
+												</Text>
+												<Text>{value}</Text>
+											</Box>
+										) : null,
+									)}
+									{detailContent?.tags && detailContent.tags.length > 0 && (
+										<Box>
+											<Text fontWeight="bold" mb={2}>
+												Tags
+											</Text>
+											<HStack gap={2} flexWrap="wrap">
+												{detailContent.tags.map((tag) => (
+													<Tag.Root key={tag} size="md" variant="subtle">
+														<Tag.Label>{tag}</Tag.Label>
+													</Tag.Root>
+												))}
+											</HStack>
+										</Box>
+									)}
+								</Stack>
+							</Dialog.Body>
+							<Dialog.Footer>
+								<Button variant="ghost" onClick={() => setDetailOpen(false)}>
+									Close
+								</Button>
+							</Dialog.Footer>
+						</Dialog.Content>
+					</Dialog.Positioner>
+				</Portal>
+			</Dialog.Root>
+		</>
+	);
+}
+
 function AdminPage() {
 	return (
 		<Stack gap={6}>
@@ -245,9 +387,13 @@ function AdminPage() {
 			<Tabs.Root defaultValue="tools">
 				<Tabs.List>
 					<Tabs.Trigger value="tools">Tool Approvals</Tabs.Trigger>
+					<Tabs.Trigger value="mentorship">Mentorship Submissions</Tabs.Trigger>
 				</Tabs.List>
 				<Tabs.Content value="tools" pt={4}>
 					<ToolModerationTab />
+				</Tabs.Content>
+				<Tabs.Content value="mentorship" pt={4}>
+					<MentorshipTab />
 				</Tabs.Content>
 			</Tabs.Root>
 		</Stack>
