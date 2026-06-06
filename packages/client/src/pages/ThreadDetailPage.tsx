@@ -44,7 +44,9 @@ export default function ThreadDetailPage() {
 	useEffect(() => {
 		const fetchThread = async () => {
 			try {
-				const res = await fetch(api(`/api/thread/${id}`));
+				const res = await fetch(api(`/api/thread/${id}`), {
+					credentials: "include",
+				});
 				if (!res.ok) throw new Error(res.statusText);
 				const data: Thread = await res.json();
 				setThread(data);
@@ -88,6 +90,7 @@ export default function ThreadDetailPage() {
 			if (bookmarked) {
 				await fetch(api(`/api/thread/${thread._id}/bookmark`), {
 					method: "DELETE",
+					credentials: "include",
 				});
 				setBookmarked(false);
 			} else {
@@ -134,6 +137,7 @@ export default function ThreadDetailPage() {
 		try {
 			const res = await fetch(api(`/api/thread/${id}/comments/${commentId}`), {
 				method: "DELETE",
+				credentials: "include",
 			});
 			if (!res.ok) throw new Error(res.statusText);
 			setComments((prev) => prev.filter((c) => c._id !== commentId));
