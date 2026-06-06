@@ -6,6 +6,7 @@ import multer from "multer";
 import { auth } from "../../auth";
 import {
 	addThreadBookmark,
+	CommentModel,
 	deleteComment,
 	getCommentsForThread,
 	getThreadBookmarksForUser,
@@ -168,6 +169,41 @@ router.post(
 				content,
 			});
 			return res.status(201).json(comment);
+		} catch (err) {
+			return res.status(500).send(err);
+		}
+	},
+);
+
+router.post(
+	"/:threadId/comments/:commentId/replies",
+	formHandler.none(),
+	body("content").trim().isString().notEmpty().escape(),
+	async (req, res) => {
+		try {
+			const session = await auth.api.getSession({ headers: req.headers });
+			if (!session) return res.status(401).send("Unauthorized");
+
+			const { threadId, commentId } = req.params as { threadId: string; commentId: string };
+			const content = req.body.content as string | undefined;
+			if (!content) return res.status(400).json({ message: "Content is required" });
+
+			// ensure parent exists and is a top-level comment
+			const parent = await CommentModel.findOne({
+				_id: new mongoose.Types.ObjectId(commentId),
+				parentId: null,
+			});
+			if (!parent) return res.status(404).json({ message: "Parent comment not found" });
+
+			const reply = await insertComment({
+				threadId: new mongoose.Types.ObjectId(threadId),
+				parentId: new mongoose.Types.ObjectId(commentId),
+				userId: session.user.id,
+				username: session.user.name,
+				content,
+			});
+
+			return res.status(201).json(reply);
 		} catch (err) {
 			return res.status(500).send(err);
 		}
