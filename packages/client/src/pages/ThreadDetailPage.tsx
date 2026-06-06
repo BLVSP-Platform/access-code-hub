@@ -9,6 +9,7 @@ export interface Thread {
 	_id: string;
 	title: string;
 	userId: string;
+	username: string;
 	topic: string;
 	content: string;
 	tags: string;
@@ -173,6 +174,13 @@ export default function ThreadDetailPage() {
 			</HStack>
 
 			<VStack mt={4} gap={6} align="start">
+				<Text fontSize="sm" color="gray.500">
+					Posted by{" "}
+					<Text as="span" fontWeight="semibold">
+						{thread?.username ?? "Unknown"}
+					</Text>
+				</Text>
+
 				<Text>{thread?.content ?? "N/A"}</Text>
 
 				<Text>

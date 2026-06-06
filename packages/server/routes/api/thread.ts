@@ -26,11 +26,14 @@ router.post(
 	body("content").trim().isString().escape(),
 	body("tags").trim().isString().escape(),
 	async (req, res) => {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
 		try {
 			const session = await auth.api.getSession({ headers: req.headers });
 			if (!session) return res.status(401).send("Unauthorized");
 
-			const result = await insertThread({ ...req.body, userId: session.user.id });
+			const result = await insertThread({ ...req.body, userId: session.user.id, username: session.user.name });
 			if (!result) return res.status(502);
 			return res.status(201).json({ id: result });
 		} catch (err) {
