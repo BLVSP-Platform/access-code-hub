@@ -3,6 +3,7 @@ import mongoose, { type InferSchemaType } from "mongoose";
 export const threadFormSchema = new mongoose.Schema(
 	{
 		userId: { type: String, required: true },
+		username: { type: String, required: true },
 		title: { type: String, required: true },
 		topic: { type: String, required: true },
 		content: { type: String, required: true },
@@ -48,7 +49,7 @@ export const getThreadBookmarksForUser = async (userId: string) => {
 
 export const commentSchema = new mongoose.Schema(
 	{
-		threadId: { type: String, required: true, index: true },
+		threadId: { type: mongoose.Schema.Types.ObjectId, required: true, index: true, ref: "thread" },
 		userId: { type: String, required: true },
 		username: { type: String, required: true },
 		content: { type: String, required: true },
@@ -60,7 +61,8 @@ export const CommentModel = mongoose.model("thread_comment", commentSchema);
 
 export type CommentParameters = Omit<InferSchemaType<typeof commentSchema>, "createdAt" | "updatedAt">;
 
-export const getCommentsForThread = async (threadId: string) => CommentModel.find({ threadId }).sort({ createdAt: -1 });
+export const getCommentsForThread = async (threadId: string) =>
+	CommentModel.find({ threadId: new mongoose.Types.ObjectId(threadId) }).sort({ createdAt: -1 });
 
 export const insertComment = async (params: CommentParameters) => CommentModel.create(params);
 

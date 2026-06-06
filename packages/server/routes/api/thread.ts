@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { body } from "express-validator";
 import { MongoServerError } from "mongodb";
+import mongoose from "mongoose";
 import multer from "multer";
 import { auth } from "../../auth";
 import {
@@ -26,11 +27,14 @@ router.post(
 	body("content").trim().isString().escape(),
 	body("tags").trim().isString().escape(),
 	async (req, res) => {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
 		try {
 			const session = await auth.api.getSession({ headers: req.headers });
 			if (!session) return res.status(401).send("Unauthorized");
 
-			const result = await insertThread({ ...req.body, userId: session.user.id });
+			const result = await insertThread({ ...req.body, userId: session.user.id, username: session.user.name });
 			if (!result) return res.status(502);
 			return res.status(201).json({ id: result });
 		} catch (err) {
@@ -41,7 +45,23 @@ router.post(
 
 router.get("/", async (_req, res) => {
 	try {
-		const threads = await ThreadFormModel.find().sort({ createdAt: -1 });
+		const threads = await ThreadFormModel.aggregate([
+			{ $sort: { createdAt: -1 } },
+			{
+				$lookup: {
+					from: "thread_comments",
+					localField: "_id",
+					foreignField: "threadId",
+					as: "comments",
+				},
+			},
+			{
+				$addFields: {
+					commentCount: { $size: "$comments" },
+				},
+			},
+			{ $project: { comments: 0 } },
+		]);
 		return res.status(200).json(threads);
 	} catch (err) {
 		return res.status(500).send(err);
@@ -142,7 +162,7 @@ router.post(
 			if (!content) return res.status(400).json({ message: "Content is required" });
 
 			const comment = await insertComment({
-				threadId,
+				threadId: new mongoose.Types.ObjectId(threadId),
 				userId: session.user.id,
 				username: session.user.name,
 				content,
