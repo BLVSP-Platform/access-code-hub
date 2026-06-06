@@ -9,6 +9,7 @@ interface LoginFormProps {
 	setIsRegistering: React.Dispatch<React.SetStateAction<boolean>>;
 	registerSuccess: string;
 	setRegisterSuccess: React.Dispatch<React.SetStateAction<string>>;
+	redirectTo: string;
 }
 
 interface AuthFormData {
@@ -21,7 +22,13 @@ type SignInResult = Awaited<ReturnType<typeof signIn.email>>;
 type SignUpResult = Awaited<ReturnType<typeof signUp.email>>;
 
 // @todo: more robust error displays
-const LoginForm = ({ isRegistering, setIsRegistering, registerSuccess, setRegisterSuccess }: LoginFormProps) => {
+const LoginForm = ({
+	isRegistering,
+	setIsRegistering,
+	registerSuccess,
+	setRegisterSuccess,
+	redirectTo,
+}: LoginFormProps) => {
 	const [loading, setLoading] = useState(false);
 	const [authError, setAuthError] = useState("");
 	const { register, handleSubmit, reset } = useForm<AuthFormData>();
@@ -44,7 +51,7 @@ const LoginForm = ({ isRegistering, setIsRegistering, registerSuccess, setRegist
 				result = await signIn.email({
 					email: data.email,
 					password: data.password,
-					callbackURL: "/",
+					callbackURL: redirectTo,
 				});
 			}
 
@@ -153,9 +160,10 @@ const LoginForm = ({ isRegistering, setIsRegistering, registerSuccess, setRegist
 
 interface AuthDialogProps {
 	children: React.ReactNode;
+	redirectTo?: string;
 }
 
-export const AuthDialog = ({ children }: AuthDialogProps) => {
+export const AuthDialog = ({ children, redirectTo = "/" }: AuthDialogProps) => {
 	const [isRegistering, setIsRegistering] = useState(false);
 	const [registerSuccess, setRegisterSuccess] = useState("");
 
@@ -175,6 +183,7 @@ export const AuthDialog = ({ children }: AuthDialogProps) => {
 								setIsRegistering={setIsRegistering}
 								registerSuccess={registerSuccess}
 								setRegisterSuccess={setRegisterSuccess}
+								redirectTo={redirectTo}
 							/>
 						</Dialog.Body>
 						<Dialog.CloseTrigger asChild>
