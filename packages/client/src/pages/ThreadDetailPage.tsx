@@ -51,6 +51,7 @@ export default function ThreadDetailPage() {
 	const commentRef = useRef<HTMLTextAreaElement>(null);
 	const [replyingTo, setReplyingTo] = useState<string | null>(null);
 	const replyRef = useRef<HTMLTextAreaElement>(null);
+	const [submittingReply, setSubmittingReply] = useState(false);
 
 	const { isAuthenticated, user } = useAuth();
 
@@ -165,6 +166,7 @@ export default function ThreadDetailPage() {
 		const content = replyRef.current?.value.trim();
 		if (!content || !id) return;
 
+		setSubmittingReply(true);
 		try {
 			const fd = new FormData();
 			fd.append("content", content);
@@ -183,6 +185,8 @@ export default function ThreadDetailPage() {
 			setReplyingTo(null);
 		} catch (err) {
 			console.error("Failed to post reply:", err);
+		} finally {
+			setSubmittingReply(false);
 		}
 	};
 
@@ -309,6 +313,8 @@ export default function ThreadDetailPage() {
 											bg="primary"
 											size="sm"
 											onClick={() => submitReply(comment._id)}
+											loading={submittingReply}
+											disabled={submittingReply}
 										>
 											Post reply
 										</Button>
