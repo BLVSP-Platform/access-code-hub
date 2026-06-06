@@ -48,8 +48,8 @@ function Navbar() {
 						Tool Submission Form
 					</NavigationMenuLink>
 					{isAdminOrModerator && (
-						<NavigationMenuLink href="admin" color="white">
-							Admin
+						<NavigationMenuLink href="moderator" color="white">
+							Moderator
 						</NavigationMenuLink>
 					)}
 				</HStack>

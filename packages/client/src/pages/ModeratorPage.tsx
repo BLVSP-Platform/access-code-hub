@@ -59,7 +59,7 @@ function ToolModerationTab() {
 	useEffect(() => {
 		const fetchPending = async () => {
 			try {
-				const res = await fetch(api("/api/admin/tools/pending"), { credentials: "include" });
+				const res = await fetch(api("/api/moderator/tools/pending"), { credentials: "include" });
 				const data = await res.json();
 				setTools(data);
 			} catch (err) {
@@ -86,7 +86,7 @@ function ToolModerationTab() {
 		const { tool, action } = confirmContent;
 		setSubmitting(true);
 		try {
-			await fetch(api(`/api/admin/tools/${tool.slug}/${action}`), {
+			await fetch(api(`/api/moderator/tools/${tool.slug}/${action}`), {
 				method: "POST",
 				credentials: "include",
 			});
@@ -271,7 +271,7 @@ function MentorshipTab() {
 	useEffect(() => {
 		const fetchSubmissions = async () => {
 			try {
-				const res = await fetch(api("/api/admin/mentorship"), { credentials: "include" });
+				const res = await fetch(api("/api/moderator/mentorship"), { credentials: "include" });
 				const data = await res.json();
 				setSubmissions(data);
 			} catch (err) {
@@ -380,10 +380,10 @@ function MentorshipTab() {
 	);
 }
 
-function AdminPage() {
+function ModeratorPage() {
 	return (
 		<Stack gap={6}>
-			<Heading size="4xl">Admin</Heading>
+			<Heading size="4xl">Moderator</Heading>
 			<Tabs.Root defaultValue="tools">
 				<Tabs.List>
 					<Tabs.Trigger value="tools">Tool Approvals</Tabs.Trigger>
@@ -400,4 +400,4 @@ function AdminPage() {
 	);
 }
 
-export default AdminPage;
+export default ModeratorPage;
