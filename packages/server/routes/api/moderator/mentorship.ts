@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { MentorshipFormModel } from "../../../schema/mentorship";
-import { requireAdmin } from "./middleware";
+import { requireModerator } from "./middleware";
 
 const router = Router();
 
-router.use(requireAdmin);
+router.use(requireModerator);
 
 router.get("/", async (_req, res) => {
 	try {

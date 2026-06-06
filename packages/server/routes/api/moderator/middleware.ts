@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { auth } from "../../../auth";
 
-export const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
+export const requireModerator = async (req: Request, res: Response, next: NextFunction) => {
 	const session = await auth.api.getSession({ headers: req.headers });
 	if (!session) return res.status(401).send("Unauthorized");
 

@@ -1,10 +1,10 @@
 import { Router } from "express";
-import mentorshipAdminRouter from "./mentorship";
-import toolAdminRouter from "./tools";
+import mentorshipModRouter from "./mentorship";
+import toolModRouter from "./tools";
 
 const router = Router();
 
-router.use("/tools", toolAdminRouter);
-router.use("/mentorship", mentorshipAdminRouter);
+router.use("/tools", toolModRouter);
+router.use("/mentorship", mentorshipModRouter);
 
 export default router;

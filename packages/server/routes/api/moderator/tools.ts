@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { approveTool, getToolsByApprovalStatus, rejectTool } from "../../../schema/tool";
-import { requireAdmin } from "./middleware";
+import { requireModerator } from "./middleware";
 
 const router = Router();
 
-router.use(requireAdmin);
+router.use(requireModerator);
 
 router.get("/pending", async (_req, res) => {
 	try {
