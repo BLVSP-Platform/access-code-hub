@@ -14,7 +14,8 @@ export interface Thread {
 	content: string;
 	tags: string;
 	createdAt: string;
-
+	updatedAt: string;
+	commentCount: number;
 	bookmarked: boolean;
 }
 

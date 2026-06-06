@@ -49,7 +49,7 @@ export const getThreadBookmarksForUser = async (userId: string) => {
 
 export const commentSchema = new mongoose.Schema(
 	{
-		threadId: { type: String, required: true, index: true },
+		threadId: { type: mongoose.Schema.Types.ObjectId, required: true, index: true, ref: "thread" },
 		userId: { type: String, required: true },
 		username: { type: String, required: true },
 		content: { type: String, required: true },

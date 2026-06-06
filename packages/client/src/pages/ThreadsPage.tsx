@@ -140,9 +140,10 @@ function ThreadsPage() {
 				<Table.Header>
 					<Table.Row bg="secondary">
 						<Table.ColumnHeader>Title</Table.ColumnHeader>
+						<Table.ColumnHeader>Posted By</Table.ColumnHeader>
 						<Table.ColumnHeader>Topic</Table.ColumnHeader>
-						<Table.ColumnHeader>Tags</Table.ColumnHeader>
-						<Table.ColumnHeader>Date Created</Table.ColumnHeader>
+						<Table.ColumnHeader>Comments</Table.ColumnHeader>
+						<Table.ColumnHeader>Last Activity</Table.ColumnHeader>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -151,9 +152,10 @@ function ThreadsPage() {
 							<Table.Cell>
 								<Link href={`threads/${t._id}`}>{t.title}</Link>
 							</Table.Cell>
+							<Table.Cell>{t.username ?? "Unknown"}</Table.Cell>
 							<Table.Cell>{t.topic}</Table.Cell>
-							<Table.Cell>{t.tags}</Table.Cell>
-							<Table.Cell>{formatDate(t.createdAt)}</Table.Cell>
+							<Table.Cell>{t.commentCount ?? 0}</Table.Cell>
+							<Table.Cell>{formatDate(t.updatedAt)}</Table.Cell>
 						</Table.Row>
 					))}
 				</Table.Body>

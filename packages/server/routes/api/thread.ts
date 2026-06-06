@@ -1,10 +1,12 @@
 import { Router } from "express";
 import { body } from "express-validator";
 import { MongoServerError } from "mongodb";
+import mongoose from "mongoose";
 import multer from "multer";
 import { auth } from "../../auth";
 import {
 	addThreadBookmark,
+	CommentModel,
 	deleteComment,
 	getCommentsForThread,
 	getThreadBookmarksForUser,
@@ -44,7 +46,23 @@ router.post(
 
 router.get("/", async (_req, res) => {
 	try {
-		const threads = await ThreadFormModel.find().sort({ createdAt: -1 });
+		const threads = await ThreadFormModel.aggregate([
+			{ $sort: { createdAt: -1 } },
+			{
+				$lookup: {
+					from: "thread_comments",
+					localField: "_id",
+					foreignField: "threadId",
+					as: "comments",
+				},
+			},
+			{
+				$addFields: {
+					commentCount: { $size: "$comments" },
+				},
+			},
+			{ $project: { comments: 0 } },
+		]);
 		return res.status(200).json(threads);
 	} catch (err) {
 		return res.status(500).send(err);
@@ -145,7 +163,7 @@ router.post(
 			if (!content) return res.status(400).json({ message: "Content is required" });
 
 			const comment = await insertComment({
-				threadId,
+				threadId: new mongoose.Types.ObjectId(threadId),
 				userId: session.user.id,
 				username: session.user.name,
 				content,
