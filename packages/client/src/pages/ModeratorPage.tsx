@@ -380,7 +380,7 @@ function MentorshipTab() {
 	);
 }
 
-function AdminPage() {
+function ModeratorPage() {
 	return (
 		<Stack gap={6}>
 			<Heading size="4xl">Moderator</Heading>
@@ -400,4 +400,4 @@ function AdminPage() {
 	);
 }
 
-export default AdminPage;
+export default ModeratorPage;
