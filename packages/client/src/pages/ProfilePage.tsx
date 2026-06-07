@@ -265,7 +265,9 @@ function ProfilePage() {
 					</Heading>
 
 					<VStack gap={4} w="380px">
-						<ProfilePageButton disabled>Tool Submissions</ProfilePageButton>
+						<ProfilePageButton as={Link} to="/tools/submissions/mine">
+							Tool Submissions
+						</ProfilePageButton>
 						<ProfilePageButton as={Link} to="/tools/bookmarked">
 							Tool Bookmarks
 						</ProfilePageButton>
