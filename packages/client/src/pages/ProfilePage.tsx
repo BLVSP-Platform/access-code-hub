@@ -270,7 +270,9 @@ function ProfilePage() {
 							Tool Bookmarks
 						</ProfilePageButton>
 						<ProfilePageButton disabled>Reviews</ProfilePageButton>
-						<ProfilePageButton disabled>Threads</ProfilePageButton>
+						<ProfilePageButton as={Link} to="/community/threads/mine">
+							Threads
+						</ProfilePageButton>
 						<ProfilePageButton disabled>Comments</ProfilePageButton>
 					</VStack>
 				</Stack>
