@@ -273,7 +273,9 @@ function ProfilePage() {
 						<ProfilePageButton as={Link} to="/community/threads/mine">
 							Threads
 						</ProfilePageButton>
-						<ProfilePageButton disabled>Comments</ProfilePageButton>
+						<ProfilePageButton as={Link} to="/community/comments/mine">
+							Comments
+						</ProfilePageButton>
 					</VStack>
 				</Stack>
 			</HStack>
