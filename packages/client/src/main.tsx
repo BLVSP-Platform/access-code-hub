@@ -13,6 +13,8 @@ import HomePage from "./pages/HomePage.tsx";
 import { LoginPage } from "./pages/LoginPage.tsx";
 import MentorshipPage from "./pages/MentorshipPage.tsx";
 import ModeratorPage from "./pages/ModeratorPage.tsx";
+import MyCommentsPage from "./pages/MyCommentsPage.tsx";
+import MyThreadsPage from "./pages/MyThreadsPage.tsx";
 import PostThreadPage from "./pages/PostThreadPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import SubmitToolReviewsPage from "./pages/SubmitToolReviewsPage.tsx";
@@ -73,6 +75,14 @@ const router = createBrowserRouter([
 							{
 								path: "threads/bookmarked",
 								element: <BookmarkedThreadsPage />,
+							},
+							{
+								path: "threads/mine",
+								element: <MyThreadsPage />,
+							},
+							{
+								path: "comments/mine",
+								element: <MyCommentsPage />,
 							},
 							{
 								path: "threads/:id",
