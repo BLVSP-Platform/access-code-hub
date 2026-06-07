@@ -167,4 +167,16 @@ router.delete("/:toolId/reviews", async (req, res) => {
 	}
 });
 
+router.get("/submissions/me", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
+		const tools = await getToolsWithRatings("all", session.user.id);
+		return res.status(200).json(tools);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
 export default router;
