@@ -69,6 +69,67 @@ router.get("/", async (_req, res) => {
 	}
 });
 
+router.get("/me", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
+		const threads = await ThreadFormModel.aggregate([
+			{ $match: { userId: session.user.id } },
+			{ $sort: { createdAt: -1 } },
+			{
+				$lookup: {
+					from: "thread_comments",
+					localField: "_id",
+					foreignField: "threadId",
+					as: "comments",
+				},
+			},
+			{
+				$addFields: {
+					commentCount: { $size: "$comments" },
+				},
+			},
+			{ $project: { comments: 0 } },
+		]);
+
+		return res.status(200).json(threads);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+router.get("/comments/me", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
+		const comments = await CommentModel.aggregate([
+			{ $match: { userId: session.user.id } },
+			{ $sort: { createdAt: -1 } },
+			{
+				$lookup: {
+					from: "threads",
+					localField: "threadId",
+					foreignField: "_id",
+					as: "thread",
+				},
+			},
+			{
+				$addFields: {
+					threadTitle: { $arrayElemAt: ["$thread.title", 0] },
+					threadTopic: { $arrayElemAt: ["$thread.topic", 0] },
+				},
+			},
+			{ $project: { thread: 0 } },
+		]);
+
+		return res.status(200).json(comments);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
 router.get("/bookmarks/me", async (req, res) => {
 	try {
 		const session = await auth.api.getSession({ headers: req.headers });
