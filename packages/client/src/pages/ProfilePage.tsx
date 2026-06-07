@@ -271,7 +271,9 @@ function ProfilePage() {
 						<ProfilePageButton as={Link} to="/tools/bookmarked">
 							Tool Bookmarks
 						</ProfilePageButton>
-						<ProfilePageButton disabled>Reviews</ProfilePageButton>
+						<ProfilePageButton as={Link} to="/tools/reviews/mine">
+							Reviews
+						</ProfilePageButton>
 						<ProfilePageButton as={Link} to="/community/threads/mine">
 							Threads
 						</ProfilePageButton>
