@@ -31,3 +31,19 @@ export function RequireModerator({ children }: { children: React.ReactNode }) {
 
 	return <>{children}</>;
 }
+
+export function RequireAdmin({ children }: { children: React.ReactNode }) {
+	const { isAuthenticated, isAdmin, isLoading } = useAuth();
+	const location = useLocation();
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
+	if (!isAuthenticated) {
+		return <Navigate to="/login" state={{ from: location }} replace />;
+	}
+
+	if (!isAdmin) return <Navigate to="/forbidden" replace />;
+
+	return <>{children}</>;
+}
