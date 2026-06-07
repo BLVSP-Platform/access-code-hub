@@ -1,18 +1,5 @@
 // AdminPage.tsx
-import {
-	Badge,
-	Box,
-	Button,
-	Dialog,
-	Heading,
-	HStack,
-	Portal,
-	Stack,
-	Table,
-	Tabs,
-	Text,
-	VStack,
-} from "@chakra-ui/react";
+import { Badge, Box, Button, Dialog, Heading, HStack, Portal, Stack, Table, Tabs, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { LuCheck, LuX } from "react-icons/lu";
 import { api } from "@/lib/utils";
