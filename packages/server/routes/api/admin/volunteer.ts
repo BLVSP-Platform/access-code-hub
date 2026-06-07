@@ -26,10 +26,18 @@ router.post("/:id/approve", async (req, res) => {
 		);
 		if (!submission) return res.status(404).json({ error: "Submission not found" });
 
-		await auth.api.setRole({
+		const userList = await auth.api.listUsers({
 			headers: req.headers,
+			query: { searchValue: submission.email, searchField: "email" },
+		});
+
+		const targetUser = userList.users[0];
+		if (!targetUser) return res.status(404).json({ error: "No account found for that email" });
+
+		await auth.api.setRole({
+			headers: new Headers(req.headers as Record<string, string>),
 			body: {
-				userId: submission.userId,
+				userId: targetUser.id,
 				role: "moderator",
 			},
 		});
