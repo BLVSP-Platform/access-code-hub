@@ -61,20 +61,22 @@ function BookmarkedToolsPage() {
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{bookmarkedTools.map((tool) => (
-							<Table.Row key={tool._id} bg="tertiary" width="100%">
-								<Table.Cell>
-									<Link href={`/tools/${tool.slug}`}>{tool.name}</Link>
-								</Table.Cell>
-								<Table.Cell>{tool.compatibility}</Table.Cell>
-								<Table.Cell maxWidth="500px">
-									<Text>{tool.description}</Text>
-								</Table.Cell>
-								<Table.Cell>
-									<Link>{decodeEntities(tool.link)}</Link>
-								</Table.Cell>
-							</Table.Row>
-						))}
+						{bookmarkedTools
+							.filter((tool) => tool !== null)
+							.map((tool) => (
+								<Table.Row key={tool._id} bg="tertiary" width="100%">
+									<Table.Cell>
+										<Link href={`/tools/${tool.slug}`}>{tool.name}</Link>
+									</Table.Cell>
+									<Table.Cell>{tool.compatibility}</Table.Cell>
+									<Table.Cell maxWidth="500px">
+										<Text>{tool.description}</Text>
+									</Table.Cell>
+									<Table.Cell>
+										<Link>{decodeEntities(tool.link)}</Link>
+									</Table.Cell>
+								</Table.Row>
+							))}
 					</Table.Body>
 				</Table.Root>
 			</Box>
