@@ -75,7 +75,7 @@ function VolunteerTab() {
 		const { submission, action } = confirmContent;
 		setSubmitting(true);
 		try {
-			await fetch(api(`/api/moderator/volunteer/${submission._id}/${action}`), {
+			await fetch(api(`/api/admin/volunteer/${submission._id}/${action}`), {
 				method: "POST",
 				credentials: "include",
 			});
