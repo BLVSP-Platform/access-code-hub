@@ -43,6 +43,18 @@ router.post(
 			if (!result) return res.status(502);
 			return res.status(201).send("Success");
 		} catch (err) {
+			// Check if err is duplicate key error from mongoose insert operation
+			if (
+				err &&
+				typeof err === "object" &&
+				"errorResponse" in err &&
+				err.errorResponse &&
+				typeof err.errorResponse === "object" &&
+				"code" in err.errorResponse &&
+				err.errorResponse.code === 11000
+			) {
+				return res.status(400).send("A tool with that name already exists.");
+			}
 			return res.status(500).send(err);
 		}
 	},

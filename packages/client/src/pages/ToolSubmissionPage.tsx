@@ -111,7 +111,9 @@ function ToolSubmissionPage() {
 				setDialogBody("Thank you for your submission. It will be reviewed by a moderator.");
 			} else {
 				setDialogTitle(`Error: ${res.statusText}`);
-				setDialogBody("An error occurred while processing your submission.");
+				res.text()
+					.then((text) => setDialogBody(text))
+					.catch((_err) => setDialogBody("An error occurred while processing your submission."));
 			}
 		} catch (err) {
 			if (err instanceof Error) {
