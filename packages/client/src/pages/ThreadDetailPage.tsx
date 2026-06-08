@@ -140,7 +140,7 @@ export default function ThreadDetailPage() {
 			if (!res.ok) throw new Error(res.statusText);
 
 			const newComment: Comment = await res.json();
-			setComments((prev) => [newComment, ...prev]);
+			setComments((prev) => [{ ...newComment, replies: newComment.replies ?? [] }, ...prev]);
 			if (commentRef.current) commentRef.current.value = "";
 		} catch (err) {
 			console.error("Failed to post comment:", err);
