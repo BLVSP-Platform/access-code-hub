@@ -8,6 +8,7 @@ import AdminPage from "./pages/AdminPage.tsx";
 import BookmarkedThreadsPage from "./pages/BookmarkedThreadsPage.tsx";
 import BookmarkedToolsPage from "./pages/BookmarkedToolsPage.tsx";
 import CommunityNavPage from "./pages/CommunityNavPage.tsx";
+import ErrorPage from "./pages/ErrorPage.tsx";
 import ForbiddenPage from "./pages/ForbiddenPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import { LoginPage } from "./pages/LoginPage.tsx";
@@ -29,107 +30,117 @@ const router = createBrowserRouter([
 		element: <App></App>,
 		children: [
 			{
-				index: true,
-				element: <HomePage />,
-			},
-			{
-				path: "index",
-				element: <ToolIndexPage />,
-			},
-			{
-				path: "tools/:slug",
-				element: <ToolDetailPage />,
-			},
-			{
-				path: "login",
-				element: <LoginPage />,
-			},
-			{
-				path: "forbidden",
-				element: <ForbiddenPage />,
-			},
-			{
-				element: (
-					<RequireAuth>
-						<Outlet />
-					</RequireAuth>
-				),
+				element: <Outlet />,
+				errorElement: <ErrorPage />,
 				children: [
 					{
-						path: "community",
-						children: [
-							{
-								index: true,
-								element: <CommunityNavPage />,
-							},
-							{
-								path: "threads",
-								element: <ThreadsPage />,
-							},
-							{
-								path: "threads/post",
-								element: <PostThreadPage />,
-							},
-							{
-								path: "threads/bookmarked",
-								element: <BookmarkedThreadsPage />,
-							},
-							{
-								path: "threads/:id",
-								element: <ThreadDetailPage />,
-							},
-						],
+						index: true,
+						element: <HomePage />,
 					},
 					{
-						path: "tools",
+						path: "index",
+						element: <ToolIndexPage />,
+					},
+					{
+						path: "tools/:slug",
+						element: <ToolDetailPage />,
+					},
+					{
+						path: "login",
+						element: <LoginPage />,
+					},
+					{
+						path: "forbidden",
+						element: <ForbiddenPage />,
+					},
+					{
+						element: (
+							<RequireAuth>
+								<Outlet />
+							</RequireAuth>
+						),
 						children: [
 							{
-								path: "submit",
+								path: "community",
+								children: [
+									{
+										index: true,
+										element: <CommunityNavPage />,
+									},
+									{
+										path: "threads",
+										element: <ThreadsPage />,
+									},
+									{
+										path: "threads/post",
+										element: <PostThreadPage />,
+									},
+									{
+										path: "threads/bookmarked",
+										element: <BookmarkedThreadsPage />,
+									},
+									{
+										path: "threads/:id",
+										element: <ThreadDetailPage />,
+									},
+								],
+							},
+							{
+								path: "tools",
+								children: [
+									{
+										path: "submit",
+										element: <ToolSubmissionPage />,
+									},
+									{
+										path: "review",
+										element: <SubmitToolReviewsPage />,
+									},
+									{
+										path: "bookmarked",
+										element: <BookmarkedToolsPage />,
+									},
+								],
+							},
+							{
+								path: "submission",
 								element: <ToolSubmissionPage />,
 							},
 							{
-								path: "review",
-								element: <SubmitToolReviewsPage />,
+								path: "volunteer",
+								element: <VolunteerPage />,
 							},
 							{
-								path: "bookmarked",
-								element: <BookmarkedToolsPage />,
+								path: "mentorship",
+								element: <MentorshipPage />,
+							},
+							{
+								path: "profile",
+								element: <ProfilePage />,
 							},
 						],
 					},
 					{
-						path: "submission",
-						element: <ToolSubmissionPage />,
+						path: "moderator",
+						element: (
+							<RequireModerator>
+								<ModeratorPage />
+							</RequireModerator>
+						),
 					},
 					{
-						path: "volunteer",
-						element: <VolunteerPage />,
+						path: "admin",
+						element: (
+							<RequireAdmin>
+								<AdminPage />
+							</RequireAdmin>
+						),
 					},
 					{
-						path: "mentorship",
-						element: <MentorshipPage />,
-					},
-					{
-						path: "profile",
-						element: <ProfilePage />,
+						path: "*",
+						element: <ErrorPage />,
 					},
 				],
-			},
-			{
-				path: "moderator",
-				element: (
-					<RequireModerator>
-						<ModeratorPage />
-					</RequireModerator>
-				),
-			},
-			{
-				path: "admin",
-				element: (
-					<RequireAdmin>
-						<AdminPage />
-					</RequireAdmin>
-				),
 			},
 		],
 	},
