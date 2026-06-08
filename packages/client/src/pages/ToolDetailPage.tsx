@@ -50,6 +50,15 @@ const StarRating = ({
 	</RatingGroup.Root>
 );
 
+const MaybeLinkValue = ({ value }: { value: string }) => {
+	try {
+		new URL(value);
+		return <Link href={value}>{value}</Link>;
+	} catch {
+		return <>{value}</>;
+	}
+};
+
 export default function ToolDetailPage() {
 	const [tool, setTool] = useState<Tool>();
 	const [loading, setLoading] = useState(true);
@@ -210,14 +219,14 @@ export default function ToolDetailPage() {
 					<Text as="span" fontWeight="bold">
 						Tutorial Video(s):{" "}
 					</Text>
-					{tool?.videos ?? "N/A"}
+					<MaybeLinkValue value={tool?.videos ?? "N/A"} />
 				</Text>
 
 				<Text>
 					<Text as="span" fontWeight="bold">
 						Guidelines:{" "}
 					</Text>
-					{decodeEntities(tool?.guidelines ?? "N/A")}
+					<MaybeLinkValue value={decodeEntities(tool?.guidelines ?? "N/A")} />
 				</Text>
 
 				<Text>
@@ -231,7 +240,7 @@ export default function ToolDetailPage() {
 					<Text as="span" fontWeight="bold">
 						Link:{" "}
 					</Text>
-					<Link href={tool?.link ?? "N/A"}>{decodeEntities(tool?.link ?? "N/A")}</Link>
+					<Link href={decodeEntities(tool?.link ?? "") ?? "N/A"}>{decodeEntities(tool?.link ?? "N/A")}</Link>
 				</Text>
 
 				<Box w="full">
