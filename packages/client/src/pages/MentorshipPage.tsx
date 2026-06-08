@@ -107,7 +107,15 @@ function MentorshipPage() {
 	};
 
 	return (
-		<form onSubmit={onSubmit} noValidate>
+		<form
+			onSubmit={onSubmit}
+			noValidate
+			onKeyDown={(e) => {
+				if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "BUTTON") {
+					e.preventDefault();
+				}
+			}}
+		>
 			<Stack gap="8" align="flex-start" maxW="70%">
 				<Heading as="h1" size="4xl">
 					Mentorship
