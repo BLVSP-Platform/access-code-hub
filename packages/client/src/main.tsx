@@ -14,6 +14,10 @@ import HomePage from "./pages/HomePage.tsx";
 import { LoginPage } from "./pages/LoginPage.tsx";
 import MentorshipPage from "./pages/MentorshipPage.tsx";
 import ModeratorPage from "./pages/ModeratorPage.tsx";
+import MyCommentsPage from "./pages/MyCommentsPage.tsx";
+import MyReviewsPage from "./pages/MyReviewsPage.tsx";
+import MyThreadsPage from "./pages/MyThreadsPage.tsx";
+import MyToolSubmissionsPage from "./pages/MyToolsSubmissionsPage.tsx";
 import PostThreadPage from "./pages/PostThreadPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import SubmitToolReviewsPage from "./pages/SubmitToolReviewsPage.tsx";
@@ -80,6 +84,14 @@ const router = createBrowserRouter([
 										element: <BookmarkedThreadsPage />,
 									},
 									{
+										path: "threads/mine",
+										element: <MyThreadsPage />,
+									},
+									{
+										path: "comments/mine",
+										element: <MyCommentsPage />,
+									},
+									{
 										path: "threads/:id",
 										element: <ThreadDetailPage />,
 									},
@@ -99,6 +111,14 @@ const router = createBrowserRouter([
 									{
 										path: "bookmarked",
 										element: <BookmarkedToolsPage />,
+									},
+									{
+										path: "submissions/mine",
+										element: <MyToolSubmissionsPage />,
+									},
+									{
+										path: "reviews/mine",
+										element: <MyReviewsPage />,
 									},
 								],
 							},

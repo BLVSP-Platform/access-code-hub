@@ -1,125 +1,99 @@
-import {
-	Badge,
-	Box,
-	Button,
-	Dialog,
-	Heading,
-	HStack,
-	Link,
-	Portal,
-	Stack,
-	Table,
-	Tabs,
-	Tag,
-	Text,
-} from "@chakra-ui/react";
+// AdminPage.tsx
+import { Badge, Box, Button, Dialog, Heading, HStack, Portal, Stack, Table, Tabs, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { LuCheck, LuX } from "react-icons/lu";
-import { api, decodeEntities } from "@/lib/utils";
+import { api } from "@/lib/utils";
 
-interface PendingTool {
-	_id: string;
-	slug: string;
-	name: string;
-	description: string;
-	link: string;
-	email: string;
-	compatibility?: string;
-	videos?: string;
-	guidelines?: string;
-	limits?: string;
-	comments?: string;
-	isCreator?: boolean;
-	createdAt: string;
-}
-
-interface MentorshipSubmission {
+interface VolunteerSubmission {
 	_id: string;
 	userId: string;
 	email: string;
-	mentorshipRole: string;
-	tags: string[];
+	shortAnswer: string;
+	createdAt: string;
 }
 
 type ActionType = "approve" | "reject";
 
-function ToolModerationTab() {
-	const [tools, setTools] = useState<PendingTool[]>([]);
+function VolunteerTab() {
+	const [submissions, setSubmissions] = useState<VolunteerSubmission[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [submitting, setSubmitting] = useState(false);
 
 	// Detail dialog
 	const [detailOpen, setDetailOpen] = useState(false);
-	const [detailContent, setDetailContent] = useState<PendingTool | null>(null);
+	const [detailContent, setDetailContent] = useState<VolunteerSubmission | null>(null);
 
 	// Confirm dialog
 	const [confirmOpen, setConfirmOpen] = useState(false);
-	const [confirmContent, setConfirmContent] = useState<{ tool: PendingTool; action: ActionType } | null>(null);
+	const [confirmContent, setConfirmContent] = useState<{
+		submission: VolunteerSubmission;
+		action: ActionType;
+	} | null>(null);
+	const [confirmStep, setConfirmStep] = useState<1 | 2>(1);
 
 	useEffect(() => {
-		const fetchPending = async () => {
+		const fetchSubmissions = async () => {
 			try {
-				const res = await fetch(api("/api/moderator/tools/pending"), { credentials: "include" });
+				const res = await fetch(api("/api/admin/volunteer"), { credentials: "include" });
 				const data = await res.json();
-				setTools(data);
+				setSubmissions(data);
 			} catch (err) {
-				console.error("Failed to fetch pending tools:", err);
+				console.error("Failed to fetch volunteer submissions:", err);
 			} finally {
 				setLoading(false);
 			}
 		};
-		fetchPending();
+		fetchSubmissions();
 	}, []);
 
-	const openDetailDialog = (tool: PendingTool) => {
-		setDetailContent(tool);
+	const openDetailDialog = (submission: VolunteerSubmission) => {
+		setDetailContent(submission);
 		setDetailOpen(true);
 	};
 
-	const openConfirmDialog = (tool: PendingTool, action: ActionType) => {
-		setConfirmContent({ tool, action });
+	const openConfirmDialog = (submission: VolunteerSubmission, action: ActionType) => {
+		setConfirmContent({ submission, action });
+		setConfirmStep(1);
 		setConfirmOpen(true);
 	};
 
 	const handleConfirm = async () => {
 		if (!confirmContent) return;
-		const { tool, action } = confirmContent;
+		const { submission, action } = confirmContent;
 		setSubmitting(true);
 		try {
-			await fetch(api(`/api/moderator/tools/${tool.slug}/${action}`), {
+			await fetch(api(`/api/admin/volunteer/${submission._id}/${action}`), {
 				method: "POST",
 				credentials: "include",
 			});
-			setTools((prev) => prev.filter((t) => t._id !== tool._id));
+			setSubmissions((prev) => prev.filter((s) => s._id !== submission._id));
 			setConfirmOpen(false);
 		} catch (err) {
-			console.error("Failed to update tool:", err);
+			console.error("Failed to update volunteer submission:", err);
 		} finally {
 			setSubmitting(false);
 		}
 	};
 
-	if (loading) return <Text>Loading pending tools...</Text>;
-	if (tools.length === 0) return <Text color="fg.muted">No pending tools to review.</Text>;
+	if (loading) return <Text>Loading volunteer submissions...</Text>;
+	if (submissions.length === 0) return <Text color="fg.muted">No pending volunteer submissions.</Text>;
 
 	return (
 		<>
 			<Table.Root size="lg" variant="outline" showColumnBorder css={{ "--chakra-colors-border": "#5B5B5B" }}>
 				<Table.Header>
 					<Table.Row bg="secondary">
-						<Table.ColumnHeader>Name</Table.ColumnHeader>
-						<Table.ColumnHeader>Submitted By</Table.ColumnHeader>
+						<Table.ColumnHeader>Email</Table.ColumnHeader>
 						<Table.ColumnHeader>Details</Table.ColumnHeader>
 						<Table.ColumnHeader>Actions</Table.ColumnHeader>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
-					{tools.map((tool) => (
-						<Table.Row key={tool._id} bg="tertiary">
-							<Table.Cell>{tool.name}</Table.Cell>
-							<Table.Cell>{tool.email}</Table.Cell>
+					{submissions.map((submission) => (
+						<Table.Row key={submission._id} bg="tertiary">
+							<Table.Cell>{submission.email}</Table.Cell>
 							<Table.Cell>
-								<Button variant="subtle" size="sm" onClick={() => openDetailDialog(tool)}>
+								<Button variant="subtle" size="sm" onClick={() => openDetailDialog(submission)}>
 									More Details
 								</Button>
 							</Table.Cell>
@@ -129,7 +103,7 @@ function ToolModerationTab() {
 										size="sm"
 										bg="green.500"
 										variant="subtle"
-										onClick={() => openConfirmDialog(tool, "approve")}
+										onClick={() => openConfirmDialog(submission, "approve")}
 									>
 										<LuCheck /> Approve
 									</Button>
@@ -137,7 +111,7 @@ function ToolModerationTab() {
 										size="sm"
 										bg="red.400"
 										variant="subtle"
-										onClick={() => openConfirmDialog(tool, "reject")}
+										onClick={() => openConfirmDialog(submission, "reject")}
 									>
 										<LuX /> Reject
 									</Button>
@@ -153,30 +127,16 @@ function ToolModerationTab() {
 				<Portal>
 					<Dialog.Backdrop />
 					<Dialog.Positioner>
-						<Dialog.Content maxWidth="600px">
+						<Dialog.Content maxWidth="500px">
 							<Dialog.Header>
-								<Dialog.Title>{detailContent?.name}</Dialog.Title>
+								<Dialog.Title>Volunteer Application</Dialog.Title>
 							</Dialog.Header>
 							<Dialog.Body>
 								<Stack gap={4}>
-									<Box>
-										<Text fontWeight="bold" mb={1}>
-											Description
-										</Text>
-										<Text>{detailContent?.description}</Text>
-									</Box>
 									{[
-										{
-											label: "Link",
-											value: detailContent?.link ? decodeEntities(detailContent.link) : undefined,
-										},
-										{ label: "Submitted By", value: detailContent?.email },
-										{ label: "Compatibility", value: detailContent?.compatibility },
-										{ label: "Videos", value: detailContent?.videos },
-										{ label: "Guidelines", value: detailContent?.guidelines },
-										{ label: "Limits", value: detailContent?.limits },
-										{ label: "Comments", value: detailContent?.comments },
-										{ label: "Is Creator", value: detailContent?.isCreator ? "Yes" : "No" },
+										{ label: "Email", value: detailContent?.email },
+										{ label: "User ID", value: detailContent?.userId },
+										{ label: "How they'd like to help", value: detailContent?.shortAnswer },
 										{
 											label: "Submitted",
 											value: detailContent
@@ -196,13 +156,7 @@ function ToolModerationTab() {
 												<Text fontWeight="bold" mb={1}>
 													{label}
 												</Text>
-												{label === "Link" ? (
-													<Link href={value} target="_blank" color="blue.400">
-														{value}
-													</Link>
-												) : (
-													<Text>{value}</Text>
-												)}
+												<Text>{value}</Text>
 											</Box>
 										) : null,
 									)}
@@ -219,14 +173,20 @@ function ToolModerationTab() {
 			</Dialog.Root>
 
 			{/* Confirm dialog */}
-			<Dialog.Root open={confirmOpen} onOpenChange={({ open }) => setConfirmOpen(open)}>
+			<Dialog.Root
+				open={confirmOpen}
+				onOpenChange={({ open }) => {
+					setConfirmOpen(open);
+					if (!open) setConfirmStep(1);
+				}}
+			>
 				<Portal>
 					<Dialog.Backdrop />
 					<Dialog.Positioner>
 						<Dialog.Content>
 							<Dialog.Header>
 								<Dialog.Title>
-									{confirmContent?.action === "approve" ? "Approve Tool" : "Reject Tool"}
+									{confirmContent?.action === "approve" ? "Approve Volunteer" : "Reject Volunteer"}
 								</Dialog.Title>
 							</Dialog.Header>
 							<Dialog.Body>
@@ -235,142 +195,32 @@ function ToolModerationTab() {
 									<Badge color={confirmContent?.action === "approve" ? "green" : "red"}>
 										{confirmContent?.action}
 									</Badge>{" "}
-									<strong>{confirmContent?.tool.name}</strong>?
-									{confirmContent?.action === "reject" &&
-										" This will mark it as rejected and hide it from the public index."}
+									<strong>{confirmContent?.submission.email}</strong>?
+									{confirmContent?.action === "approve"
+										? " This will grant them moderator access."
+										: " Their application will be marked as rejected."}
 								</Text>
 							</Dialog.Body>
 							<Dialog.Footer>
 								<Button variant="ghost" onClick={() => setConfirmOpen(false)} disabled={submitting}>
 									Cancel
 								</Button>
-								<Button
-									bg={confirmContent?.action === "approve" ? "green.500" : "red.400"}
-									onClick={handleConfirm}
-									loading={submitting}
-								>
-									Confirm {confirmContent?.action === "approve" ? "Approval" : "Rejection"}
-								</Button>
-							</Dialog.Footer>
-						</Dialog.Content>
-					</Dialog.Positioner>
-				</Portal>
-			</Dialog.Root>
-		</>
-	);
-}
-
-function MentorshipTab() {
-	const [submissions, setSubmissions] = useState<MentorshipSubmission[]>([]);
-	const [loading, setLoading] = useState(true);
-
-	// Detail dialog
-	const [detailOpen, setDetailOpen] = useState(false);
-	const [detailContent, setDetailContent] = useState<MentorshipSubmission | null>(null);
-
-	useEffect(() => {
-		const fetchSubmissions = async () => {
-			try {
-				const res = await fetch(api("/api/moderator/mentorship"), { credentials: "include" });
-				const data = await res.json();
-				setSubmissions(data);
-			} catch (err) {
-				console.error("Failed to fetch mentorship submissions:", err);
-			} finally {
-				setLoading(false);
-			}
-		};
-		fetchSubmissions();
-	}, []);
-
-	const openDetailDialog = (submission: MentorshipSubmission) => {
-		setDetailContent(submission);
-		setDetailOpen(true);
-	};
-
-	if (loading) return <Text>Loading mentorship submissions...</Text>;
-	if (submissions.length === 0) return <Text color="fg.muted">No mentorship submissions to review.</Text>;
-
-	return (
-		<>
-			<Table.Root size="lg" variant="outline" showColumnBorder css={{ "--chakra-colors-border": "#5B5B5B" }}>
-				<Table.Header>
-					<Table.Row bg="secondary">
-						<Table.ColumnHeader>Email</Table.ColumnHeader>
-						<Table.ColumnHeader>Role</Table.ColumnHeader>
-						<Table.ColumnHeader>Tags</Table.ColumnHeader>
-						<Table.ColumnHeader>Details</Table.ColumnHeader>
-					</Table.Row>
-				</Table.Header>
-				<Table.Body>
-					{submissions.map((submission) => (
-						<Table.Row key={submission._id} bg="tertiary">
-							<Table.Cell>{submission.email}</Table.Cell>
-							<Table.Cell>{submission.mentorshipRole}</Table.Cell>
-							<Table.Cell>
-								<HStack gap={1} flexWrap="wrap">
-									{submission.tags.map((tag) => (
-										<Tag.Root key={tag} size="sm" variant="subtle">
-											<Tag.Label>{tag}</Tag.Label>
-										</Tag.Root>
-									))}
-								</HStack>
-							</Table.Cell>
-							<Table.Cell>
-								<Button variant="subtle" size="sm" onClick={() => openDetailDialog(submission)}>
-									More Details
-								</Button>
-							</Table.Cell>
-						</Table.Row>
-					))}
-				</Table.Body>
-			</Table.Root>
-
-			{/* Detail dialog */}
-			<Dialog.Root open={detailOpen} onOpenChange={({ open }) => setDetailOpen(open)}>
-				<Portal>
-					<Dialog.Backdrop />
-					<Dialog.Positioner>
-						<Dialog.Content maxWidth="500px">
-							<Dialog.Header>
-								<Dialog.Title>Mentorship Submission</Dialog.Title>
-							</Dialog.Header>
-							<Dialog.Body>
-								<Stack gap={4}>
-									{[
-										{ label: "Email", value: detailContent?.email },
-										{ label: "User ID", value: detailContent?.userId },
-										{ label: "Role", value: detailContent?.mentorshipRole },
-									].map(({ label, value }) =>
-										value ? (
-											<Box key={label}>
-												<Text fontWeight="bold" mb={1}>
-													{label}
-												</Text>
-												<Text>{value}</Text>
-											</Box>
-										) : null,
-									)}
-									{detailContent?.tags && detailContent.tags.length > 0 && (
-										<Box>
-											<Text fontWeight="bold" mb={2}>
-												Tags
-											</Text>
-											<HStack gap={2} flexWrap="wrap">
-												{detailContent.tags.map((tag) => (
-													<Tag.Root key={tag} size="md" variant="subtle">
-														<Tag.Label>{tag}</Tag.Label>
-													</Tag.Root>
-												))}
-											</HStack>
-										</Box>
-									)}
-								</Stack>
-							</Dialog.Body>
-							<Dialog.Footer>
-								<Button variant="ghost" onClick={() => setDetailOpen(false)}>
-									Close
-								</Button>
+								{confirmStep === 1 ? (
+									<Button
+										bg={confirmContent?.action === "approve" ? "green.500" : "red.400"}
+										onClick={() => setConfirmStep(2)}
+									>
+										{confirmContent?.action === "approve" ? "Make Moderator" : "Reject"}
+									</Button>
+								) : (
+									<Button
+										bg={confirmContent?.action === "approve" ? "green.500" : "red.400"}
+										onClick={handleConfirm}
+										loading={submitting}
+									>
+										I am absolutely sure
+									</Button>
+								)}
 							</Dialog.Footer>
 						</Dialog.Content>
 					</Dialog.Positioner>
@@ -384,16 +234,12 @@ function AdminPage() {
 	return (
 		<Stack gap={6}>
 			<Heading size="4xl">Admin</Heading>
-			<Tabs.Root defaultValue="tools">
+			<Tabs.Root defaultValue="volunteers">
 				<Tabs.List>
-					<Tabs.Trigger value="tools">Tool Approvals</Tabs.Trigger>
-					<Tabs.Trigger value="mentorship">Mentorship Submissions</Tabs.Trigger>
+					<Tabs.Trigger value="volunteers">Volunteer Applications</Tabs.Trigger>
 				</Tabs.List>
-				<Tabs.Content value="tools" pt={4}>
-					<ToolModerationTab />
-				</Tabs.Content>
-				<Tabs.Content value="mentorship" pt={4}>
-					<MentorshipTab />
+				<Tabs.Content value="volunteers" pt={4}>
+					<VolunteerTab />
 				</Tabs.Content>
 			</Tabs.Root>
 		</Stack>

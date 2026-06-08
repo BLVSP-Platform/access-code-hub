@@ -156,7 +156,10 @@ export const rejectTool = async (slug: string) => {
 	return ToolFormModel.findOneAndUpdate({ slug }, { approved: false }, { new: true });
 };
 
-export const getToolsWithRatings = async (filter: "approved" | "pending" | "rejected" | "all" = "approved") => {
+export const getToolsWithRatings = async (
+	filter: "approved" | "pending" | "rejected" | "all" = "approved",
+	userId?: string,
+) => {
 	const matchStages: PipelineStage[] = {
 		approved: [{ $match: { approved: true } }],
 		pending: [{ $match: { approved: null } }],
@@ -164,7 +167,10 @@ export const getToolsWithRatings = async (filter: "approved" | "pending" | "reje
 		all: [],
 	}[filter];
 
+	const userStage: PipelineStage[] = userId ? [{ $match: { userId } }] : [];
+
 	return ToolFormModel.aggregate([
+		...userStage,
 		...matchStages,
 		{
 			$lookup: {

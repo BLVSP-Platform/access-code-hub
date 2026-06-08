@@ -112,7 +112,7 @@ export default function ToolDetailPage() {
 		setBookmarkLoading(true);
 		try {
 			if (bookmarked) {
-				await fetch(api(`/api/tools/${tool._id}/bookmark`), { method: "DELETE" });
+				await fetch(api(`/api/tools/${tool._id}/bookmark`), { method: "DELETE", credentials: "include" });
 				setBookmarked(false);
 			} else {
 				await fetch(api(`/api/tools/${tool._id}/bookmark`), { method: "POST", credentials: "include" });
@@ -131,6 +131,7 @@ export default function ToolDetailPage() {
 		try {
 			const res = await fetch(api(`/api/tools/${tool._id}/reviews`), {
 				method: "PUT",
+				credentials: "include",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ rating: draftRating, body: draftBody }),
 			});
@@ -152,7 +153,7 @@ export default function ToolDetailPage() {
 		if (!tool?._id || !myReview || reviewLoading) return;
 		setReviewLoading(true);
 		try {
-			await fetch(api(`/api/tools/${tool._id}/reviews`), { method: "DELETE" });
+			await fetch(api(`/api/tools/${tool._id}/reviews`), { method: "DELETE", credentials: "include" });
 			setReviews((prev) => prev.filter((r) => r._id !== myReview._id));
 			setMyReview(null);
 			setDraftRating(0);
