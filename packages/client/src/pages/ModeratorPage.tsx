@@ -172,7 +172,7 @@ function ToolModerationTab() {
 										},
 										{ label: "Submitted By", value: detailContent?.email },
 										{ label: "Compatibility", value: detailContent?.compatibility },
-										{ label: "Videos", value: detailContent?.videos },
+										{ label: "Videos", value: decodeEntities(detailContent?.videos ?? "") },
 										{ label: "Guidelines", value: detailContent?.guidelines },
 										{ label: "Limits", value: detailContent?.limits },
 										{ label: "Comments", value: detailContent?.comments },
