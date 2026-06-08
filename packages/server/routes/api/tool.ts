@@ -14,6 +14,7 @@ import {
 	removeToolReview,
 	ToolBookmarkModel,
 	ToolFormModel,
+	ToolReviewModel,
 	upsertToolReview,
 } from "../../schema/tool";
 
@@ -162,6 +163,50 @@ router.delete("/:toolId/reviews", async (req, res) => {
 
 		await removeToolReview(session.user.id, req.params.toolId);
 		return res.status(200).json({ message: "Review removed" });
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+router.get("/submissions/me", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
+		const tools = await getToolsWithRatings("all", session.user.id);
+		return res.status(200).json(tools);
+	} catch (err) {
+		return res.status(500).send(err);
+	}
+});
+
+router.get("/reviews/me", async (req, res) => {
+	try {
+		const session = await auth.api.getSession({ headers: req.headers });
+		if (!session) return res.status(401).send("Unauthorized");
+
+		const reviews = await ToolReviewModel.aggregate([
+			{ $match: { userId: session.user.id } },
+			{ $sort: { updatedAt: -1 } },
+			{
+				$lookup: {
+					from: "tools",
+					localField: "toolId",
+					foreignField: "_id",
+					as: "tool",
+				},
+			},
+			{
+				$addFields: {
+					toolName: { $arrayElemAt: ["$tool.name", 0] },
+					toolSlug: { $arrayElemAt: ["$tool.slug", 0] },
+				},
+			},
+			{ $unset: "tool" },
+			{ $match: { toolName: { $exists: true } } },
+		]);
+
+		return res.status(200).json(reviews);
 	} catch (err) {
 		return res.status(500).send(err);
 	}

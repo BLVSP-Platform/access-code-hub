@@ -265,13 +265,21 @@ function ProfilePage() {
 					</Heading>
 
 					<VStack gap={4} w="380px">
-						<ProfilePageButton disabled>Tool Submissions</ProfilePageButton>
+						<ProfilePageButton as={Link} to="/tools/submissions/mine">
+							Tool Submissions
+						</ProfilePageButton>
 						<ProfilePageButton as={Link} to="/tools/bookmarked">
 							Tool Bookmarks
 						</ProfilePageButton>
-						<ProfilePageButton disabled>Reviews</ProfilePageButton>
-						<ProfilePageButton disabled>Threads</ProfilePageButton>
-						<ProfilePageButton disabled>Comments</ProfilePageButton>
+						<ProfilePageButton as={Link} to="/tools/reviews/mine">
+							Reviews
+						</ProfilePageButton>
+						<ProfilePageButton as={Link} to="/community/threads/mine">
+							Threads
+						</ProfilePageButton>
+						<ProfilePageButton as={Link} to="/community/comments/mine">
+							Comments
+						</ProfilePageButton>
 					</VStack>
 				</Stack>
 			</HStack>

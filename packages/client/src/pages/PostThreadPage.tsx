@@ -3,7 +3,7 @@ import { useState } from "react";
 import { type FieldError, type RegisterOptions, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { FormDialog } from "@/components/FormDialog";
-import { formDataCast } from "@/lib/utils";
+import { api, formDataCast } from "@/lib/utils";
 
 interface ThreadData {
 	title: string;
@@ -37,9 +37,10 @@ function PostThreadPage() {
 	const onSubmit = handleSubmit(async (data) => {
 		const formData = formDataCast(data);
 		try {
-			const res = await fetch("/api/thread", {
+			const res = await fetch(api("/api/thread"), {
 				method: "POST",
 				body: formData,
+				credentials: "include",
 			});
 			if (res.ok) {
 				const { id } = await res.json();

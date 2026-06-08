@@ -7,7 +7,7 @@ import { AuthDialog } from "./ui/AuthDialog";
 import { ColorModeButton } from "./ui/color-mode";
 
 function Navbar() {
-	const { isAuthenticated } = useAuth();
+	const { isAuthenticated, isAdminOrModerator, isAdmin } = useAuth();
 	const navigate = useNavigate();
 
 	const profileButton = (
@@ -47,6 +47,16 @@ function Navbar() {
 					<NavigationMenuLink href="submission" color="white">
 						Tool Submission Form
 					</NavigationMenuLink>
+					{isAdminOrModerator && (
+						<NavigationMenuLink href="moderator" color="white">
+							Moderator
+						</NavigationMenuLink>
+					)}
+					{isAdmin && (
+						<NavigationMenuLink href="admin" color="white">
+							Admin
+						</NavigationMenuLink>
+					)}
 				</HStack>
 			</NavigationMenuItem>
 			<NavigationMenuItem>

@@ -1,6 +1,6 @@
 import { Box, Heading, Link, Stack, Table, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { decodeEntities } from "@/lib/utils";
+import { api, decodeEntities } from "@/lib/utils";
 import type { Tool } from "./ToolIndexPage";
 
 type Bookmark = {
@@ -14,7 +14,9 @@ function BookmarkedToolsPage() {
 	useEffect(() => {
 		const fetchTools = async () => {
 			try {
-				const res = await fetch("/api/tools/bookmarks/me");
+				const res = await fetch(api("/api/tools/bookmarks/me"), {
+					credentials: "include",
+				});
 				const data: Bookmark[] = await res.json();
 				const tools = data.map((b) => b.toolId);
 				setBookmarkedTools(tools);
@@ -59,20 +61,22 @@ function BookmarkedToolsPage() {
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{bookmarkedTools.map((tool) => (
-							<Table.Row key={tool._id} bg="tertiary" width="100%">
-								<Table.Cell>
-									<Link href={`/tools/${tool.slug}`}>{tool.name}</Link>
-								</Table.Cell>
-								<Table.Cell>{tool.compatibility}</Table.Cell>
-								<Table.Cell maxWidth="500px">
-									<Text>{tool.description}</Text>
-								</Table.Cell>
-								<Table.Cell>
-									<Link>{decodeEntities(tool.link)}</Link>
-								</Table.Cell>
-							</Table.Row>
-						))}
+						{bookmarkedTools
+							.filter((tool) => tool !== null)
+							.map((tool) => (
+								<Table.Row key={tool._id} bg="tertiary" width="100%">
+									<Table.Cell>
+										<Link href={`/tools/${tool.slug}`}>{tool.name}</Link>
+									</Table.Cell>
+									<Table.Cell>{tool.compatibility}</Table.Cell>
+									<Table.Cell maxWidth="500px">
+										<Text>{tool.description}</Text>
+									</Table.Cell>
+									<Table.Cell>
+										<Link>{decodeEntities(tool.link)}</Link>
+									</Table.Cell>
+								</Table.Row>
+							))}
 					</Table.Body>
 				</Table.Root>
 			</Box>

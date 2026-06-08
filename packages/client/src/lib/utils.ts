@@ -61,3 +61,8 @@ export function normalizeToolsList(rawTools?: string | null): string[] {
 		.map((tool) => tool.trim())
 		.filter(Boolean);
 }
+
+export function api(path: string): string {
+	const base = import.meta.env.VITE_SERVER_URL;
+	return `${base}${path}`;
+}

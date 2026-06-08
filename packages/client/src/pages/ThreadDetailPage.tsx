@@ -3,22 +3,36 @@ import { useEffect, useRef, useState } from "react";
 import { LuBookmark, LuBookmarkCheck, LuTrash2 } from "react-icons/lu";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import { api } from "@/lib/utils";
 
 export interface Thread {
 	_id: string;
 	title: string;
 	userId: string;
+	username: string;
 	topic: string;
 	content: string;
 	tags: string;
 	createdAt: string;
-
+	updatedAt: string;
+	commentCount: number;
 	bookmarked: boolean;
 }
 
 export interface Comment {
 	_id: string;
 	threadId: string;
+	userId: string;
+	username: string;
+	content: string;
+	createdAt: string;
+	replies: Reply[];
+}
+
+export interface Reply {
+	_id: string;
+	threadId: string;
+	parentId: string;
 	userId: string;
 	username: string;
 	content: string;
@@ -35,6 +49,9 @@ export default function ThreadDetailPage() {
 	const [commentsLoading, setCommentsLoading] = useState(true);
 	const [submitting, setSubmitting] = useState(false);
 	const commentRef = useRef<HTMLTextAreaElement>(null);
+	const [replyingTo, setReplyingTo] = useState<string | null>(null);
+	const replyRef = useRef<HTMLTextAreaElement>(null);
+	const [submittingReply, setSubmittingReply] = useState(false);
 
 	const { isAuthenticated, user } = useAuth();
 
@@ -43,7 +60,9 @@ export default function ThreadDetailPage() {
 	useEffect(() => {
 		const fetchThread = async () => {
 			try {
-				const res = await fetch(`/api/thread/${id}`);
+				const res = await fetch(api(`/api/thread/${id}`), {
+					credentials: "include",
+				});
 				if (!res.ok) throw new Error(res.statusText);
 				const data: Thread = await res.json();
 				setThread(data);
@@ -66,7 +85,7 @@ export default function ThreadDetailPage() {
 		if (!id) return;
 		const fetchComments = async () => {
 			try {
-				const res = await fetch(`/api/thread/${id}/comments`);
+				const res = await fetch(api(`/api/thread/${id}/comments`));
 				if (!res.ok) throw new Error(res.statusText);
 				setComments(await res.json());
 			} catch (err) {
@@ -85,13 +104,15 @@ export default function ThreadDetailPage() {
 
 		try {
 			if (bookmarked) {
-				await fetch(`/api/thread/${thread._id}/bookmark`, {
+				await fetch(api(`/api/thread/${thread._id}/bookmark`), {
 					method: "DELETE",
+					credentials: "include",
 				});
 				setBookmarked(false);
 			} else {
-				await fetch(`/api/thread/${thread._id}/bookmark`, {
+				await fetch(api(`/api/thread/${thread._id}/bookmark`), {
 					method: "POST",
+					credentials: "include",
 				});
 				setBookmarked(true);
 			}
@@ -111,9 +132,10 @@ export default function ThreadDetailPage() {
 			const fd = new FormData();
 			fd.append("content", content);
 
-			const res = await fetch(`/api/thread/${id}/comments`, {
+			const res = await fetch(api(`/api/thread/${id}/comments`), {
 				method: "POST",
 				body: fd,
+				credentials: "include",
 			});
 			if (!res.ok) throw new Error(res.statusText);
 
@@ -129,13 +151,42 @@ export default function ThreadDetailPage() {
 
 	const deleteComment = async (commentId: string) => {
 		try {
-			const res = await fetch(`/api/thread/${id}/comments/${commentId}`, {
+			const res = await fetch(api(`/api/thread/${id}/comments/${commentId}`), {
 				method: "DELETE",
+				credentials: "include",
 			});
 			if (!res.ok) throw new Error(res.statusText);
 			setComments((prev) => prev.filter((c) => c._id !== commentId));
 		} catch (err) {
 			console.error("Failed to delete comment:", err);
+		}
+	};
+
+	const submitReply = async (parentId: string) => {
+		const content = replyRef.current?.value.trim();
+		if (!content || !id) return;
+
+		setSubmittingReply(true);
+		try {
+			const fd = new FormData();
+			fd.append("content", content);
+
+			const res = await fetch(api(`/api/thread/${id}/comments/${parentId}/replies`), {
+				method: "POST",
+				body: fd,
+				credentials: "include",
+			});
+			if (!res.ok) throw new Error(res.statusText);
+
+			const newReply: Reply = await res.json();
+			setComments((prev) =>
+				prev.map((c) => (c._id === parentId ? { ...c, replies: [...c.replies, newReply] } : c)),
+			);
+			setReplyingTo(null);
+		} catch (err) {
+			console.error("Failed to post reply:", err);
+		} finally {
+			setSubmittingReply(false);
 		}
 	};
 
@@ -166,6 +217,13 @@ export default function ThreadDetailPage() {
 			</HStack>
 
 			<VStack mt={4} gap={6} align="start">
+				<Text fontSize="sm" color="gray.500">
+					Posted by{" "}
+					<Text as="span" fontWeight="semibold">
+						{thread?.username ?? "Unknown"}
+					</Text>
+				</Text>
+
 				<Text>{thread?.content ?? "N/A"}</Text>
 
 				<Text>
@@ -230,7 +288,80 @@ export default function ThreadDetailPage() {
 										)}
 									</HStack>
 								</HStack>
-								<Text>{comment.content}</Text>
+								<Text mb={2}>{comment.content}</Text>
+
+								{isAuthenticated && (
+									<Button
+										size="xs"
+										variant="ghost"
+										onClick={() => setReplyingTo(replyingTo === comment._id ? null : comment._id)}
+									>
+										{replyingTo === comment._id ? "Cancel" : "Reply"}
+									</Button>
+								)}
+
+								{replyingTo === comment._id && (
+									<VStack align="stretch" mt={2} gap={2}>
+										<Textarea
+											ref={replyRef}
+											placeholder="Write a reply…"
+											resize="vertical"
+											rows={2}
+										/>
+										<Button
+											alignSelf="flex-end"
+											bg="primary"
+											size="sm"
+											onClick={() => submitReply(comment._id)}
+											loading={submittingReply}
+											disabled={submittingReply}
+										>
+											Post reply
+										</Button>
+									</VStack>
+								)}
+
+								{/* Replies */}
+								{comment.replies.length > 0 && (
+									<VStack
+										align="stretch"
+										mt={3}
+										gap={3}
+										pl={6}
+										borderLeftWidth="2px"
+										borderColor="gray.200"
+									>
+										{comment.replies.map((reply) => (
+											<Box key={reply._id}>
+												<HStack justify="space-between">
+													<Text fontWeight="bold" fontSize="sm">
+														{reply.username}
+													</Text>
+													<HStack gap={2}>
+														<Text fontSize="xs" color="gray.500">
+															{new Date(reply.createdAt).toLocaleDateString()}
+														</Text>
+														{user?.user.id === reply.userId && (
+															<IconButton
+																aria-label="Delete reply"
+																variant="ghost"
+																size="xs"
+																color="red.400"
+																onClick={() => deleteComment(reply._id)}
+															>
+																<LuTrash2 />
+															</IconButton>
+														)}
+													</HStack>
+												</HStack>
+												<Text fontSize="xs" color="gray.500" mt={-2} mb={2}>
+													Replying to {comment.username}
+												</Text>
+												<Text fontSize="sm">{reply.content}</Text>
+											</Box>
+										))}
+									</VStack>
+								)}
 							</Box>
 						))}
 					</VStack>

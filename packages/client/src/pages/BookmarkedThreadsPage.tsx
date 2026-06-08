@@ -1,6 +1,6 @@
 import { Box, Heading, Link, Stack, Table, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { formatDate } from "@/lib/utils";
+import { api, formatDate } from "@/lib/utils";
 import type { Thread } from "./ThreadDetailPage";
 
 function BookmarkedThreadsPage() {
@@ -10,7 +10,9 @@ function BookmarkedThreadsPage() {
 	useEffect(() => {
 		const fetchBookmarkedThreads = async () => {
 			try {
-				const res = await fetch("/api/thread/bookmarks/me");
+				const res = await fetch(api("/api/thread/bookmarks/me"), {
+					credentials: "include",
+				});
 				if (!res.ok) throw new Error(res.statusText);
 				const data: Thread[] = await res.json();
 				setBookmarkedThreads(data);
@@ -61,7 +63,7 @@ function BookmarkedThreadsPage() {
 							bookmarkedThreads.map((t) => (
 								<Table.Row key={t._id} bg="tertiary">
 									<Table.Cell>
-										<Link href={`/thread/${t._id}`}>{t.title}</Link>
+										<Link href={`/community/threads/${t._id}`}>{t.title}</Link>
 									</Table.Cell>
 									<Table.Cell>{t.topic}</Table.Cell>
 									<Table.Cell>{t.tags}</Table.Cell>

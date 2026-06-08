@@ -1,8 +1,10 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { admin } from "better-auth/plugins";
 import { rateLimiter } from "better-auth-rate-limiter";
 import { client } from "./db";
 import "dotenv/config";
+import { ac, admin as adminRole, moderator, user } from "./permissions";
 
 if (!process.env.CLIENT_URL) throw new Error("CLIENT_URL not provided");
 if (!process.env.SERVER_URL) throw new Error("SERVER_URL not provided");
@@ -12,6 +14,18 @@ export const auth = betterAuth({
 	database: mongodbAdapter(client.db(), {
 		client,
 	}),
+	plugins: [
+		admin({
+			ac,
+			roles: { admin: adminRole, moderator, user },
+		}),
+		rateLimiter({
+			window: 60,
+			max: 100,
+			storage: "database",
+			detection: "ip",
+		}),
+	],
 	user: {
 		additionalFields: {
 			about: {
@@ -51,12 +65,4 @@ export const auth = betterAuth({
 			disableIpTracking: false,
 		},
 	},
-	plugins: [
-		rateLimiter({
-			window: 60,
-			max: 100,
-			storage: "database",
-			detection: "ip",
-		}),
-	],
 });

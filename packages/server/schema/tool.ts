@@ -1,4 +1,4 @@
-import mongoose, { type InferSchemaType, type Types } from "mongoose";
+import mongoose, { type InferSchemaType, type PipelineStage, type Types } from "mongoose";
 import slugify from "slugify";
 
 export const toolFormSchema = new mongoose.Schema(
@@ -20,6 +20,7 @@ export const toolFormSchema = new mongoose.Schema(
 			unique: true,
 			index: true,
 		},
+		approved: { type: Boolean, default: null, index: true },
 	},
 	{
 		timestamps: true,
@@ -147,8 +148,30 @@ export const getReviewByUser = async (userId: string, toolId: Types.ObjectId | s
 	return ToolReviewModel.findOne({ userId, toolId }).lean();
 };
 
-export const getToolsWithRatings = async () => {
+export const approveTool = async (slug: string) => {
+	return ToolFormModel.findOneAndUpdate({ slug }, { approved: true }, { new: true });
+};
+
+export const rejectTool = async (slug: string) => {
+	return ToolFormModel.findOneAndUpdate({ slug }, { approved: false }, { new: true });
+};
+
+export const getToolsWithRatings = async (
+	filter: "approved" | "pending" | "rejected" | "all" = "approved",
+	userId?: string,
+) => {
+	const matchStages: PipelineStage[] = {
+		approved: [{ $match: { approved: true } }],
+		pending: [{ $match: { approved: null } }],
+		rejected: [{ $match: { approved: false } }],
+		all: [],
+	}[filter];
+
+	const userStage: PipelineStage[] = userId ? [{ $match: { userId } }] : [];
+
 	return ToolFormModel.aggregate([
+		...userStage,
+		...matchStages,
 		{
 			$lookup: {
 				from: "toolreviews",
@@ -166,4 +189,8 @@ export const getToolsWithRatings = async () => {
 		{ $unset: "reviews" },
 		{ $sort: { createdAt: -1 } },
 	]);
+};
+
+export const getToolsByApprovalStatus = async (status: true | false | null) => {
+	return ToolFormModel.find({ approved: status }).sort({ createdAt: -1 }).lean();
 };

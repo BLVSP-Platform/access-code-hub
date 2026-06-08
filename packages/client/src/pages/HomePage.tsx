@@ -42,10 +42,10 @@ function App() {
 				}}
 				mt="12"
 			>
-				Welcome to the Access Code Hub! We are a screen reader accessible platform where Blind and Low Vision
+				Welcome to the Access Code Hub! This is a screen reader accessible platform where Blind and Low Vision
 				Software Professionals (BLVSPs) can find software tools for accessibility, network with other BLVSPs and
-				get involved in community outreach through volunteering. To learn more about us please see the features
-				below.
+				get involved in community outreach through volunteering. To learn more about the platform, please see
+				the features below.
 			</Text>
 			<Grid
 				templateColumns={{
@@ -63,25 +63,25 @@ function App() {
 				<HomePageItem
 					to="index"
 					title="Tool Index"
-					description="Our Tool Index page is a configured list of accessible tools. Please visit here to find the most applicable tools for your use case."
+					description="The Tool Index page is a configured list of accessible tools. Please visit here to find the most applicable tools for your use case."
 				/>
 
 				<HomePageItem
 					to="submission"
 					title="Submit A Tool"
-					description="To submit a tool to the website please use our Tool Submission Form. This will create a new index in the Tool Index page, so that other developers can take advantage of this utility."
+					description="To submit a tool to the website, please use the Tool Submission Form. This will create a new index in the Tool Index page, so that other developers can take advantage of this utility."
 				/>
 
 				<HomePageItem
 					to="community"
 					title="Connect Now"
-					description="To learn more about the BLVSP community please visit our Community section. Here you can find other software professionals to discuss useful tools."
+					description="To learn more about the BLVSP community, please visit the Community section. Here, you can find other software professionals to discuss useful tools."
 				/>
 
 				<HomePageItem
 					to="volunteer"
 					title="Get Involved"
-					description="To get more engaged in the community please consider volunteering. Here you can help improve our Tool Index website through content moderation or community outreach."
+					description="To get more engaged in the community, please consider volunteering. Here, you can help improve the Access Code Hub through content moderation or community outreach."
 				/>
 			</Grid>
 		</>
