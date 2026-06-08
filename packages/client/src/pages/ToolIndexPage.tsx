@@ -18,7 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import { LuSearch } from "react-icons/lu";
 import { InfoTip } from "@/components/ui/toggle-tip";
-import { api } from "@/lib/utils";
+import { api, decodeEntities } from "@/lib/utils";
 
 // @todo: use backend type?
 export interface Tool {
@@ -177,9 +177,11 @@ function ToolIndexPage() {
 								<Table.Cell>
 									<Link href={`/tools/${tool.slug}`}>{tool.name}</Link>
 								</Table.Cell>
-								<Table.Cell>{tool.compatibility}</Table.Cell>
 								<Table.Cell maxWidth="500px">
-									<Text>{tool.description}</Text>
+									<Text lineClamp={2}>{decodeEntities(tool.compatibility ?? "")}</Text>
+								</Table.Cell>
+								<Table.Cell maxWidth="500px">
+									<Text lineClamp={2}>{decodeEntities(tool.description)}</Text>
 								</Table.Cell>
 								<Table.Cell>
 									<RatingGroup.Root
