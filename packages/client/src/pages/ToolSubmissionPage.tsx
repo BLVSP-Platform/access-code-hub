@@ -9,6 +9,7 @@ import {
 	type RadioGroupValueChangeDetails,
 	Stack,
 	Text,
+	Textarea,
 	VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -160,22 +161,28 @@ function ToolSubmissionPage() {
 								errorMsg="Please enter a valid URL link"
 							/>
 
-							<TextInput
-								name="description"
-								label="Description"
-								placeholder="Briefly describe what this tool does"
-								register={register}
-								error={errors.description?.message}
-								errorMsg="Please enter a description"
-							/>
+							<Field.Root required invalid={!!errors.description}>
+								<Field.Label>
+									<Text>Description</Text>
+									<Field.RequiredIndicator />
+								</Field.Label>
+								<Textarea
+									placeholder="Briefly describe what this tool does"
+									{...register("description", { required: "Please enter a description" })}
+								/>
+								<Field.ErrorText>{errors.description?.message}</Field.ErrorText>
+							</Field.Root>
 
-							<TextInput
-								name="compatibility"
-								label="Compatibility Information"
-								placeholder="e.g. Windows 10+, macOS 12+, Chrome 110+"
-								register={register}
-								required={false}
-							/>
+							<Field.Root>
+								<Field.Label>
+									<Text>Compatibility Information</Text>
+								</Field.Label>
+								<Textarea
+									placeholder="e.g. Windows 10+, macOS 12+, Chrome 110+"
+									{...register("compatibility")}
+								/>
+							</Field.Root>
+
 							<TextInput
 								name="videos"
 								label="Tutorial Video(s)"
@@ -198,13 +205,13 @@ function ToolSubmissionPage() {
 								register={register}
 								required={false}
 							/>
-							<TextInput
-								name="comments"
-								label="Extra Comments"
-								placeholder="Anything else you'd like us to know"
-								register={register}
-								required={false}
-							/>
+
+							<Field.Root>
+								<Field.Label>
+									<Text>Extra Comments</Text>
+								</Field.Label>
+								<Textarea placeholder="Anything else you'd like us to know" {...register("comments")} />
+							</Field.Root>
 
 							<Field.Root required invalid={!!errors.isCreator}>
 								<Field.Label>
