@@ -1,5 +1,6 @@
 import { adminClient, inferAdditionalFields } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
+import { rateLimiterClient } from "better-auth-rate-limiter/client";
 import { ac, admin as adminRole, moderator, user } from "./permissions";
 
 export const { signIn, signUp, signOut, useSession, updateUser } = createAuthClient({
@@ -12,6 +13,7 @@ export const { signIn, signUp, signOut, useSession, updateUser } = createAuthCli
 			ac,
 			roles: { admin: adminRole, moderator, user },
 		}),
+		rateLimiterClient(),
 		inferAdditionalFields({
 			user: {
 				about: {

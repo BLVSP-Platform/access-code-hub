@@ -1,10 +1,13 @@
 import { Router } from "express";
+import { rateLimitMiddleware } from "../../middleware/rateLimiter";
 import mentorshipRouter from "./mentorship";
 import threadRouter from "./thread";
 import toolRouter from "./tool";
 import volunteerRouter from "./volunteer";
 
 const app = Router();
+
+app.use("/", rateLimitMiddleware);
 
 app.get("/health", (_req, res) => {
 	res.status(200).send("OK");

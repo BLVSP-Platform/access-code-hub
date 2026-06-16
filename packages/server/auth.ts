@@ -1,12 +1,14 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { admin } from "better-auth/plugins";
+import { rateLimiter } from "better-auth-rate-limiter";
 import { client } from "./db";
 import "dotenv/config";
 import { ac, admin as adminRole, moderator, user } from "./permissions";
 
 if (!process.env.CLIENT_URL) throw new Error("CLIENT_URL not provided");
 if (!process.env.SERVER_URL) throw new Error("SERVER_URL not provided");
+console.log("CLIENT_URL", process.env.CLIENT_URL);
 
 export const auth = betterAuth({
 	database: mongodbAdapter(client.db(), {
@@ -16,6 +18,12 @@ export const auth = betterAuth({
 		admin({
 			ac,
 			roles: { admin: adminRole, moderator, user },
+		}),
+		rateLimiter({
+			window: 60,
+			max: 100,
+			storage: "database",
+			detection: "ip",
 		}),
 	],
 	user: {
@@ -40,6 +48,9 @@ export const auth = betterAuth({
 	emailAndPassword: {
 		enabled: true,
 	},
+	rateLimit: {
+		enabled: true,
+	},
 	trustedOrigins: [process.env.CLIENT_URL],
 	baseURL: process.env.SERVER_URL,
 	advanced: {
@@ -48,6 +59,10 @@ export const auth = betterAuth({
 			httpOnly: true,
 			sameSite: "none",
 			partitioned: true,
+		},
+		ipAddress: {
+			ipAddressHeaders: ["x-client-ip", "x-forwarded-for"],
+			disableIpTracking: false,
 		},
 	},
 });
